@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="../dist/evolutionland.min.js"></script>
+    <script>
+      setTimeout(() => {
+        const contract = Evolutionland({
+          status: "test",
+          isIteringId: false,
+          blockchain: 2,
+          languge: "zh-CN"
+        });
+        contract.triggerContractMethod({
+          wallet: "4161ADE0A567CBCC8C2CC7478BE6627D38D02EBBA2",
+          tokenAddr: "4181f0f3891cb32d1af69a6c853aefa6cf80f270b5",
+          methodName: "transferAndFallback",
+          methodParams: [
+            "4108b5e5c13baf1cd59030f3c6fb8fb2b56dc8a8e4",
+            contract.toWei(1000),
+            "0x0000000000000000000000000000000000000000000000000000000000000001"
+          ],
+          value: 0,
+          tokenId: ""
+        })({
+          callback: res => {
+            console.log(res);
+            self.setState({
+              link: res
+            });
+          },
+          onSendBefore: res => {
+            console.log("onSendBefore", res);
+          },
+          onTransactionHash: res => {
+            console.log("onTransactionHash", res);
+          },
+          onSuccess: res => {
+            console.log("onSuccess", res);
+          },
+          onFail: res => {
+            console.log("onFail", res);
+          },
+          onError: res => {
+            console.log("onError", res);
+          }
+        });
+      }, 2000);
+    </script>
+  </body>
+</html>
