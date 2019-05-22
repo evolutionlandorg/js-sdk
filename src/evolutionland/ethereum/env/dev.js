@@ -42,6 +42,6 @@ export default {
         AUCTIONHOLDER: "0xba332453b171aac634b3bed88bfef28770acf7e3",
         ITERING_CALLBACK: "https://alpha.evolution.land/api/eth/raw_sign_broadcast"
     },
-    DOMAIN: "https://www.evolution.land",
+    DOMAIN: "https://alpha.evolution.land",
     ABI_DOMAIN: "https://devstatic.l2me.com/static"
 };

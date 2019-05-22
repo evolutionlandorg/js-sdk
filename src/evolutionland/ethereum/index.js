@@ -10,6 +10,7 @@ import landABI from './env/abi/ethereum/abi-land'
 import lotteryABI from './env/abi/ethereum/abi-lottery'
 import rolesUpdaterABI from './env/abi/ethereum/abi-rolesUpdater'
 import landResourceABI from './env/abi/ethereum/abi-landResource'
+import apostleAuctionABI from './env/abi/ethereum/abi-apostleAuction'
 import Utils from '../utils/index'
 
 /**
@@ -27,7 +28,8 @@ class EthereumEvolutionLand {
         this._web3js = web3js
         this.env = Env(network)
         this.ABIs = getABIConfig(network)
-        this.clientFetch = new ClientFetch({baseUrl: this.env.ABI_DOMAIN, chainId: 60})
+        this.ABIClientFetch = new ClientFetch({baseUrl: this.env.ABI_DOMAIN, chainId: 60})
+        this.ClientFetch = new ClientFetch({baseUrl: this.env.DOMAIN, chainId: 60})
     }
 
     /**
@@ -61,7 +63,7 @@ class EthereumEvolutionLand {
         if (abiString) {
             _contract = new this._web3js.eth.Contract(abiString, this.ABIs[abiKey].address);
         } else {
-            const _abi = await this.clientFetch.$getAbi(this.ABIs[abiKey].api())
+            const _abi = await this.ABIClientFetch.$getAbi(this.ABIs[abiKey].api())
             _contract = new this._web3js.eth.Contract(_abi, this.ABIs[abiKey].address)
         }
 
@@ -314,6 +316,100 @@ class EthereumEvolutionLand {
             abiKey: 'apostleLandResource',
             abiString: landResourceABI,
             contractParams: [tokenId],
+        })
+    }
+
+    /**
+     * Bid apostle by RING token
+     * @param amount - RING amount
+     * @param tokenId - Apostle token ID
+     * @param referrer - refer address
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    apostleBid(amount, tokenId, referrer) {
+        const finalReferrer = referrer
+        const data =
+            finalReferrer && Utils.isAddress(finalReferrer)
+                ? `0x${tokenId}${Utils.padLeft(finalReferrer.substring(2), 64, '0')}`
+                : `0x${tokenId}`
+
+        return this.triggerContract({
+            methodName: 'transfer',
+            abiKey: 'ring',
+            abiString: ringABI,
+            contractParams: [this.ABIs['apostleBid'].address, amount, data],
+        })
+    }
+
+    /**
+     * Receive apostle
+     * @param tokenId - Apostle Token ID
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    apostleClaim(tokenId) {
+        return this.triggerContract({
+            methodName: 'claimApostleAsset',
+            abiKey: 'apostleAuction',
+            abiString: apostleAuctionABI,
+            contractParams: [tokenId],
+        })
+    }
+
+    /**
+     * check address info
+     * @param address - Ethereum address
+     */
+    checkAddress(address) {
+        return this.ClientFetch.$get('/api/verified_wallet', {wallet: address})
+    }
+
+    challengeAddress(address) {
+        return this.ClientFetch.$get('/api/challenge', {wallet: address})
+    }
+
+    async _sign({data, name}, from) {
+        let signature;
+        try {
+            signature = await this._web3js.eth.personal.sign(
+                name + " " + data,
+                from
+            );
+        } catch (e) {
+
+        }
+
+        return {
+            address: from,
+            signature
+        };
+    }
+
+    /**
+     * Login Evolution Land
+     * @param address - Ethereum address
+     * @returns {Promise<*>}
+     */
+    async login(address) {
+        return new Promise((resolve, reject) => {
+            this.challengeAddress(address).then((res) => {
+                const {code, data, name} = res
+                if (code === 0) {
+                    this._sign({data, name}, address)
+                        .then(info => {
+                            if (info.signature) {
+                                this.ClientFetch.$post('/api/login', {
+                                    wallet: address,
+                                    sign: info.signature
+                                }).then((res) => {
+                                    resolve(res)
+                                })
+                            } else {
+                                reject({code, data})
+                            }
+                        })
+                        .catch(err => reject(err))
+                }
+            })
         })
     }
 }
