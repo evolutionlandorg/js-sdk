@@ -11,6 +11,11 @@ import lotteryABI from './env/abi/ethereum/abi-lottery'
 import rolesUpdaterABI from './env/abi/ethereum/abi-rolesUpdater'
 import landResourceABI from './env/abi/ethereum/abi-landResource'
 import apostleAuctionABI from './env/abi/ethereum/abi-apostleAuction'
+import apostleTakeBackABI from './env/abi/ethereum/abi-takeBack'
+import apostleSiringABI from './env/abi/ethereum/abi-apostleSiring'
+import apostleBaseABI from './env/abi/ethereum/abi-apostleBase'
+import tokenUseABI from './env/abi/ethereum/abi-tokenUse'
+import petBaseABI from './env/abi/ethereum/abi-petbase'
 import Utils from '../utils/index'
 
 /**
@@ -273,11 +278,7 @@ class EthereumEvolutionLand {
     createRedPackageContract(amount, number, packetId) {
         const model = 0;
 
-        function _toHexAndPadLeft(o) {
-            return Utils.padLeft(Utils.toHex(o), 64, '0')
-        }
-
-        const _data = `0x${_toHexAndPadLeft(number)}${_toHexAndPadLeft(model)}${_toHexAndPadLeft(packetId)}`
+        const _data = `0x${Utils.toHexAndPadLeft(number).slice(2)}${Utils.toHexAndPadLeft(model).slice(2)}${Utils.toHexAndPadLeft(packetId).slice(2)}`
         return this.triggerContract({
             methodName: 'transfer',
             abiKey: 'ring',
@@ -352,6 +353,324 @@ class EthereumEvolutionLand {
             abiKey: 'apostleAuction',
             abiString: apostleAuctionABI,
             contractParams: [tokenId],
+        })
+    }
+
+    /**
+     * Sell apostle
+     * @param tokenId - Apostle Token ID
+     * @param start - auction start price
+     * @param end - auction end price
+     * @param duration - duration time
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    async apostleSell(tokenId, start, end, duration) {
+        const from = await this.getCurrentAccount()
+        const _from = Utils.padLeft(from.slice(2), 64, '0').slice(2)
+        const _start = Utils.toHexAndPadLeft(start).slice(2)
+        const _end = Utils.toHexAndPadLeft(end).slice(2)
+        const _duration = Utils.toHexAndPadLeft(duration).slice(2)
+        const data = `0x${_start}${_end}${_duration}${_from}`
+        return this.triggerContract({
+            methodName: 'approveAndCall',
+            abiKey: 'land',
+            abiString: landABI,
+            contractParams: [this.ABIs['apostleSell'].address, tokenId, data],
+        })
+    }
+
+    /**
+     * Cancel the auction by apostle token ID
+     * @param tokenId - apostle token ID
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    apostleCancelSell(tokenId) {
+        return this.triggerContract({
+            methodName: 'cancelAuction',
+            abiKey: 'apostleAuction',
+            abiString: apostleAuctionABI,
+            contractParams: [tokenId],
+        })
+    }
+
+    /**
+     *
+     * @param tokenId
+     * @param nftData
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    apostleRewardClaim(tokenId, nftData) {
+        return this.triggerContract({
+            methodName: 'takeBackNFT',
+            abiKey: 'apostleTakeBack',
+            abiString: apostleTakeBackABI,
+            contractParams: [
+                nftData.nonce,
+                tokenId,
+                this.ABIs['land'].address,
+                nftData.expireTime,
+                nftData.hash_text,
+                nftData.v,
+                nftData.r,
+                nftData.s
+            ],
+        })
+    }
+
+    /**
+     * Apostle reproduction in own
+     * @param tokenId
+     * @param targetTokenId
+     * @param amount
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    apostleBreed(tokenId, targetTokenId, amount) {
+        return this.triggerContract({
+            methodName: 'transfer',
+            abiKey: 'ring',
+            abiString: ringABI,
+            contractParams: [
+                this.ABIs["apostleBreed"].address,
+                amount,
+                `0x${tokenId}${targetTokenId}`
+            ]
+        })
+    }
+
+    /**
+     * Apostle reproduction
+     * @param tokenId
+     * @param targetTokenId
+     * @param amount
+     */
+    apostleBreedBid(tokenId, targetTokenId, amount) {
+        return this.triggerContract({
+            methodName: 'transfer',
+            abiKey: 'ring',
+            abiString: ringABI,
+            contractParams: [
+                this.ABIs["apostleSiringAuction"].address,
+                amount,
+                `0x${tokenId}${targetTokenId}`
+            ]
+        })
+    }
+
+    /**
+     * Cancel apostle breed auction
+     * @param tokenId
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    apostleCancelBreedAuction(tokenId) {
+        return this.triggerContract({
+            methodName: 'cancelAuction',
+            abiKey: 'apostleSiringCancelAuction',
+            abiString: apostleSiringABI,
+            contractParams: [
+                tokenId
+            ]
+        })
+    }
+
+    /**
+     * Transfer apostle
+     * @param toAddress
+     * @param tokenId
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    async apostleTransfer(toAddress, tokenId) {
+        const from = await this.getCurrentAccount()
+        const _from = Utils.padLeft(from.slice(2), 64, '0').slice(2)
+
+        return this.triggerContract({
+            methodName: 'transferFrom',
+            abiKey: 'land',
+            abiString: landABI,
+            contractParams: [
+                _from, toAddress, tokenId
+            ]
+        })
+    }
+
+    /**
+     * Let apostle go to work
+     * @param tokenId - Apostle tokenId
+     * @param landTokenId - Land tokenId
+     * @param element - ['gold', 'wood', 'water', 'fire' ,'soil']
+     */
+    apostleWork(tokenId, landTokenId, element) {
+        const elementAddress = this.ABIs[element.toLowerCase() || 'token'].address
+
+        return this.triggerContract({
+            methodName: 'startMining',
+            abiKey: 'apostleLandResource',
+            abiString: landResourceABI,
+            contractParams: [
+                tokenId, landTokenId, elementAddress
+            ]
+        })
+    }
+
+    /**
+     * Stop apostle mining
+     * @param tokenId - Apostle tokenId
+     */
+    apostleStopWorking(tokenId) {
+        return this.triggerContract({
+            methodName: 'stopMining',
+            abiKey: 'apostleLandResource',
+            abiString: landResourceABI,
+            contractParams: [
+                tokenId
+            ]
+        })
+    }
+
+    /**
+     * Claim an apostle that expires at work
+     * @param tokenId - Apostle TokenId
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    apostleHireClaim(tokenId) {
+        return this.triggerContract({
+            methodName: 'removeTokenUseAndActivity',
+            abiKey: 'apostleTokenUse',
+            abiString: tokenUseABI,
+            contractParams: [
+                tokenId
+            ]
+        })
+    }
+
+    /**
+     * Renting apostles to work
+     * @param tokenId - Apostle TokenId
+     * @param duration - Duration in second
+     * @param price - Hire Price
+     */
+    apostleHire(tokenId, duration, price) {
+        const address = this.ABIs['apostleLandResource'].address
+        const _resourceAddress = Utils.padLeft(address.slice(2), 64, '0').slice(2)
+        const _price = Utils.toHexAndPadLeft(price).slice(2)
+        const _duration = Utils.toHexAndPadLeft(duration).slice(2)
+        const data = `0x${_duration}${_price}${_resourceAddress}`
+
+        return this.triggerContract({
+            methodName: 'removeTokenUseAndActivity',
+            abiKey: 'land',
+            abiString: tokenUseABI,
+            contractParams: [
+                this.ABIs['apostleTokenUse'].address,
+                tokenId,
+                data
+            ]
+        })
+    }
+
+    /**
+     * Cancel an apostle on Renting
+     * @param tokenId - Apostle tokenId
+     */
+    apostleCancelHire(tokenId) {
+        return this.triggerContract({
+            methodName: 'cancelTokenUseOffer',
+            abiKey: 'apostleTokenUse',
+            abiString: tokenUseABI,
+            contractParams: [
+                tokenId
+            ]
+        })
+    }
+
+    /**
+     * Bid apostle on Renting
+     * @param tokenId - Apostle tokenId
+     * @param price - bid price
+     */
+    apostleHireBid(tokenId, price) {
+        return this.triggerContract({
+            methodName: 'transfer',
+            abiKey: 'ring',
+            abiString: ringABI,
+            contractParams: [
+                this.ABIs['apostleTokenUse'].address,
+                price,
+                `0x${tokenId}`
+            ]
+        })
+    }
+
+    /**
+     * Apostle Born without element
+     * @param motherTokenId
+     */
+    apostleBorn(motherTokenId) {
+        return this.triggerContract({
+            methodName: 'giveBirth',
+            abiKey: 'apostleBase',
+            abiString: apostleBaseABI,
+            contractParams: [
+                motherTokenId,
+                Utils.padLeft(0, 40, '0'),
+                0
+            ]
+        })
+    }
+
+    /**
+     * Apostle Born with element
+     * @param motherTokenId
+     * @param element
+     * @param level
+     * @param levelUnitPrice
+     */
+    apostleBornAndEnhance(
+        motherTokenId,
+        element,
+        level,
+        levelUnitPrice,
+    ) {
+        const elementAddress = this.ABIs[element.toLowerCase() || 'token'].address
+
+        return this.triggerContract({
+            methodName: 'transfer',
+            abiKey: element.toLowerCase(),
+            abiString: apostleBaseABI,
+            contractParams: [
+                elementAddress,
+                level * levelUnitPrice,
+                `0x${motherTokenId}${Utils.toHexAndPadLeft(level).slice(2)}`
+            ]
+        })
+    }
+
+    /**
+     * Bind pet
+     * @param originNftAddress
+     * @param originTokenId
+     * @param apostleTokenId
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    bridgeInAndTie(originNftAddress, originTokenId, apostleTokenId) {
+        return this.triggerContract({
+            methodName: 'bridgeInAndTie',
+            abiKey: 'petBase',
+            abiString: petBaseABI,
+            contractParams: [originNftAddress, originTokenId, apostleTokenId]
+        })
+    }
+
+    /**
+     * Unbind pet
+     * @param petTokenId
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    untiePetToken(petTokenId) {
+        return this.triggerContract({
+            methodName: 'untiePetToken',
+            abiKey: 'petBase',
+            abiString: petBaseABI,
+            contractParams: [petTokenId]
         })
     }
 
