@@ -79,6 +79,12 @@ class EthereumEvolutionLand {
             value: 0,
             ...sendParams
         })
+
+        // return _method.send.bind(this,{
+        //     from: await this.getCurrentAccount(),
+        //     value: 0,
+        //     ...sendParams
+        // })
     }
 
     /**
@@ -96,6 +102,11 @@ class EthereumEvolutionLand {
         })
     }
 
+    /**
+     * Claim land asset
+     * @param tokenId - Land tokenId
+     * @returns {Promise<PromiEvent<any>>}
+     */
     claimLandAsset(tokenId) {
         return this.triggerContract({
             methodName: 'claimLandAsset',
@@ -128,6 +139,29 @@ class EthereumEvolutionLand {
     }
 
     /**
+     * Sell land asset
+     * @param tokenId - Land tokenId
+     * @param start - start price
+     * @param end - end price
+     * @param duration - bid duration time in second
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    async setLandPrice(tokenId, start, end, duration) {
+        const from = await this.getCurrentAccount()
+        const _from = Utils.padLeft(from.slice(2), 64, '0')
+        const _start = Utils.toHexAndPadLeft(start).slice(2)
+        const _end = Utils.toHexAndPadLeft(end).slice(2)
+        const _duration = Utils.toHexAndPadLeft(duration).slice(2)
+        const data = `0x${_start}${_end}${_duration}${_from}`
+        return this.triggerContract({
+            methodName: 'approveAndCall',
+            abiKey: 'land',
+            abiString: landABI,
+            contractParams: [this.ABIs['auction'].address, tokenId, data],
+        })
+    }
+
+    /**
      * Bid Land Assets with Ether.
      * @param tokenId - tokenid of land
      * @param referer - Referrer address
@@ -138,7 +172,7 @@ class EthereumEvolutionLand {
         return this.triggerContract({
             methodName: "bidWithETH",
             abiString: actionABI,
-            params: [tokenId, referer],
+            contractParams: [tokenId, referer],
             abiKey: "auction",
             sendParams: {value: value}
         })
@@ -366,7 +400,7 @@ class EthereumEvolutionLand {
      */
     async apostleSell(tokenId, start, end, duration) {
         const from = await this.getCurrentAccount()
-        const _from = Utils.padLeft(from.slice(2), 64, '0').slice(2)
+        const _from = Utils.padLeft(from.slice(2), 64, '0')
         const _start = Utils.toHexAndPadLeft(start).slice(2)
         const _end = Utils.toHexAndPadLeft(end).slice(2)
         const _duration = Utils.toHexAndPadLeft(duration).slice(2)
@@ -457,6 +491,29 @@ class EthereumEvolutionLand {
     }
 
     /**
+     * Apostle Breed Auction
+     * @param tokenId - Apostle tokenId
+     * @param start - start price
+     * @param end - end price
+     * @param duration - auction duration time
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    async apostleBreedAuction(tokenId, start, end, duration) {
+        const from = await this.getCurrentAccount()
+        const _from = Utils.padLeft(from.slice(2), 64, '0')
+        const _start = Utils.toHexAndPadLeft(start).slice(2)
+        const _end = Utils.toHexAndPadLeft(end).slice(2)
+        const _duration = Utils.toHexAndPadLeft(duration).slice(2)
+        const data = `0x${_start}${_end}${_duration}${_from}`
+        return this.triggerContract({
+            methodName: 'approveAndCall',
+            abiKey: 'land',
+            abiString: landABI,
+            contractParams: [this.ABIs['apostleSiringAuction'].address, tokenId, data],
+        })
+    }
+
+    /**
      * Cancel apostle breed auction
      * @param tokenId
      * @returns {Promise<PromiEvent<any>>}
@@ -480,14 +537,13 @@ class EthereumEvolutionLand {
      */
     async apostleTransfer(toAddress, tokenId) {
         const from = await this.getCurrentAccount()
-        const _from = Utils.padLeft(from.slice(2), 64, '0').slice(2)
 
         return this.triggerContract({
             methodName: 'transferFrom',
             abiKey: 'land',
             abiString: landABI,
             contractParams: [
-                _from, toAddress, tokenId
+                from, toAddress, tokenId
             ]
         })
     }
@@ -500,7 +556,6 @@ class EthereumEvolutionLand {
      */
     apostleWork(tokenId, landTokenId, element) {
         const elementAddress = this.ABIs[element.toLowerCase() || 'token'].address
-
         return this.triggerContract({
             methodName: 'startMining',
             abiKey: 'apostleLandResource',
@@ -550,15 +605,15 @@ class EthereumEvolutionLand {
      */
     apostleHire(tokenId, duration, price) {
         const address = this.ABIs['apostleLandResource'].address
-        const _resourceAddress = Utils.padLeft(address.slice(2), 64, '0').slice(2)
+        const _resourceAddress = Utils.padLeft(address.slice(2), 64, '0')
         const _price = Utils.toHexAndPadLeft(price).slice(2)
         const _duration = Utils.toHexAndPadLeft(duration).slice(2)
         const data = `0x${_duration}${_price}${_resourceAddress}`
 
         return this.triggerContract({
-            methodName: 'removeTokenUseAndActivity',
+            methodName: 'approveAndCall',
             abiKey: 'land',
-            abiString: tokenUseABI,
+            abiString: landABI,
             contractParams: [
                 this.ABIs['apostleTokenUse'].address,
                 tokenId,
