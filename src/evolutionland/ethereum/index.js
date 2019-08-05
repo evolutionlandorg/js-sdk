@@ -18,6 +18,9 @@ import tokenUseABI from './env/abi/ethereum/abi-tokenUse'
 import petBaseABI from './env/abi/ethereum/abi-petbase'
 import Utils from '../utils/index'
 
+const loop = function () {
+}
+
 /**
  * @class
  * Evolution Land for Ethereum
@@ -61,24 +64,55 @@ class EthereumEvolutionLand {
      * @param {json} abiString - ethereum ABI json
      * @param contractParams - contract function with arguments
      * @param sendParams - web3js send() arguments
+     * @param beforeFetch
+     * @param transactionHashCallback
+     * @param confirmationCallback
+     * @param receiptCallback
+     * @param errorCallback
      * @returns {Promise<PromiEvent<any>>}
      */
-    async triggerContract({methodName, abiKey, abiString, contractParams = [], sendParams}) {
-        let _contract = null
-        if (abiString) {
-            _contract = new this._web3js.eth.Contract(abiString, this.ABIs[abiKey].address);
-        } else {
-            const _abi = await this.ABIClientFetch.$getAbi(this.ABIs[abiKey].api())
-            _contract = new this._web3js.eth.Contract(_abi, this.ABIs[abiKey].address)
+    async triggerContract({methodName, abiKey, abiString, contractParams = [], sendParams},
+                          {
+                              beforeFetch = loop,
+                              transactionHashCallback = loop,
+                              confirmationCallback = loop,
+                              receiptCallback = loop,
+                              errorCallback = loop
+                          } = {}
+    ) {
+        try {
+            beforeFetch && beforeFetch()
+
+            let _contract = null
+            if (abiString) {
+                _contract = new this._web3js.eth.Contract(abiString, this.ABIs[abiKey].address);
+            } else {
+                const _abi = await this.ABIClientFetch.$getAbi(this.ABIs[abiKey].api())
+                _contract = new this._web3js.eth.Contract(_abi, this.ABIs[abiKey].address)
+            }
+
+            const _method = _contract.methods[methodName].apply(this, contractParams)
+
+            return _method.send({
+                from: await this.getCurrentAccount(),
+                value: 0,
+                ...sendParams
+            })
+                .on('transactionHash', (hash) => {
+                    transactionHashCallback && transactionHashCallback(hash)
+                })
+                .on('confirmation', (confirmationNumber, receipt) => {
+                    confirmationCallback && confirmationCallback(confirmationNumber, receipt)
+                })
+                .on('receipt', (receipt) => {
+                    receiptCallback && receiptCallback(receipt)
+                })
+                .on('error', (error) => {
+                    errorCallback && errorCallback(error)
+                })
+        } catch (e) {
+            errorCallback && errorCallback(e)
         }
-
-        const _method = _contract.methods[methodName].apply(this, contractParams)
-
-        return _method.send({
-            from: await this.getCurrentAccount(),
-            value: 0,
-            ...sendParams
-        })
 
         // return _method.send.bind(this,{
         //     from: await this.getCurrentAccount(),
@@ -92,14 +126,14 @@ class EthereumEvolutionLand {
      * @param {string} value - amount for Ether， unit of measurement(wei)
      * @returns {Promise<PromiEvent<any>>}
      */
-    buyRing(value) {
+    buyRing(value, callback = {}) {
         return this.triggerContract({
             methodName: 'buyRING',
             abiKey: 'bancor',
             abiString: bancorABI,
             contractParams: [1],
             sendParams: {value: value}
-        })
+        }, callback)
     }
 
     /**
@@ -107,13 +141,13 @@ class EthereumEvolutionLand {
      * @param tokenId - Land tokenId
      * @returns {Promise<PromiEvent<any>>}
      */
-    claimLandAsset(tokenId) {
+    claimLandAsset(tokenId, callback = {}) {
         return this.triggerContract({
             methodName: 'claimLandAsset',
             abiKey: 'auction',
             abiString: actionABI,
             contractParams: [tokenId],
-        })
+        }, callback)
     }
 
     /**
@@ -123,7 +157,7 @@ class EthereumEvolutionLand {
      * @param referrer - Referrer address
      * @returns {Promise<PromiEvent<any>>}
      */
-    buyLandContract(amount, tokenId, referrer) {
+    buyLandContract(amount, tokenId, referrer, callback = {}) {
         const finalReferrer = referrer
         const data =
             finalReferrer && Utils.isAddress(finalReferrer)
@@ -135,7 +169,7 @@ class EthereumEvolutionLand {
             abiKey: 'ring',
             abiString: ringABI,
             contractParams: [this.ABIs['auction'].address, amount, data],
-        })
+        }, callback)
     }
 
     /**
@@ -146,7 +180,7 @@ class EthereumEvolutionLand {
      * @param duration - bid duration time in second
      * @returns {Promise<PromiEvent<any>>}
      */
-    async setLandPrice(tokenId, start, end, duration) {
+    async setLandPrice(tokenId, start, end, duration, callback = {}) {
         const from = await this.getCurrentAccount()
         const _from = Utils.padLeft(from.slice(2), 64, '0')
         const _start = Utils.toHexAndPadLeft(start).slice(2)
@@ -158,7 +192,7 @@ class EthereumEvolutionLand {
             abiKey: 'land',
             abiString: landABI,
             contractParams: [this.ABIs['auction'].address, tokenId, data],
-        })
+        }, callback)
     }
 
     /**
@@ -168,14 +202,14 @@ class EthereumEvolutionLand {
      * @param value - bid price with ether
      * @returns {Promise<PromiEvent<any>>}
      */
-    buyLandWithETHContract(tokenId, referer, value) {
+    buyLandWithETHContract(tokenId, referer, value, callback = {}) {
         return this.triggerContract({
             methodName: "bidWithETH",
             abiString: actionABI,
             contractParams: [tokenId, referer],
             abiKey: "auction",
             sendParams: {value: value}
-        })
+        }, callback)
     }
 
     /**
@@ -188,13 +222,13 @@ class EthereumEvolutionLand {
      * @param s
      * @returns {Promise<PromiEvent<any>>}
      */
-    withdrawRing({nonce, value, hash, v, r, s}) {
+    withdrawRing({nonce, value, hash, v, r, s}, callback = {}) {
         return this.triggerContract({
             methodName: "takeBack",
             abiString: withdrawABI,
             params: [nonce, value, hash, v, r, s],
             abiKey: "withdraw",
-        });
+        }, callback);
     }
 
     /**
@@ -202,13 +236,13 @@ class EthereumEvolutionLand {
      * @param {string} tokenId - tokenid of land
      * @returns {Promise<PromiEvent<any>>}
      */
-    cancelAuction(tokenId) {
+    cancelAuction(tokenId, callback = {}) {
         return this.triggerContract({
             methodName: "cancelAuction",
             abiString: actionABI,
-            params: [tokenId],
+            contractParams: [tokenId],
             abiKey: "auction",
-        });
+        }, callback);
     }
 
     /**
@@ -216,13 +250,13 @@ class EthereumEvolutionLand {
      * @param amount - ring token amount
      * @returns {Promise<PromiEvent<any>>}
      */
-    sellRing(amount) {
+    sellRing(amount, callback = {}) {
         return this.triggerContract({
             methodName: 'transfer',
             abiKey: 'ring',
             abiString: ringABI,
             contractParams: [this.ABIs['bancor'].address, amount, '0x0000000000000000000000000000000000000000000000000000000000000001'],
-        })
+        }, callback)
     }
 
     /**
@@ -231,13 +265,13 @@ class EthereumEvolutionLand {
      * @param month - Locking time(unit: month)
      * @returns {Promise<PromiEvent<any>>}
      */
-    saveRing(amount, month) {
+    saveRing(amount, month, callback = {}) {
         return this.triggerContract({
             methodName: 'transfer',
             abiKey: 'ring',
             abiString: ringABI,
             contractParams: [this.ABIs['bank'].address, amount, Utils.toTwosComplement(month)],
-        })
+        }, callback)
     }
 
     /**
@@ -246,13 +280,13 @@ class EthereumEvolutionLand {
      * @param id - deposit ID
      * @returns {Promise<PromiEvent<any>>}
      */
-    redeemRing(amount, id) {
+    redeemRing(amount, id, callback = {}) {
         return this.triggerContract({
             methodName: 'transfer',
             abiKey: 'kton',
             abiString: ktonABI,
             contractParams: [this.ABIs['bank'].address, amount, Utils.toTwosComplement(id)],
-        })
+        }, callback)
     }
 
     /**
@@ -260,13 +294,13 @@ class EthereumEvolutionLand {
      * @param id - deposit ID
      * @returns {Promise<PromiEvent<any>>}
      */
-    withdrawBankRing(id) {
+    withdrawBankRing(id, callback = {}) {
         return this.triggerContract({
             methodName: 'claimDeposit',
             abiKey: 'bank',
             abiString: bankABI,
             contractParams: [Utils.toTwosComplement(id)],
-        })
+        }, callback)
     }
 
     /**
@@ -274,13 +308,13 @@ class EthereumEvolutionLand {
      * @param type - ['small':playWithSmallTicket , 'large': playWithLargeTicket]
      * @returns {Promise<PromiEvent<any>>}
      */
-    lotteryFromPoint(type = "small") {
+    lotteryFromPoint(type = "small", callback = {}) {
         return this.triggerContract({
             methodName: type === "small" ? "playWithSmallTicket" : "playWithLargeTicket",
             abiKey: 'lottery',
             abiString: lotteryABI,
             contractParams: [],
-        })
+        }, callback)
     }
 
     /**
@@ -293,13 +327,13 @@ class EthereumEvolutionLand {
      * @param _s
      * @returns {Promise<PromiEvent<any>>}
      */
-    updateTesterRole(_nonce, _testerCodeHash, _hashmessage, _v, _r, _s) {
+    updateTesterRole(_nonce, _testerCodeHash, _hashmessage, _v, _r, _s, callback = {}) {
         return this.triggerContract({
             methodName: 'updateTesterRole',
             abiKey: 'rolesUpdater',
             abiString: rolesUpdaterABI,
             contractParams: [_nonce, _testerCodeHash, _hashmessage, _v, _r, _s],
-        })
+        }, callback)
     }
 
     /**
@@ -309,7 +343,7 @@ class EthereumEvolutionLand {
      * @param packetId - packet ID
      * @returns {Promise<PromiEvent<any>>}
      */
-    createRedPackageContract(amount, number, packetId) {
+    createRedPackageContract(amount, number, packetId, callback = {}) {
         const model = 0;
 
         const _data = `0x${Utils.toHexAndPadLeft(number).slice(2)}${Utils.toHexAndPadLeft(model).slice(2)}${Utils.toHexAndPadLeft(packetId).slice(2)}`
@@ -318,7 +352,7 @@ class EthereumEvolutionLand {
             abiKey: 'ring',
             abiString: ringABI,
             contractParams: [this.ABIs['redPackage'].address, amount, _data],
-        })
+        }, callback)
     }
 
     /**
@@ -328,16 +362,17 @@ class EthereumEvolutionLand {
      * @param {string} tokenId - Land token ID
      * @returns {*}
      */
-    transferFromLand(from, to, tokenId) {
-        if (to) {
+    async transferFromLand(to, tokenId, callback = {}) {
+        if (!to) {
             return null
         }
+        const from = await this.getCurrentAccount()
         return this.triggerContract({
             methodName: 'transferFrom',
             abiKey: 'land',
             abiString: landABI,
             contractParams: [from, to, tokenId],
-        })
+        }, callback)
     }
 
     /**
@@ -345,13 +380,13 @@ class EthereumEvolutionLand {
      * @param tokenId
      * @returns {Promise<PromiEvent<any>>}
      */
-    resourceClaim(tokenId) {
+    resourceClaim(tokenId, callback = {}) {
         return this.triggerContract({
             methodName: 'claimAllResource',
             abiKey: 'apostleLandResource',
             abiString: landResourceABI,
             contractParams: [tokenId],
-        })
+        }, callback)
     }
 
     /**
@@ -361,7 +396,7 @@ class EthereumEvolutionLand {
      * @param referrer - refer address
      * @returns {Promise<PromiEvent<any>>}
      */
-    apostleBid(amount, tokenId, referrer) {
+    apostleBid(amount, tokenId, referrer, callback = {}) {
         const finalReferrer = referrer
         const data =
             finalReferrer && Utils.isAddress(finalReferrer)
@@ -373,7 +408,7 @@ class EthereumEvolutionLand {
             abiKey: 'ring',
             abiString: ringABI,
             contractParams: [this.ABIs['apostleBid'].address, amount, data],
-        })
+        }, callback)
     }
 
     /**
@@ -381,13 +416,13 @@ class EthereumEvolutionLand {
      * @param tokenId - Apostle Token ID
      * @returns {Promise<PromiEvent<any>>}
      */
-    apostleClaim(tokenId) {
+    apostleClaim(tokenId, callback = {}) {
         return this.triggerContract({
             methodName: 'claimApostleAsset',
             abiKey: 'apostleAuction',
             abiString: apostleAuctionABI,
             contractParams: [tokenId],
-        })
+        }, callback)
     }
 
     /**
@@ -398,7 +433,7 @@ class EthereumEvolutionLand {
      * @param duration - duration time
      * @returns {Promise<PromiEvent<any>>}
      */
-    async apostleSell(tokenId, start, end, duration) {
+    async apostleSell(tokenId, start, end, duration, callback = {}) {
         const from = await this.getCurrentAccount()
         const _from = Utils.padLeft(from.slice(2), 64, '0')
         const _start = Utils.toHexAndPadLeft(start).slice(2)
@@ -410,7 +445,7 @@ class EthereumEvolutionLand {
             abiKey: 'land',
             abiString: landABI,
             contractParams: [this.ABIs['apostleSell'].address, tokenId, data],
-        })
+        }, callback)
     }
 
     /**
@@ -418,13 +453,13 @@ class EthereumEvolutionLand {
      * @param tokenId - apostle token ID
      * @returns {Promise<PromiEvent<any>>}
      */
-    apostleCancelSell(tokenId) {
+    apostleCancelSell(tokenId, callback = {}) {
         return this.triggerContract({
             methodName: 'cancelAuction',
             abiKey: 'apostleAuction',
             abiString: apostleAuctionABI,
             contractParams: [tokenId],
-        })
+        }, callback)
     }
 
     /**
@@ -433,7 +468,7 @@ class EthereumEvolutionLand {
      * @param nftData
      * @returns {Promise<PromiEvent<any>>}
      */
-    apostleRewardClaim(tokenId, nftData) {
+    apostleRewardClaim(tokenId, nftData, callback = {}) {
         return this.triggerContract({
             methodName: 'takeBackNFT',
             abiKey: 'apostleTakeBack',
@@ -448,7 +483,7 @@ class EthereumEvolutionLand {
                 nftData.r,
                 nftData.s
             ],
-        })
+        }, callback)
     }
 
     /**
@@ -458,7 +493,7 @@ class EthereumEvolutionLand {
      * @param amount
      * @returns {Promise<PromiEvent<any>>}
      */
-    apostleBreed(tokenId, targetTokenId, amount) {
+    apostleBreed(tokenId, targetTokenId, amount, callback = {}) {
         return this.triggerContract({
             methodName: 'transfer',
             abiKey: 'ring',
@@ -468,7 +503,7 @@ class EthereumEvolutionLand {
                 amount,
                 `0x${tokenId}${targetTokenId}`
             ]
-        })
+        }, callback)
     }
 
     /**
@@ -477,7 +512,7 @@ class EthereumEvolutionLand {
      * @param targetTokenId
      * @param amount
      */
-    apostleBreedBid(tokenId, targetTokenId, amount) {
+    apostleBreedBid(tokenId, targetTokenId, amount, callback = {}) {
         return this.triggerContract({
             methodName: 'transfer',
             abiKey: 'ring',
@@ -487,7 +522,7 @@ class EthereumEvolutionLand {
                 amount,
                 `0x${tokenId}${targetTokenId}`
             ]
-        })
+        }, callback)
     }
 
     /**
@@ -498,7 +533,7 @@ class EthereumEvolutionLand {
      * @param duration - auction duration time
      * @returns {Promise<PromiEvent<any>>}
      */
-    async apostleBreedAuction(tokenId, start, end, duration) {
+    async apostleBreedAuction(tokenId, start, end, duration, callback = {}) {
         const from = await this.getCurrentAccount()
         const _from = Utils.padLeft(from.slice(2), 64, '0')
         const _start = Utils.toHexAndPadLeft(start).slice(2)
@@ -510,7 +545,7 @@ class EthereumEvolutionLand {
             abiKey: 'land',
             abiString: landABI,
             contractParams: [this.ABIs['apostleSiringAuction'].address, tokenId, data],
-        })
+        }, callback)
     }
 
     /**
@@ -518,7 +553,7 @@ class EthereumEvolutionLand {
      * @param tokenId
      * @returns {Promise<PromiEvent<any>>}
      */
-    apostleCancelBreedAuction(tokenId) {
+    apostleCancelBreedAuction(tokenId, callback = {}) {
         return this.triggerContract({
             methodName: 'cancelAuction',
             abiKey: 'apostleSiringCancelAuction',
@@ -526,7 +561,7 @@ class EthereumEvolutionLand {
             contractParams: [
                 tokenId
             ]
-        })
+        }, callback)
     }
 
     /**
@@ -535,7 +570,7 @@ class EthereumEvolutionLand {
      * @param tokenId
      * @returns {Promise<PromiEvent<any>>}
      */
-    async apostleTransfer(toAddress, tokenId) {
+    async apostleTransfer(toAddress, tokenId, callback = {}) {
         const from = await this.getCurrentAccount()
 
         return this.triggerContract({
@@ -545,7 +580,7 @@ class EthereumEvolutionLand {
             contractParams: [
                 from, toAddress, tokenId
             ]
-        })
+        }, callback)
     }
 
     /**
@@ -554,7 +589,7 @@ class EthereumEvolutionLand {
      * @param landTokenId - Land tokenId
      * @param element - ['gold', 'wood', 'water', 'fire' ,'soil']
      */
-    apostleWork(tokenId, landTokenId, element) {
+    apostleWork(tokenId, landTokenId, element, callback = {}) {
         const elementAddress = this.ABIs[element.toLowerCase() || 'token'].address
         return this.triggerContract({
             methodName: 'startMining',
@@ -563,14 +598,14 @@ class EthereumEvolutionLand {
             contractParams: [
                 tokenId, landTokenId, elementAddress
             ]
-        })
+        }, callback)
     }
 
     /**
      * Stop apostle mining
      * @param tokenId - Apostle tokenId
      */
-    apostleStopWorking(tokenId) {
+    apostleStopWorking(tokenId, callback = {}) {
         return this.triggerContract({
             methodName: 'stopMining',
             abiKey: 'apostleLandResource',
@@ -578,7 +613,7 @@ class EthereumEvolutionLand {
             contractParams: [
                 tokenId
             ]
-        })
+        }, callback)
     }
 
     /**
@@ -586,7 +621,7 @@ class EthereumEvolutionLand {
      * @param tokenId - Apostle TokenId
      * @returns {Promise<PromiEvent<any>>}
      */
-    apostleHireClaim(tokenId) {
+    apostleHireClaim(tokenId, callback = {}) {
         return this.triggerContract({
             methodName: 'removeTokenUseAndActivity',
             abiKey: 'apostleTokenUse',
@@ -594,7 +629,7 @@ class EthereumEvolutionLand {
             contractParams: [
                 tokenId
             ]
-        })
+        }, callback)
     }
 
     /**
@@ -603,7 +638,7 @@ class EthereumEvolutionLand {
      * @param duration - Duration in second
      * @param price - Hire Price
      */
-    apostleHire(tokenId, duration, price) {
+    apostleHire(tokenId, duration, price, callback = {}) {
         const address = this.ABIs['apostleLandResource'].address
         const _resourceAddress = Utils.padLeft(address.slice(2), 64, '0')
         const _price = Utils.toHexAndPadLeft(price).slice(2)
@@ -619,14 +654,14 @@ class EthereumEvolutionLand {
                 tokenId,
                 data
             ]
-        })
+        }, callback)
     }
 
     /**
      * Cancel an apostle on Renting
      * @param tokenId - Apostle tokenId
      */
-    apostleCancelHire(tokenId) {
+    apostleCancelHire(tokenId, callback = {}) {
         return this.triggerContract({
             methodName: 'cancelTokenUseOffer',
             abiKey: 'apostleTokenUse',
@@ -634,7 +669,7 @@ class EthereumEvolutionLand {
             contractParams: [
                 tokenId
             ]
-        })
+        }, callback)
     }
 
     /**
@@ -642,7 +677,7 @@ class EthereumEvolutionLand {
      * @param tokenId - Apostle tokenId
      * @param price - bid price
      */
-    apostleHireBid(tokenId, price) {
+    apostleHireBid(tokenId, price, callback = {}) {
         return this.triggerContract({
             methodName: 'transfer',
             abiKey: 'ring',
@@ -652,14 +687,14 @@ class EthereumEvolutionLand {
                 price,
                 `0x${tokenId}`
             ]
-        })
+        }, callback)
     }
 
     /**
      * Apostle Born without element
      * @param motherTokenId
      */
-    apostleBorn(motherTokenId) {
+    apostleBorn(motherTokenId, callback = {}) {
         return this.triggerContract({
             methodName: 'giveBirth',
             abiKey: 'apostleBase',
@@ -669,7 +704,7 @@ class EthereumEvolutionLand {
                 Utils.padLeft(0, 40, '0'),
                 0
             ]
-        })
+        }, callback)
     }
 
     /**
@@ -684,6 +719,7 @@ class EthereumEvolutionLand {
         element,
         level,
         levelUnitPrice,
+        callback = {}
     ) {
         const elementAddress = this.ABIs[element.toLowerCase() || 'token'].address
 
@@ -696,7 +732,7 @@ class EthereumEvolutionLand {
                 level * levelUnitPrice,
                 `0x${motherTokenId}${Utils.toHexAndPadLeft(level).slice(2)}`
             ]
-        })
+        }, callback)
     }
 
     /**
@@ -706,13 +742,13 @@ class EthereumEvolutionLand {
      * @param apostleTokenId
      * @returns {Promise<PromiEvent<any>>}
      */
-    bridgeInAndTie(originNftAddress, originTokenId, apostleTokenId) {
+    bridgeInAndTie(originNftAddress, originTokenId, apostleTokenId, callback = {}) {
         return this.triggerContract({
             methodName: 'bridgeInAndTie',
             abiKey: 'petBase',
             abiString: petBaseABI,
             contractParams: [originNftAddress, originTokenId, apostleTokenId]
-        })
+        }, callback)
     }
 
     /**
@@ -720,13 +756,13 @@ class EthereumEvolutionLand {
      * @param petTokenId
      * @returns {Promise<PromiEvent<any>>}
      */
-    untiePetToken(petTokenId) {
+    untiePetToken(petTokenId, callback = {}) {
         return this.triggerContract({
             methodName: 'untiePetToken',
             abiKey: 'petBase',
             abiString: petBaseABI,
             contractParams: [petTokenId]
-        })
+        }, callback)
     }
 
     /**
