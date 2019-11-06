@@ -9,6 +9,7 @@ function createTronweb(config = {}) {
 }
 
 function _getTronweb(config) {
+
     if(window.tronWeb) {
         return window.tronWeb
     }

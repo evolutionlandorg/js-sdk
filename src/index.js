@@ -18,8 +18,8 @@ class Evolution {
      * create web3js instance.
      * @param config [provider: A URL or one of the Web3 provider classes.]
      */
-    createWeb3js(config) {
-        this.web3js = Ethereum.createWeb3js(config)
+    async createWeb3js(config) {
+        this.web3js = await Ethereum.createWeb3js(config)
     }
 
     /**

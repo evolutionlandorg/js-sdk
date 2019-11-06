@@ -92,7 +92,6 @@ class EthereumEvolutionLand {
             }
 
             const _method = _contract.methods[methodName].apply(this, contractParams)
-
             return _method.send({
                 from: await this.getCurrentAccount(),
                 value: 0,

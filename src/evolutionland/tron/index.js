@@ -11,7 +11,7 @@ class TronEvolutionLand {
         this._tronweb = tronweb
         this.env = Env(network)
         this.ABIs = getABIConfig(network)
-        this.clientFetch = new ClientFetch({baseUrl: this.env.ABI_DOMAIN, chainId: 60})
+        // this.clientFetch = new ClientFetch({baseUrl: this.env.ABI_DOMAIN, chainId: 60})
     }
 
     getCurrentAccount() {
@@ -29,12 +29,14 @@ class TronEvolutionLand {
 
     async triggerContract({methodName, abiKey, contractParams, sendParams}) {
         console.log(methodName, abiKey, contractParams, sendParams)
+
         let _contract = await this._tronweb.contract().at(this.ABIs[abiKey].address)
-        const _method = _contract[methodName].apply(this, contractParams)
-        return _method.send({
+        // const _method = _contract[methodName].apply(this, contractParams)
+
+        return _contract[methodName](...contractParams).send({
             feeLimit: this._tronweb.toSun(100),
             callValue: 0,
-            // shouldPollResponse: true,
+            shouldPollResponse: false,
             ...sendParams
         })
     }
@@ -59,6 +61,7 @@ class TronEvolutionLand {
 
     buyLandContract(amount, tokenId, referrer) {
         const finalReferrer = referrer
+        console.log(amount, tokenId, referrer)
         const data =
             finalReferrer && Utils.isAddress(finalReferrer)
                 ? `0x${tokenId}${Utils.padLeft(finalReferrer.substring(2), 64, '0')}`
