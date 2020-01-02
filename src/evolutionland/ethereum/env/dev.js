@@ -1,45 +1,45 @@
 export default {
     CONTRACT: {
-        TOKEN_DEX_BRIDGE: "0xbe1f7c33db20a67750dc82d6310350ef11f798a2", // DexBridge swap
-        TOKEN_RING: "0xf8720eb6ad4a530cccb696043a0d10831e2ff60e",
-        TOKEN_WITHDRAW: "0xa0feeb22a4f02e4e10e4dbd847f8cde521d97434", // takeback
-        TOKEN_AUCTION: "0x3a0aa8bce3c00305f9024bb46bf0f2d328129a79", // ClockAuction
-        TOKEN_LAND: "0xe94b9ebf9609a0d20270e8de317381ff4bcdcd79", //objectOwnership
-        TOKEN_LUCKYBAG: "0xce37a0f71e46d43f3007389ebd392cf14c6c0755",
-        TOKEN_REDPACKAGE: "0xd9a7feda848552b009fe7368ea3a6afb2dfb9d8c",
-        TOKEN_BANCOR: "0x4038a368eebe4f374417cdc358d2f99b4c7f161e", // BancorExchange
-        TOKEN_BANK: "0x6436b1eb4b71616202620ccc2e974d6c02b5a3b1",
-        TOKEN_KTON: "0xf8c63be35fea3679e825df8ce100dd2283f977c7",
-        TOKEN_LOTTERY: "0x01b4a7c1b26179f83d501af9512ac8b8d03a7bdb", // PointsRewardPool
-        TOKEN_USER_POINTS: "0x23db7d50d2fc46c7b5e99f9fb2e1f8284c78f46c", //UserPoints
-        TOKEN_ROLES_UPDATER: "0x7550f7dceaa0b4ccda34ae84a303ab274523e65a", // rolesUpdater
+        TOKEN_DEX_BRIDGE: "", // DexBridge swap
+        TOKEN_RING: "0xb52FBE2B925ab79a821b261C82c5Ba0814AAA5e0",
+        TOKEN_WITHDRAW: "0x115493f616F3D213913F843fB5594C4d004b4782", // takeback
+        TOKEN_AUCTION: "0x9a6144237be8B5a6dc793E8848B6AeFc99bd2256", // ClockAuction
+        TOKEN_LAND: "0x33c7A4C0454618c4AD43330C056eEC231c00d366", //objectOwnership
+        TOKEN_LUCKYBAG: "",
+        TOKEN_REDPACKAGE: "0x4088Db66B8acAA673333b2Ef32648137A95c4476",
+        TOKEN_BANCOR: "", // BancorExchange
+        TOKEN_BANK: "0x6EF538314829EfA8386Fc43386cB13B4e0A67D1e",
+        TOKEN_KTON: "0x1994100c58753793D52c6f457f189aa3ce9cEe94",
+        TOKEN_LOTTERY: "0xc7eFAaa1b57EB6d5A1855dAf1a37f27cBEa5b5A5", // PointsRewardPool
+        TOKEN_USER_POINTS: "0x42a1D26d764a4ec858aB9e955B70e55FE409C749", //UserPoints
+        TOKEN_ROLES_UPDATER: "0xdB131373218b9E3bAAAC807C540F4EAeEb2274b3", // rolesUpdater
 
-        TOKEN_GEN0_APOSTLE: "0xd45fe6e402e3c21cd5b3273908121c90a30f5f71", //Gen0Apostle
-        TOKEN_APOSTLE_TAKE_BACK: "0x09ba3a75928d9bca065fd7091582a4750e350bb1", //TakeBackNFT
-        TOKEN_APOSTLE_CLOCK_AUCTION: "0x2fdd8e8da34a8242c04b3d8d6afcb2a6c3afd483", //ApostleClockAuction
-        TOKEN_APOSTLE_SIRING_AUCTION: "0x439f118c4ade15ad011f2b8d2350af70fa3046dc", //SiringClockAuction
-        TOKEN_APOSTLE_BASE: "0x23236af7d03c4b0720f709593f5ace0ea92e77cf", //ApostleBase
-        TOKEN_LAND_RESOURCE: "0x6bcb3c94040ba63e4da086f2a8d0d6f5f72b8490", //landResource
-        TOKEN_TOKEN_USE: "0xd2bcd143db59ddd43df2002fbf650e46b2b7ea19", //token use
+        TOKEN_GEN0_APOSTLE: "0x30F7e8C1e53D1201AfBC99e32272e98fc168E4A6", //Gen0Apostle
+        TOKEN_APOSTLE_TAKE_BACK: "", //TakeBackNFT
+        TOKEN_APOSTLE_CLOCK_AUCTION: "0xE862c7551b4361ee7DA08806affdB09850E8A284", //ApostleClockAuction
+        TOKEN_APOSTLE_SIRING_AUCTION: "0xfBe870C1084E6e5AE51b89765F70f1673bb9F6Ab", //SiringClockAuction
+        TOKEN_APOSTLE_BASE: "0x2E1dd56F118505a9D420Bf50D3bbAd80B3Aa2Ef3", //ApostleBase
+        TOKEN_LAND_RESOURCE: "0xD22065369994568096FB841e024462F4d7F5f2f9", //landResource
+        TOKEN_TOKEN_USE: "0xfD9512e7c8d5D481661032768bBBdEA683D78865", //token use
 
-        TOKEN_KITTY_CORE: "0x9782865f91f9aace5582f695bf678121a0359edd", // KittyCore
-        TOKEN_PET_BASE: "0x9038cf766688c8e9b19552f464b514f9760fdc49", // PetBaseProxy
+        TOKEN_KITTY_CORE: "", // KittyCore
+        TOKEN_PET_BASE: "", // PetBaseProxy
 
-        TOKEN_ELEMENT_GOLD: "0xf2b3aeba2fd26eb9c7af802e728069f1c217e565",
-        TOKEN_ELEMENT_WOOD: "0x9314fc7e0a2825f5b2a38bed43ddfdf1b30216b1",
-        TOKEN_ELEMENT_WATER: "0xbffb29084e610ffea58bbd81f044cdb68979babd",
-        TOKEN_ELEMENT_FIRE: "0x5f405a65b67a2ba03ffd1fdf20e0e92b50e41ae3",
-        TOKEN_ELEMENT_SOIL: "0x8a768e5dafa2950b0d0a686d45b5226ffeb24aa6",
-        PROVIDER: `https://kovan.infura.io/v3/616e88b770be403a8be78c4b545a5298`,
+        TOKEN_ELEMENT_GOLD: "0xB6A07A36FA73758Ce9D58a2C6a8Da74CECCa438d",
+        TOKEN_ELEMENT_WOOD: "0xda4d84c604977220D58ade0CF0D915b1a4099E35",
+        TOKEN_ELEMENT_WATER: "0x40766Ce658Ae73E29242A3EDd75cF83F84c7120e",
+        TOKEN_ELEMENT_FIRE: "0xC5C0f115C05dd10625A5d4d0fAf284100AD56E68",
+        TOKEN_ELEMENT_SOIL: "0x5102d99fa797a12f611744cDAE69FF7A5F34b38D",
+        PROVIDER: `https://ropsten.infura.io/v3/616e88b770be403a8be78c4b545a5298`,
 
-        SCAN_URL: "https://kovan.etherscan.io/",
-        SCAN_TRANSACTION: "https://kovan.etherscan.io/tx",
-        SCAN_ADDRESS: "https://kovan.etherscan.io/address",
+        SCAN_URL: "https://ropsten.etherscan.io/",
+        SCAN_TRANSACTION: "https://ropsten.etherscan.io/tx",
+        SCAN_ADDRESS: "https://ropsten.etherscan.io/address",
 
-        NETWORK: "42",
+        NETWORK: "3",
 
-        GENESISHOLDER: "0x8639bb491bf2393e4467cc94b5322bebb8b2a3d1",
-        AUCTIONHOLDER: "0xba332453b171aac634b3bed88bfef28770acf7e3",
+        GENESISHOLDER: "0xfE3EE13c28830F7F91Bbb62305D3B616e49998EC",
+        AUCTIONHOLDER: "",
         ITERING_CALLBACK: "https://alpha.evolution.land/api/eth/raw_sign_broadcast"
     },
     DOMAIN: "https://alpha.evolution.land",
