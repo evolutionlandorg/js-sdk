@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack --mode production",
     "analyze": "ANALYZE=true webpack --mode production",
-    "generate-docs": "jsdoc --configure .jsdoc.json --verbose"
+    "generate-docs": "jsdoc --configure .jsdoc.json --verbose",
+    "publish-docs": "gh-pages -d docs/evolution-js/1.0.0"
   },
   "author": "",
   "license": "ISC",
