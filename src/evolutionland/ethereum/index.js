@@ -1,3 +1,4 @@
+import bignumber from 'bignumber.js'
 import {Env, getABIConfig} from './env'
 import ClientFetch from '../utils/clientFetch'
 import bancorABI from './env/abi/ethereum/abi-bancor'
@@ -16,7 +17,20 @@ import apostleSiringABI from './env/abi/ethereum/abi-apostleSiring'
 import apostleBaseABI from './env/abi/ethereum/abi-apostleBase'
 import tokenUseABI from './env/abi/ethereum/abi-tokenUse'
 import petBaseABI from './env/abi/ethereum/abi-petbase'
+import uniswapExchangeABI from './env/abi/ethereum/abi-uniswapExchange'
 import Utils from '../utils/index'
+
+import {
+    FACTORY_ADDRESS,
+    SUPPORTED_CHAIN_ID,
+    FACTORY_ABI,
+    EXCHANGE_ABI,
+    getTokenReserves,
+    tradeExactEthForTokensWithData,
+    getExecutionDetails,
+    tradeEthForExactTokensWithData,
+    tradeExactTokensForEthWithData
+} from '@uniswap/sdk'
 
 const loop = function () {
 }
@@ -38,6 +52,19 @@ class EthereumEvolutionLand {
         this.ABIs = getABIConfig(network)
         this.ABIClientFetch = new ClientFetch({baseUrl: this.env.ABI_DOMAIN, chainId: 60})
         this.ClientFetch = new ClientFetch({baseUrl: this.env.DOMAIN, chainId: 60})
+        this.UniswapExchangeAdderss = ''
+        this.UniswapExchangeContract = null
+        this.getAndSetUniswapExchangeAddress()
+    }
+
+    async getAndSetUniswapExchangeAddress() {
+        const factoryAddress = FACTORY_ADDRESS[parseInt(this.env.CONTRACT.NETWORK)]
+        const factoryContract = new this._web3js.eth.Contract(JSON.parse(FACTORY_ABI), factoryAddress)
+        const exchangeAddress = await factoryContract.methods.getExchange(this.env.CONTRACT.TOKEN_RING).call()
+        this.UniswapExchangeAdderss = exchangeAddress
+        const exchangeContract = new this._web3js.eth.Contract(JSON.parse(EXCHANGE_ABI), exchangeAddress)
+        this.UniswapExchangeContract = exchangeContract
+        return exchangeAddress
     }
 
     /**
@@ -110,6 +137,7 @@ class EthereumEvolutionLand {
                     errorCallback && errorCallback(error)
                 })
         } catch (e) {
+            console.error('triggerContract', e)
             errorCallback && errorCallback(e)
         }
 
@@ -118,6 +146,73 @@ class EthereumEvolutionLand {
         //     value: 0,
         //     ...sendParams
         // })
+    }
+
+
+    /**
+     * Swap Ether to Ring token - Powered by uniswap.
+     * @param {string} value - amount for Ring， unit of measurement(wei)
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    async buyRingUniswap(value, callback = {}) {
+        const tokenReserves = await getTokenReserves(this.env.CONTRACT.TOKEN_RING, parseInt(this.env.CONTRACT.NETWORK))
+        const tradeDetails = tradeEthForExactTokensWithData(tokenReserves, value)
+        const executionDetails = await getExecutionDetails(tradeDetails,new bignumber(0))
+
+        return this.triggerContract({
+            methodName: 'ethToTokenSwapOutput',
+            abiKey: 'uniswapExchange',
+            abiString: uniswapExchangeABI,
+            contractParams: [executionDetails.methodArguments[0].toFixed(), executionDetails.methodArguments[1] + 600],
+            sendParams: {value: executionDetails.value.toFixed()}
+        }, callback)
+    }
+
+    /**
+     * Swap Ring token to Ether - Powered by uniswap.
+     * @param {string} value - amount for Ring， unit of measurement(wei)
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    async sellRingUniswap(value, callback = {}) {
+        const tokenReserves = await getTokenReserves(this.env.CONTRACT.TOKEN_RING, parseInt(this.env.CONTRACT.NETWORK))
+        const tradeDetails = tradeExactTokensForEthWithData(tokenReserves, value)
+        const executionDetails = await getExecutionDetails(tradeDetails, 100)
+
+        return this.triggerContract({
+            methodName: executionDetails.methodName,
+            abiKey: 'uniswapExchange',
+            abiString: uniswapExchangeABI,
+            contractParams: [
+                executionDetails.methodArguments[0].toFixed(),
+                executionDetails.methodArguments[1].toFixed(), 
+                executionDetails.methodArguments[2] + 600
+            ],
+            sendParams: {value: 0}
+        }, callback)
+    }
+
+    /**
+     * Ethereum Function, Approve Ring to Uniswap Exchange
+     * @param {*} callback 
+     */
+    async approveRingToUniswap(callback = {}) {
+        if (!this.UniswapExchangeAdderss || this.UniswapExchangeAdderss === "0x0000000000000000000000000000000000000000") return;
+
+        return this.triggerContract({
+            methodName: 'approve',
+            abiKey: 'ring',
+            abiString: ringABI,
+            contractParams: [this.UniswapExchangeAdderss, '100000000000000000000000000000'],
+        }, callback)
+    }
+
+    /**
+     * Eth will be cost to swap 1 Ring
+     * @param {*} tokens_bought
+     */
+    async getEthToTokenOutputPrice(tokens_bought = '1000000000000000000') {
+        if (!this.UniswapExchangeAdderss || this.UniswapExchangeAdderss === "0x0000000000000000000000000000000000000000") return;
+        return await this.UniswapExchangeContract.methods.getEthToTokenOutputPrice(tokens_bought).call()
     }
 
     /**

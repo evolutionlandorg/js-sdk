@@ -4,7 +4,7 @@ import getABI from './abi'
 
 export function Env(env) {
     switch (env) {
-        case 'kovan':
+        case 'ropsten':
             return dev;
         case 'main':
             return prod;

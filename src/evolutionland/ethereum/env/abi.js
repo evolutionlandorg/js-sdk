@@ -70,6 +70,10 @@ export function apiContractTakeBack() {
     return ("/abi-takeBack.json");
 }
 
+export function uniswapExchange() {
+    return ("/abi-uniswapExchange.json");
+}
+
 function getABI(env){
     let _env = Env(env)
     return Object.freeze({
@@ -184,6 +188,10 @@ function getABI(env){
         soil: {
             address: _env.CONTRACT.TOKEN_ELEMENT_SOIL,
             api: apiContractRing
+        },
+        uniswapExchange: {
+            address: _env.CONTRACT.UNISWAP_EXCHANGE,
+            api: uniswapExchange
         }
     });
 }
