@@ -240,7 +240,7 @@ class EthereumEvolutionLand {
             methodName: 'claimLandAsset',
             abiKey: 'auction',
             abiString: actionABI,
-            contractParams: [tokenId],
+            contractParams: ['0x' + tokenId],
         }, callback)
     }
 
@@ -515,7 +515,7 @@ class EthereumEvolutionLand {
             methodName: 'claimApostleAsset',
             abiKey: 'apostleAuction',
             abiString: apostleAuctionABI,
-            contractParams: [tokenId],
+            contractParams: ['0x' + tokenId],
         }, callback)
     }
 
@@ -690,7 +690,7 @@ class EthereumEvolutionLand {
             abiKey: 'apostleLandResource',
             abiString: landResourceABI,
             contractParams: [
-                tokenId, landTokenId, elementAddress
+                '0x' + tokenId, '0x' + landTokenId, elementAddress
             ]
         }, callback)
     }
@@ -705,7 +705,7 @@ class EthereumEvolutionLand {
             abiKey: 'apostleLandResource',
             abiString: landResourceABI,
             contractParams: [
-                tokenId
+                '0x' + tokenId
             ]
         }, callback)
     }
@@ -721,7 +721,7 @@ class EthereumEvolutionLand {
             abiKey: 'apostleTokenUse',
             abiString: tokenUseABI,
             contractParams: [
-                tokenId
+                '0x' + tokenId
             ]
         }, callback)
     }
@@ -745,7 +745,7 @@ class EthereumEvolutionLand {
             abiString: landABI,
             contractParams: [
                 this.ABIs['apostleTokenUse'].address,
-                tokenId,
+                '0x' + tokenId,
                 data
             ]
         }, callback)
@@ -794,7 +794,7 @@ class EthereumEvolutionLand {
             abiKey: 'apostleBase',
             abiString: apostleBaseABI,
             contractParams: [
-                motherTokenId,
+                '0x' + motherTokenId,
                 Utils.padLeft(0, 40, '0'),
                 0
             ]
