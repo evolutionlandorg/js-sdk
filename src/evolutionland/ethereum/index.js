@@ -285,7 +285,7 @@ class EthereumEvolutionLand {
             methodName: 'approveAndCall',
             abiKey: 'land',
             abiString: landABI,
-            contractParams: [this.ABIs['auction'].address, tokenId, data],
+            contractParams: [this.ABIs['auction'].address, '0x' + tokenId, data],
         }, callback)
     }
 
@@ -300,7 +300,7 @@ class EthereumEvolutionLand {
         return this.triggerContract({
             methodName: "bidWithETH",
             abiString: actionABI,
-            contractParams: [tokenId, referer],
+            contractParams: ['0x' + tokenId, referer],
             abiKey: "auction",
             sendParams: {value: value}
         }, callback)
@@ -334,7 +334,7 @@ class EthereumEvolutionLand {
         return this.triggerContract({
             methodName: "cancelAuction",
             abiString: actionABI,
-            contractParams: [tokenId],
+            contractParams: ['0x' + tokenId],
             abiKey: "auction",
         }, callback);
     }
@@ -465,7 +465,7 @@ class EthereumEvolutionLand {
             methodName: 'transferFrom',
             abiKey: 'land',
             abiString: landABI,
-            contractParams: [from, to, tokenId],
+            contractParams: [from, to, '0x' + tokenId],
         }, callback)
     }
 
@@ -479,7 +479,7 @@ class EthereumEvolutionLand {
             methodName: 'claimAllResource',
             abiKey: 'apostleLandResource',
             abiString: landResourceABI,
-            contractParams: [tokenId],
+            contractParams: ['0x' + tokenId],
         }, callback)
     }
 
@@ -538,7 +538,7 @@ class EthereumEvolutionLand {
             methodName: 'approveAndCall',
             abiKey: 'land',
             abiString: landABI,
-            contractParams: [this.ABIs['apostleSell'].address, tokenId, data],
+            contractParams: [this.ABIs['apostleSell'].address, '0x' + tokenId, data],
         }, callback)
     }
 
@@ -552,7 +552,7 @@ class EthereumEvolutionLand {
             methodName: 'cancelAuction',
             abiKey: 'apostleAuction',
             abiString: apostleAuctionABI,
-            contractParams: [tokenId],
+            contractParams: ['0x' + tokenId],
         }, callback)
     }
 
@@ -569,7 +569,7 @@ class EthereumEvolutionLand {
             abiString: apostleTakeBackABI,
             contractParams: [
                 nftData.nonce,
-                tokenId,
+                '0x' + tokenId,
                 this.ABIs['land'].address,
                 nftData.expireTime,
                 nftData.hash_text,
@@ -634,11 +634,12 @@ class EthereumEvolutionLand {
         const _end = Utils.toHexAndPadLeft(end).slice(2)
         const _duration = Utils.toHexAndPadLeft(duration).slice(2)
         const data = `0x${_start}${_end}${_duration}${_from}`
+        console.log(_from, data)
         return this.triggerContract({
             methodName: 'approveAndCall',
             abiKey: 'land',
             abiString: landABI,
-            contractParams: [this.ABIs['apostleSiringAuction'].address, tokenId, data],
+            contractParams: [this.ABIs['apostleSiringAuction'].address, '0x' + tokenId, data],
         }, callback)
     }
 
@@ -653,7 +654,7 @@ class EthereumEvolutionLand {
             abiKey: 'apostleSiringCancelAuction',
             abiString: apostleSiringABI,
             contractParams: [
-                tokenId
+                '0x' + tokenId
             ]
         }, callback)
     }
@@ -672,7 +673,7 @@ class EthereumEvolutionLand {
             abiKey: 'land',
             abiString: landABI,
             contractParams: [
-                from, toAddress, tokenId
+                from, toAddress, '0x' + tokenId
             ]
         }, callback)
     }
@@ -761,7 +762,7 @@ class EthereumEvolutionLand {
             abiKey: 'apostleTokenUse',
             abiString: tokenUseABI,
             contractParams: [
-                tokenId
+                '0x' + tokenId
             ]
         }, callback)
     }
@@ -841,7 +842,7 @@ class EthereumEvolutionLand {
             methodName: 'bridgeInAndTie',
             abiKey: 'petBase',
             abiString: petBaseABI,
-            contractParams: [originNftAddress, originTokenId, apostleTokenId]
+            contractParams: [originNftAddress, originTokenId, '0x' + apostleTokenId]
         }, callback)
     }
 
@@ -855,7 +856,7 @@ class EthereumEvolutionLand {
             methodName: 'untiePetToken',
             abiKey: 'petBase',
             abiString: petBaseABI,
-            contractParams: [petTokenId]
+            contractParams: ['0x' + petTokenId]
         }, callback)
     }
 
