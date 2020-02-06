@@ -109,7 +109,6 @@ class EthereumEvolutionLand {
     ) {
         try {
             beforeFetch && beforeFetch()
-
             let _contract = null
             if (abiString) {
                 _contract = new this._web3js.eth.Contract(abiString, this.ABIs[abiKey].address);
@@ -188,6 +187,29 @@ class EthereumEvolutionLand {
                 executionDetails.methodArguments[2] + 600
             ],
             sendParams: {value: 0}
+        }, callback)
+    }
+
+    /**
+     * Transfers value amount of tokens to address to
+     * @param {string} value - amount of tokens
+     * @param {string} to - receiving address
+     * @param {string} symbol - symbol of token [ring, kton, gold, wood, water, fire, soil]
+     * @param {*} callback
+     */
+    async tokenTransfer(value, to, symbol, callback = {}) {
+        if (!to || to === "0x0000000000000000000000000000000000000000") return;
+        let abiString = ''
+        if( symbol === 'kton') {
+            abiString = ktonABI
+        } else {
+            abiString = ringABI
+        }
+        return this.triggerContract({
+            methodName: 'transfer',
+            abiKey: symbol,
+            abiString: abiString,
+            contractParams: [to, value],
         }, callback)
     }
 
