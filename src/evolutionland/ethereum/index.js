@@ -1,5 +1,8 @@
-import bignumber from 'bignumber.js'
-import {Env, getABIConfig} from './env'
+import bignumber, { BigNumber } from 'bignumber.js'
+import {
+    Env,
+    getABIConfig
+} from './env'
 import ClientFetch from '../utils/clientFetch'
 import bancorABI from './env/abi/ethereum/abi-bancor'
 import actionABI from './env/abi/ethereum/abi-auction'
@@ -18,6 +21,7 @@ import apostleBaseABI from './env/abi/ethereum/abi-apostleBase'
 import tokenUseABI from './env/abi/ethereum/abi-tokenUse'
 import petBaseABI from './env/abi/ethereum/abi-petbase'
 import uniswapExchangeABI from './env/abi/ethereum/abi-uniswapExchange'
+import swapBridgeABI from './env/abi/ethereum/abi-swapBridge'
 import Utils from '../utils/index'
 
 import {
@@ -32,8 +36,7 @@ import {
     tradeExactTokensForEthWithData
 } from '@uniswap/sdk'
 
-const loop = function () {
-}
+const loop = function () {}
 
 /**
  * @class
@@ -50,8 +53,14 @@ class EthereumEvolutionLand {
         this._web3js = web3js
         this.env = Env(network)
         this.ABIs = getABIConfig(network)
-        this.ABIClientFetch = new ClientFetch({baseUrl: this.env.ABI_DOMAIN, chainId: 60})
-        this.ClientFetch = new ClientFetch({baseUrl: this.env.DOMAIN, chainId: 60})
+        this.ABIClientFetch = new ClientFetch({
+            baseUrl: this.env.ABI_DOMAIN,
+            chainId: 60
+        })
+        this.ClientFetch = new ClientFetch({
+            baseUrl: this.env.DOMAIN,
+            chainId: 60
+        })
         this.UniswapExchangeAdderss = ''
         this.UniswapExchangeContract = null
         this.getAndSetUniswapExchangeAddress()
@@ -98,15 +107,19 @@ class EthereumEvolutionLand {
      * @param errorCallback
      * @returns {Promise<PromiEvent<any>>}
      */
-    async triggerContract({methodName, abiKey, abiString, contractParams = [], sendParams},
-                          {
-                              beforeFetch = loop,
-                              transactionHashCallback = loop,
-                              confirmationCallback = loop,
-                              receiptCallback = loop,
-                              errorCallback = loop
-                          } = {}
-    ) {
+    async triggerContract({
+        methodName,
+        abiKey,
+        abiString,
+        contractParams = [],
+        sendParams
+    }, {
+        beforeFetch = loop,
+        transactionHashCallback = loop,
+        confirmationCallback = loop,
+        receiptCallback = loop,
+        errorCallback = loop
+    } = {}) {
         try {
             beforeFetch && beforeFetch()
             let _contract = null
@@ -119,10 +132,10 @@ class EthereumEvolutionLand {
 
             const _method = _contract.methods[methodName].apply(this, contractParams)
             return _method.send({
-                from: await this.getCurrentAccount(),
-                value: 0,
-                ...sendParams
-            })
+                    from: await this.getCurrentAccount(),
+                    value: 0,
+                    ...sendParams
+                })
                 .on('transactionHash', (hash) => {
                     transactionHashCallback && transactionHashCallback(hash)
                 })
@@ -147,6 +160,86 @@ class EthereumEvolutionLand {
         // })
     }
 
+    /**
+     * Interact with a contract.
+     * @param {string} methodName - contract method name
+     * @param {string} abiKey - If the contract exists in the configuration file, you can use the key in the configuration to get it directly.
+     * @param {json} abiString - ethereum ABI json
+     * @param contractParams - contract function with arguments
+     * @param sendParams - web3js send() arguments
+     * @param beforeFetch
+     * @param transactionHashCallback
+     * @param confirmationCallback
+     * @param receiptCallback
+     * @param errorCallback
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    async callContract({
+        methodName,
+        abiKey,
+        abiString,
+        contractParams = [],
+    }, {
+        beforeFetch = loop,
+        errorCallback = loop
+    } = {}) {
+        try {
+            beforeFetch && beforeFetch()
+            let _contract = null
+            if (abiString) {
+                _contract = new this._web3js.eth.Contract(abiString, this.ABIs[abiKey].address);
+            } else {
+                const _abi = await this.ABIClientFetch.$getAbi(this.ABIs[abiKey].api())
+                _contract = new this._web3js.eth.Contract(_abi, this.ABIs[abiKey].address)
+            }
+
+            const _method = _contract.methods[methodName].apply(this, contractParams)
+            return _method.call({
+                    from: await this.getCurrentAccount(),
+                })
+            
+        } catch (e) {
+            console.error('triggerContract', e)
+            errorCallback && errorCallback(e)
+        }
+    }
+
+    /**
+     * Atlantis swap fee
+     * @param {string} value amount of rings to be swaped
+     * @param {*} callback 
+     */
+    async fetchAtlantisSwapFee(value, callback = {}) {
+        return await this.callContract({
+            methodName: 'querySwapFeeForNow',
+            abiKey: 'swapBridge',
+            abiString: swapBridgeABI,
+            contractParams: [value],
+        }, callback)
+    }
+
+    /**
+     * Atlantis ring transfer to Byzantium
+     * @param {string} value amount of rings to be swaped
+     * @param {string} value tron address (bs58)
+     * @param {*} callback 
+     */
+    async AtlantisSwapBridge(value, targetAddress, callback = {}) {
+        if(!targetAddress) {
+            throw Error('empty targetAddress')
+        }
+
+        const fee = await this.fetchAtlantisSwapFee(value)
+        const hexTargetAddress = Utils.decodeBase58Address(targetAddress);
+
+        const extraData = `${Utils.toHexAndPadLeft(value)}${Utils.toHexAndPadLeft(2).slice(2)}${Utils.padLeft(hexTargetAddress.substring(2), 64, '0')}`
+        return this.triggerContract({
+            methodName: 'approveAndCall',
+            abiKey: 'ring',
+            abiString: ringABI,
+            contractParams: [this.ABIs['swapBridge'].address, new bignumber(fee).plus(new bignumber(value)).toFixed(), extraData],
+        }, callback)
+    }
 
     /**
      * Swap Ether to Ring token - Powered by uniswap.
@@ -156,14 +249,16 @@ class EthereumEvolutionLand {
     async buyRingUniswap(value, callback = {}) {
         const tokenReserves = await getTokenReserves(this.env.CONTRACT.TOKEN_RING, parseInt(this.env.CONTRACT.NETWORK))
         const tradeDetails = tradeEthForExactTokensWithData(tokenReserves, value)
-        const executionDetails = await getExecutionDetails(tradeDetails,new bignumber(0))
+        const executionDetails = await getExecutionDetails(tradeDetails, new bignumber(0))
 
         return this.triggerContract({
             methodName: 'ethToTokenSwapOutput',
             abiKey: 'uniswapExchange',
             abiString: uniswapExchangeABI,
             contractParams: [executionDetails.methodArguments[0].toFixed(), executionDetails.methodArguments[1] + 600],
-            sendParams: {value: executionDetails.value.toFixed()}
+            sendParams: {
+                value: executionDetails.value.toFixed()
+            }
         }, callback)
     }
 
@@ -183,10 +278,12 @@ class EthereumEvolutionLand {
             abiString: uniswapExchangeABI,
             contractParams: [
                 executionDetails.methodArguments[0].toFixed(),
-                executionDetails.methodArguments[1].toFixed(), 
+                executionDetails.methodArguments[1].toFixed(),
                 executionDetails.methodArguments[2] + 600
             ],
-            sendParams: {value: 0}
+            sendParams: {
+                value: 0
+            }
         }, callback)
     }
 
@@ -200,7 +297,7 @@ class EthereumEvolutionLand {
     async tokenTransfer(value, to, symbol, callback = {}) {
         if (!to || to === "0x0000000000000000000000000000000000000000") return;
         let abiString = ''
-        if( symbol === 'kton') {
+        if (symbol === 'kton') {
             abiString = ktonABI
         } else {
             abiString = ringABI
@@ -248,7 +345,9 @@ class EthereumEvolutionLand {
             abiKey: 'bancor',
             abiString: bancorABI,
             contractParams: [1],
-            sendParams: {value: value}
+            sendParams: {
+                value: value
+            }
         }, callback)
     }
 
@@ -276,9 +375,9 @@ class EthereumEvolutionLand {
     buyLandContract(amount, tokenId, referrer, callback = {}) {
         const finalReferrer = referrer
         const data =
-            finalReferrer && Utils.isAddress(finalReferrer)
-                ? `0x${tokenId}${Utils.padLeft(finalReferrer.substring(2), 64, '0')}`
-                : `0x${tokenId}`
+            finalReferrer && Utils.isAddress(finalReferrer) ?
+            `0x${tokenId}${Utils.padLeft(finalReferrer.substring(2), 64, '0')}` :
+            `0x${tokenId}`
 
         return this.triggerContract({
             methodName: 'transfer',
@@ -324,7 +423,9 @@ class EthereumEvolutionLand {
             abiString: actionABI,
             contractParams: ['0x' + tokenId, referer],
             abiKey: "auction",
-            sendParams: {value: value}
+            sendParams: {
+                value: value
+            }
         }, callback)
     }
 
@@ -338,7 +439,14 @@ class EthereumEvolutionLand {
      * @param s
      * @returns {Promise<PromiEvent<any>>}
      */
-    withdrawRing({nonce, value, hash, v, r, s}, callback = {}) {
+    withdrawRing({
+        nonce,
+        value,
+        hash,
+        v,
+        r,
+        s
+    }, callback = {}) {
         return this.triggerContract({
             methodName: "takeBack",
             abiString: withdrawABI,
@@ -515,9 +623,9 @@ class EthereumEvolutionLand {
     apostleBid(amount, tokenId, referrer, callback = {}) {
         const finalReferrer = referrer
         const data =
-            finalReferrer && Utils.isAddress(finalReferrer)
-                ? `0x${tokenId}${Utils.padLeft(finalReferrer.substring(2), 64, '0')}`
-                : `0x${tokenId}`
+            finalReferrer && Utils.isAddress(finalReferrer) ?
+            `0x${tokenId}${Utils.padLeft(finalReferrer.substring(2), 64, '0')}` :
+            `0x${tokenId}`
 
         return this.triggerContract({
             methodName: 'transfer',
@@ -656,7 +764,6 @@ class EthereumEvolutionLand {
         const _end = Utils.toHexAndPadLeft(end).slice(2)
         const _duration = Utils.toHexAndPadLeft(duration).slice(2)
         const data = `0x${_start}${_end}${_duration}${_from}`
-        console.log(_from, data)
         return this.triggerContract({
             methodName: 'approveAndCall',
             abiKey: 'land',
@@ -887,14 +994,21 @@ class EthereumEvolutionLand {
      * @param address - Ethereum address
      */
     checkAddress(address) {
-        return this.ClientFetch.$get('/api/verified_wallet', {wallet: address})
+        return this.ClientFetch.$get('/api/verified_wallet', {
+            wallet: address
+        })
     }
 
     challengeAddress(address) {
-        return this.ClientFetch.$get('/api/challenge', {wallet: address})
+        return this.ClientFetch.$get('/api/challenge', {
+            wallet: address
+        })
     }
 
-    async _sign({data, name}, from) {
+    async _sign({
+        data,
+        name
+    }, from) {
         let signature;
         try {
             signature = await this._web3js.eth.personal.sign(
@@ -919,9 +1033,16 @@ class EthereumEvolutionLand {
     async login(address) {
         return new Promise((resolve, reject) => {
             this.challengeAddress(address).then((res) => {
-                const {code, data, name} = res
+                const {
+                    code,
+                    data,
+                    name
+                } = res
                 if (code === 0) {
-                    this._sign({data, name}, address)
+                    this._sign({
+                            data,
+                            name
+                        }, address)
                         .then(info => {
                             if (info.signature) {
                                 this.ClientFetch.$post('/api/login', {
@@ -931,7 +1052,10 @@ class EthereumEvolutionLand {
                                     resolve(res)
                                 })
                             } else {
-                                reject({code, data})
+                                reject({
+                                    code,
+                                    data
+                                })
                             }
                         })
                         .catch(err => reject(err))

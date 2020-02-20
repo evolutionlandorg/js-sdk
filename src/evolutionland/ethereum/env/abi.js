@@ -74,6 +74,10 @@ export function uniswapExchange() {
     return ("/abi-uniswapExchange.json");
 }
 
+export function swapBridge() {
+    return ("/abi-swapBridge.json");
+}
+
 function getABI(env){
     let _env = Env(env)
     return Object.freeze({
@@ -192,6 +196,10 @@ function getABI(env){
         uniswapExchange: {
             address: _env.CONTRACT.UNISWAP_EXCHANGE,
             api: uniswapExchange
+        },
+        swapBridge: {
+            address: _env.CONTRACT.TOKEN_DEX_BRIDGE,
+            api: swapBridge
         }
     });
 }
