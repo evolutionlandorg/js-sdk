@@ -2,7 +2,7 @@ import Ethereum from './chain/ethereum/index'
 import Tronweb from './chain/tron/index'
 import ethEvolutionLand from './evolutionland/ethereum'
 import tronEvolutionLand from './evolutionland/tron'
-
+import units from './evolutionland/utils/unitConversion'
 
 /**
  * @constructor
@@ -12,6 +12,7 @@ class Evolution {
     constructor(options = {}) {
         this.web3js = null
         this.tronweb = null
+        this.units = units
     }
 
     /**
@@ -33,7 +34,7 @@ class Evolution {
     /**
      * create a instance for interacting with Evolution Land
      * @param chain ['ethereum', 'tron']
-     * @param env Ethereum for ['main','kovan']、 Tron for ['main', 'shasta']
+     * @param env Ethereum for ['main','ropsten']、 Tron for ['main', 'shasta']
      * @returns {*}
      */
     createEvolutionLand(chain, env) {

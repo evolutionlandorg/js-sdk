@@ -1,4 +1,4 @@
-import bignumber, { BigNumber } from 'bignumber.js'
+import BigNumber from 'bignumber.js'
 import {
     Env,
     getABIConfig
@@ -61,7 +61,7 @@ class EthereumEvolutionLand {
             baseUrl: this.env.DOMAIN,
             chainId: 60
         })
-        this.UniswapExchangeAdderss = ''
+        this.UniswapExchangeAddress = ''
         this.UniswapExchangeContract = null
         this.getAndSetUniswapExchangeAddress()
     }
@@ -70,7 +70,7 @@ class EthereumEvolutionLand {
         const factoryAddress = FACTORY_ADDRESS[parseInt(this.env.CONTRACT.NETWORK)]
         const factoryContract = new this._web3js.eth.Contract(JSON.parse(FACTORY_ABI), factoryAddress)
         const exchangeAddress = await factoryContract.methods.getExchange(this.env.CONTRACT.TOKEN_RING).call()
-        this.UniswapExchangeAdderss = exchangeAddress
+        this.UniswapExchangeAddress = exchangeAddress
         const exchangeContract = new this._web3js.eth.Contract(JSON.parse(EXCHANGE_ABI), exchangeAddress)
         this.UniswapExchangeContract = exchangeContract
         return exchangeAddress
@@ -86,7 +86,6 @@ class EthereumEvolutionLand {
                 if (error) {
                     reject(error)
                 } else {
-                    console.log('getCurrentAccount: ', accounts[0])
                     resolve(accounts[0])
                 }
             })
@@ -237,7 +236,7 @@ class EthereumEvolutionLand {
             methodName: 'approveAndCall',
             abiKey: 'ring',
             abiString: ringABI,
-            contractParams: [this.ABIs['swapBridge'].address, new bignumber(fee).plus(new bignumber(value)).toFixed(), extraData],
+            contractParams: [this.ABIs['swapBridge'].address, new BigNumber(fee).plus(new BigNumber(value)).toFixed(), extraData],
         }, callback)
     }
 
@@ -249,7 +248,7 @@ class EthereumEvolutionLand {
     async buyRingUniswap(value, callback = {}) {
         const tokenReserves = await getTokenReserves(this.env.CONTRACT.TOKEN_RING, parseInt(this.env.CONTRACT.NETWORK))
         const tradeDetails = tradeEthForExactTokensWithData(tokenReserves, value)
-        const executionDetails = await getExecutionDetails(tradeDetails, new bignumber(0))
+        const executionDetails = await getExecutionDetails(tradeDetails, new BigNumber(0))
 
         return this.triggerContract({
             methodName: 'ethToTokenSwapOutput',
@@ -315,13 +314,13 @@ class EthereumEvolutionLand {
      * @param {*} callback 
      */
     async approveRingToUniswap(callback = {}) {
-        if (!this.UniswapExchangeAdderss || this.UniswapExchangeAdderss === "0x0000000000000000000000000000000000000000") return;
+        if (!this.UniswapExchangeAddress || this.UniswapExchangeAddress === "0x0000000000000000000000000000000000000000") return;
 
         return this.triggerContract({
             methodName: 'approve',
             abiKey: 'ring',
             abiString: ringABI,
-            contractParams: [this.UniswapExchangeAdderss, '100000000000000000000000000000'],
+            contractParams: [this.UniswapExchangeAddress, '100000000000000000000000000000'],
         }, callback)
     }
 
@@ -330,7 +329,7 @@ class EthereumEvolutionLand {
      * @param {*} tokens_bought
      */
     async getEthToTokenOutputPrice(tokens_bought = '1000000000000000000') {
-        if (!this.UniswapExchangeAdderss || this.UniswapExchangeAdderss === "0x0000000000000000000000000000000000000000") return;
+        if (!this.UniswapExchangeAddress || this.UniswapExchangeAddress === "0x0000000000000000000000000000000000000000") return;
         return await this.UniswapExchangeContract.methods.getEthToTokenOutputPrice(tokens_bought).call()
     }
 
@@ -945,15 +944,13 @@ class EthereumEvolutionLand {
         levelUnitPrice,
         callback = {}
     ) {
-        const elementAddress = this.ABIs[element.toLowerCase() || 'token'].address
-
         return this.triggerContract({
             methodName: 'transfer',
             abiKey: element.toLowerCase(),
-            abiString: apostleBaseABI,
+            abiString: ringABI,
             contractParams: [
-                elementAddress,
-                level * levelUnitPrice,
+                this.ABIs['apostleBase'].address,
+                new BigNumber(level).times(new BigNumber(levelUnitPrice)).toFixed(),
                 `0x${motherTokenId}${Utils.toHexAndPadLeft(level).slice(2)}`
             ]
         }, callback)

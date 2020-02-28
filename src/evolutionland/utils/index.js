@@ -12,5 +12,5 @@ function decodeBase58Address(base58Sting) {
 export default {
     toHexAndPadLeft,
     decodeBase58Address,
-    ...Web3.utils
+    ...Web3.utils,
 }

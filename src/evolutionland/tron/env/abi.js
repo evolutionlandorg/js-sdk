@@ -1,4 +1,6 @@
-import {Env} from './index'
+import {
+    Env
+} from './index'
 
 export function apiContractlottey() {
     return ("/abi-lottery.json");
@@ -70,7 +72,50 @@ export function apiContractTakeBack() {
     return ("/abi-takeBack.json");
 }
 
-function getABI(env){
+export function getContractMethodsParams(methodName, params, json) {
+    const result = json.filter(item => {
+        if (Array.isArray(item.inputs)) {
+            return (
+                (item.type === "Function" || item.type === "function") &&
+                item.name === methodName &&
+                item.inputs.length === params.length
+            );
+        }
+        return (
+            (item.type === "Function" || item.type === "function") &&
+            item.name === methodName
+        );
+    })[0];
+
+    let function_selector;
+    let parameter;
+
+    if (Array.isArray(result.inputs)) {
+        const types = result.inputs.reduce((total, item) => {
+            return total + item.type + ",";
+        }, "");
+        function_selector = `${methodName}(${types.substring(
+        0,
+        types.length - 1
+      )})`;
+
+        parameter = params.map((item, index) => {
+            const obj = {};
+            obj.type = result.inputs[index].type;
+            obj.value = item;
+            return obj;
+        });
+    } else {
+        function_selector = `${methodName}()`;
+        parameter = [];
+    }
+    return {
+        functionSelector: function_selector,
+        parameter
+    };
+}
+
+function getABI(env) {
     let _env = Env(env)
     return Object.freeze({
         ring: {
