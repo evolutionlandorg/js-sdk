@@ -1,11 +1,12 @@
 {
-  "name": "evolution-js",
-  "version": "1.0.0",
+  "name": "@evolutionland/evolution-js",
+  "version": "1.1.0",
   "description": "",
   "main": "./src/index.js",
   "scripts": {
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
+    "dev-watch": "webpack --mode development --watch",
     "analyze": "ANALYZE=true webpack --mode production",
     "generate-docs": "jsdoc --configure .jsdoc.json --verbose",
     "publish-docs": "gh-pages -d docs/evolution-js/1.0.0"

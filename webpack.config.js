@@ -9,12 +9,29 @@ const {
 
 const plugins = [new CleanWebpackPlugin(), new Dotenv()];
 
+
 if (process.env.ANALYZE) {
     plugins.push(new BundleAnalyzerPlugin());
 }
 
 const ENV = process.env.NODE_ENV || 'development';
 const isProd = ENV === 'production';
+const optimization =
+    isProd ? {
+        optimization: {
+            runtimeChunk: 'single',
+            splitChunks: {
+                cacheGroups: {
+                    vendorOther: {
+                        chunks: 'initial',
+                        enforce: true,
+                        name: 'vendor',
+                        test: /node_modules\//
+                    }
+                }
+            }
+        }
+    } : {}
 
 
 module.exports = {
@@ -26,29 +43,17 @@ module.exports = {
         globalObject: '(typeof self !== \'undefined\' ? self : this)',
         path: path.join(__dirname, "dist")
     } : {
-        filename: "evolutionland.min.js",
-        globalObject: '(typeof self !== \'undefined\' ? self : this)',
-        path: path.join(__dirname, "dist")
-    },
+            filename: "evolutionland.min.js",
+            globalObject: '(typeof self !== \'undefined\' ? self : this)',
+            path: path.join(__dirname, "dist")
+        },
     watch: isProd,
     watchOptions: {
         poll: 1000,
         aggregateTimeout: 2000,
         ignored: /node_modules/
     },
-    optimization: {
-        runtimeChunk: 'single',
-        splitChunks: {
-            cacheGroups: {
-                vendorOther: {
-                    chunks: 'initial',
-                    enforce: true,
-                    name: 'vendor',
-                    test: /node_modules\//
-                }
-            }
-        }
-    },
+    ...optimization,
     module: {
         rules: [{
             test: /\.(js|mjs)$/,
