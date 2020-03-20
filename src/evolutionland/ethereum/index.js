@@ -63,7 +63,6 @@ class EthereumEvolutionLand {
         })
         this.UniswapExchangeAddress = ''
         this.UniswapExchangeContract = null
-        this.getAndSetUniswapExchangeAddress()
     }
 
     async getAndSetUniswapExchangeAddress() {
@@ -314,6 +313,7 @@ class EthereumEvolutionLand {
      * @param {*} callback 
      */
     async approveRingToUniswap(callback = {}) {
+        await this.getAndSetUniswapExchangeAddress();
         if (!this.UniswapExchangeAddress || this.UniswapExchangeAddress === "0x0000000000000000000000000000000000000000") return;
 
         return this.triggerContract({
@@ -329,6 +329,7 @@ class EthereumEvolutionLand {
      * @param {*} tokens_bought
      */
     async getEthToTokenOutputPrice(tokens_bought = '1000000000000000000') {
+        await this.getAndSetUniswapExchangeAddress();
         if (!this.UniswapExchangeAddress || this.UniswapExchangeAddress === "0x0000000000000000000000000000000000000000") return;
         return await this.UniswapExchangeContract.methods.getEthToTokenOutputPrice(tokens_bought).call()
     }
