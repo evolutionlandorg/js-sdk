@@ -36,7 +36,7 @@ import {
     tradeExactTokensForEthWithData
 } from '@uniswap/sdk'
 
-const loop = function () {}
+const loop = function () { }
 
 /**
  * @class
@@ -128,28 +128,28 @@ class EthereumEvolutionLand {
                 const _abi = await this.ABIClientFetch.$getAbi(this.ABIs[abiKey].api())
                 _contract = new this._web3js.eth.Contract(_abi, this.ABIs[abiKey].address)
             }
-
+            const extendPayload = { ...payload, _contractAddress: this.ABIs[abiKey].address };
             const _method = _contract.methods[methodName].apply(this, contractParams)
             return _method.send({
-                    from: await this.getCurrentAccount(),
-                    value: 0,
-                    ...sendParams
-                })
+                from: await this.getCurrentAccount(),
+                value: 0,
+                ...sendParams
+            })
                 .on('transactionHash', (hash) => {
-                    transactionHashCallback && transactionHashCallback(hash, payload)
+                    transactionHashCallback && transactionHashCallback(hash, extendPayload)
                 })
                 .on('confirmation', (confirmationNumber, receipt) => {
-                    confirmationCallback && confirmationCallback(confirmationNumber, receipt, payload)
+                    confirmationCallback && confirmationCallback(confirmationNumber, receipt, extendPayload)
                 })
                 .on('receipt', (receipt) => {
-                    receiptCallback && receiptCallback(receipt, payload)
+                    receiptCallback && receiptCallback(receipt, extendPayload)
                 })
                 .on('error', (error) => {
-                    errorCallback && errorCallback(error, payload)
+                    errorCallback && errorCallback(error, extendPayload)
                 })
         } catch (e) {
             console.error('triggerContract', e)
-            errorCallback && errorCallback(e, payload)
+            errorCallback && errorCallback(e, extendPayload)
         }
 
         // return _method.send.bind(this,{
@@ -194,9 +194,9 @@ class EthereumEvolutionLand {
 
             const _method = _contract.methods[methodName].apply(this, contractParams)
             return _method.call({
-                    from: await this.getCurrentAccount(),
-                })
-            
+                from: await this.getCurrentAccount(),
+            })
+
         } catch (e) {
             console.error('triggerContract', e)
             errorCallback && errorCallback(e)
@@ -224,7 +224,7 @@ class EthereumEvolutionLand {
      * @param {*} callback 
      */
     async AtlantisSwapBridge(value, targetAddress, callback = {}) {
-        if(!targetAddress) {
+        if (!targetAddress) {
             throw Error('empty targetAddress')
         }
 
@@ -377,8 +377,8 @@ class EthereumEvolutionLand {
         const finalReferrer = referrer
         const data =
             finalReferrer && Utils.isAddress(finalReferrer) ?
-            `0x${tokenId}${Utils.padLeft(finalReferrer.substring(2), 64, '0')}` :
-            `0x${tokenId}`
+                `0x${tokenId}${Utils.padLeft(finalReferrer.substring(2), 64, '0')}` :
+                `0x${tokenId}`
 
         return this.triggerContract({
             methodName: 'transfer',
@@ -625,8 +625,8 @@ class EthereumEvolutionLand {
         const finalReferrer = referrer
         const data =
             finalReferrer && Utils.isAddress(finalReferrer) ?
-            `0x${tokenId}${Utils.padLeft(finalReferrer.substring(2), 64, '0')}` :
-            `0x${tokenId}`
+                `0x${tokenId}${Utils.padLeft(finalReferrer.substring(2), 64, '0')}` :
+                `0x${tokenId}`
 
         return this.triggerContract({
             methodName: 'transfer',
@@ -1039,9 +1039,9 @@ class EthereumEvolutionLand {
                 } = res
                 if (code === 0) {
                     this._sign({
-                            data,
-                            name
-                        }, address)
+                        data,
+                        name
+                    }, address)
                         .then(info => {
                             if (info.signature) {
                                 this.ClientFetch.$post('/api/login', {

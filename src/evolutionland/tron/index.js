@@ -119,7 +119,7 @@ class TronEvolutionLand {
             // })
 
             let _contract = await this._tronweb.contract().at(_abi.address)
-            console.log('contractParams', contractParams)
+            const extendPayload = { ...payload, _contractAddress: _abi.address };
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const res = _method.send({
                 feeLimit: this._tronweb.toSun(100),
@@ -128,7 +128,7 @@ class TronEvolutionLand {
                 ...sendParams
             })
             res.then((hash) => {
-                transactionHashCallback && transactionHashCallback(hash, payload)
+                transactionHashCallback && transactionHashCallback(hash, extendPayload)
                 console.log('hash', hash)
             })
             console.log('tron res:', res)
@@ -148,7 +148,7 @@ class TronEvolutionLand {
             // })
         } catch (e) {
             console.error('triggerContract', e)
-            errorCallback && errorCallback(e, payload)
+            errorCallback && errorCallback(e, extendPayload)
         }
     }
 
