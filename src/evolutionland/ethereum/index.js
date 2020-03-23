@@ -116,7 +116,8 @@ class EthereumEvolutionLand {
         transactionHashCallback = loop,
         confirmationCallback = loop,
         receiptCallback = loop,
-        errorCallback = loop
+        errorCallback = loop,
+        payload = {}
     } = {}) {
         try {
             beforeFetch && beforeFetch()
@@ -135,20 +136,20 @@ class EthereumEvolutionLand {
                     ...sendParams
                 })
                 .on('transactionHash', (hash) => {
-                    transactionHashCallback && transactionHashCallback(hash)
+                    transactionHashCallback && transactionHashCallback(hash, payload)
                 })
                 .on('confirmation', (confirmationNumber, receipt) => {
-                    confirmationCallback && confirmationCallback(confirmationNumber, receipt)
+                    confirmationCallback && confirmationCallback(confirmationNumber, receipt, payload)
                 })
                 .on('receipt', (receipt) => {
-                    receiptCallback && receiptCallback(receipt)
+                    receiptCallback && receiptCallback(receipt, payload)
                 })
                 .on('error', (error) => {
-                    errorCallback && errorCallback(error)
+                    errorCallback && errorCallback(error, payload)
                 })
         } catch (e) {
             console.error('triggerContract', e)
-            errorCallback && errorCallback(e)
+            errorCallback && errorCallback(e, payload)
         }
 
         // return _method.send.bind(this,{

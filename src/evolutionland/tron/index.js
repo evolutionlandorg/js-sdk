@@ -92,7 +92,8 @@ class TronEvolutionLand {
         transactionHashCallback = loop,
         confirmationCallback = loop,
         receiptCallback = loop,
-        errorCallback = loop
+        errorCallback = loop,
+        payload = {}
     } = {}) {
         try {
             beforeFetch && beforeFetch()
@@ -127,7 +128,7 @@ class TronEvolutionLand {
                 ...sendParams
             })
             res.then((hash) => {
-                transactionHashCallback && transactionHashCallback(hash)
+                transactionHashCallback && transactionHashCallback(hash, payload)
                 console.log('hash', hash)
             })
             console.log('tron res:', res)
@@ -147,7 +148,7 @@ class TronEvolutionLand {
             // })
         } catch (e) {
             console.error('triggerContract', e)
-            errorCallback && errorCallback(e)
+            errorCallback && errorCallback(e, payload)
         }
     }
 
