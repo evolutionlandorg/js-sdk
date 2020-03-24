@@ -326,6 +326,20 @@ class EthereumEvolutionLand {
     }
 
     /**
+     * Check if uniswap has sufficient transfer authority
+     * @param {*} amount 
+     */
+    async checkUniswapAllowance(amount) {
+        await this.getAndSetUniswapExchangeAddress();
+        if (!this.UniswapExchangeAddress || this.UniswapExchangeAddress === "0x0000000000000000000000000000000000000000") return;
+        const from = await this.getCurrentAccount()
+
+        const erc20Contract = new this._web3js.eth.Contract(ringABI, this.ABIs['ring'].address )
+        const allowanceAmount = await erc20Contract.methods.allowance(from, this.UniswapExchangeAddress).call()
+        return !Utils.toBN(allowanceAmount).lt(Utils.toBN(amount || '1000000000000000000'))
+    }
+
+    /**
      * Eth will be cost to swap 1 Ring
      * @param {*} tokens_bought
      */
