@@ -72,6 +72,10 @@ export function apiContractTakeBack() {
     return ("/abi-takeBack.json");
 }
 
+export function swapBridge() {
+    return ("/abi-swapBridge.json");
+}
+
 export function getContractMethodsParams(methodName, params, json) {
     const result = json.filter(item => {
         if (Array.isArray(item.inputs)) {
@@ -229,6 +233,10 @@ function getABI(env) {
         soil: {
             address: _env.CONTRACT.TOKEN_ELEMENT_SOIL,
             api: apiContractRing
+        },
+        swapBridge: {
+            address: _env.CONTRACT.TOKEN_DEX_BRIDGE,
+            api: swapBridge
         }
     });
 }

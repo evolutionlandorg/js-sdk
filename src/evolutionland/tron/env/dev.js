@@ -1,7 +1,7 @@
 export default {
     CONTRACT: {
         // 合约
-        TOKEN_DEX_BRIDGE: "", // DexBridge swap
+        TOKEN_DEX_BRIDGE: "41C2CB4091065AA98F37B34A2A5DEC74FEB68969B7", // DexBridge swap
         TOKEN_RING: "415e465875334b3960e6fc3f6e018ef70d66dedf15",
         TOKEN_WITHDRAW: "41c93353671432262fba262adb8d0bdebc48551035", // takeback
         TOKEN_AUCTION: "41a77b64c3751e29ed15c7ca936a219609b7974955", // ClockAuction

@@ -81,6 +81,45 @@ class TronEvolutionLand {
      * @param errorCallback
      * @returns {Promise<PromiEvent<any>>}
      */
+    async callContract({
+        methodName,
+        abiKey,
+        abiString,
+        contractParams = [],
+    }, {
+        beforeFetch = loop,
+        errorCallback = loop
+    } = {}) {
+        try {
+            beforeFetch && beforeFetch()
+            let _abi = this.ABIs[abiKey];
+
+            let _contract = await this._tronweb.contract().at(_abi.address)
+            const _method = _contract.methods[methodName].apply(this, contractParams)
+            const res = await _method.call()
+            console.log('tron res:', res)
+            return res;
+
+        } catch (e) {
+            console.error('triggerContract', e)
+            errorCallback && errorCallback(e)
+        }
+    }
+
+    /**
+     * Interact with a contract.
+     * @param {string} methodName - contract method name
+     * @param {string} abiKey - If the contract exists in the configuration file, you can use the key in the configuration to get it directly.
+     * @param {json} abiString - ethereum ABI json
+     * @param contractParams - contract function with arguments
+     * @param sendParams - web3js send() arguments
+     * @param beforeFetch
+     * @param transactionHashCallback
+     * @param confirmationCallback
+     * @param receiptCallback
+     * @param errorCallback
+     * @returns {Promise<PromiEvent<any>>}
+     */
     async triggerContract({
         methodName,
         abiKey,
@@ -749,6 +788,42 @@ class TronEvolutionLand {
                 new BigNumber(level).times(new BigNumber(levelUnitPrice)).toFixed(),
                 `0x${motherTokenId}${Utils.toHexAndPadLeft(level).slice(2)}`
             ]
+        }, callback)
+    }
+
+
+    /**
+     * Byzantine swap fee
+     * @param {string} value amount of rings to be swaped
+     * @param {*} callback 
+     */
+    async fetchByzantineSwapFee(value, callback = {}) {
+        return await this.callContract({
+            methodName: 'querySwapFeeForNow',
+            abiKey: 'swapBridge',
+            abiString: swapBridgeABI,
+            contractParams: [value],
+        }, callback)
+    }
+
+    /**
+     * Byzantine ring transfer to Atlantis
+     * @param {string} value amount of rings to be swaped
+     * @param {string} value ethereum address
+     * @param {*} callback 
+     */
+    async ByzantineSwapBridge(value, targetAddress, callback = {}) {
+        if (!targetAddress) {
+            throw Error('empty targetAddress')
+        }
+
+        const fee = await this.fetchByzantineSwapFee(value)
+        const extraData = `${Utils.toHexAndPadLeft(value)}${Utils.toHexAndPadLeft(1).slice(2)}${Utils.padLeft(targetAddress.substring(2), 64, '0')}`
+        return this.triggerContract({
+            methodName: 'approveAndCall',
+            abiKey: 'ring',
+            abiString: ringABI,
+            contractParams: [this.ABIs['swapBridge'].address, new BigNumber(fee).plus(new BigNumber(value)).toFixed(), extraData],
         }, callback)
     }
 }
