@@ -349,6 +349,16 @@ class EthereumEvolutionLand {
         return await this.UniswapExchangeContract.methods.getEthToTokenOutputPrice(tokens_bought).call()
     }
 
+     /**
+     * Eth will be got to swap 1 Ring
+     * @param {*} tokens_bought
+     */
+    async getTokenToEthInputPrice(tokens_bought = '1000000000000000000') {
+        await this.getAndSetUniswapExchangeAddress();
+        if (!this.UniswapExchangeAddress || this.UniswapExchangeAddress === "0x0000000000000000000000000000000000000000") return;
+        return await this.UniswapExchangeContract.methods.getTokenToEthInputPrice(tokens_bought).call()
+    }
+
     /**
      * Buy ring token with Ether.
      * @param {string} value - amount for Ether， unit of measurement(wei)
