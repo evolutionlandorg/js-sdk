@@ -798,7 +798,7 @@ class TronEvolutionLand {
      * @param {*} callback 
      */
     async fetchByzantineSwapFee(value, callback = {}) {
-        return await this.callContract({
+        return this.callContract({
             methodName: 'querySwapFeeForNow',
             abiKey: 'swapBridge',
             abiString: swapBridgeABI,
