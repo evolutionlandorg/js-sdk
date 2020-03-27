@@ -43,4 +43,8 @@ Units.toRing = function(value) {
   return Units.convert(value, 'ring', 'wei')
 }
 
+Units.fromWei = function(value) {
+  return Units.convert(value, 'wei', 'ring')
+}
+
 export default Units
