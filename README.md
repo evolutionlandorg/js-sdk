@@ -17,7 +17,7 @@ A javascript library for interact with blockchain(Ethereum、Tron) and Evolution
 
     evo.createWeb3js({provider: web3.currentProvider})
     evo.createTronweb({
-        fullHost: 'https://api.shata.trongrid.io',
+        fullHost: 'https://api.shasta.trongrid.io',
     })
     
     evo.createEvolutionLand('ethereum', 'kovan')
