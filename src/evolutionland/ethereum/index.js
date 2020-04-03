@@ -340,6 +340,27 @@ class EthereumEvolutionLand {
     }
 
     /**
+     * get amount of ether in uniswap exchange 
+     */
+    async getUniswapEthBalance() {
+        await this.getAndSetUniswapExchangeAddress();
+        if (!this.UniswapExchangeAddress || this.UniswapExchangeAddress === "0x0000000000000000000000000000000000000000") return;
+        return await this._web3js.eth.getBalance(this.UniswapExchangeAddress)
+    }
+
+     /**
+     * get amount of ring in uniswap exchange 
+     */
+    async getUniswapTokenBalance() {
+        await this.getAndSetUniswapExchangeAddress();
+
+        if (!this.UniswapExchangeAddress || this.UniswapExchangeAddress === "0x0000000000000000000000000000000000000000") return;
+        const erc20Contract = new this._web3js.eth.Contract(ringABI, this.ABIs['ring'].address)
+        const tokenBalance = await erc20Contract.methods.balanceOf(this.UniswapExchangeAddress).call()
+        return tokenBalance
+    }
+
+    /**
      * Eth will be cost to swap 1 Ring
      * @param {*} tokens_bought
      */
