@@ -149,6 +149,7 @@ class EthereumEvolutionLand {
                 })
         } catch (e) {
             console.error('triggerContract', e)
+            const extendPayload = { ...payload, _contractAddress: this.ABIs[abiKey].address };
             errorCallback && errorCallback(e, extendPayload)
         }
 

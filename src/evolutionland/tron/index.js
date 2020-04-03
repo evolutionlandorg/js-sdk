@@ -187,6 +187,8 @@ class TronEvolutionLand {
             // })
         } catch (e) {
             console.error('triggerContract', e)
+            let _abi = this.ABIs[abiKey];
+            const extendPayload = { ...payload, _contractAddress: _abi.address };
             errorCallback && errorCallback(e, extendPayload)
         }
     }
