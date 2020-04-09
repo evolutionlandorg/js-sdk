@@ -800,12 +800,13 @@ class TronEvolutionLand {
      * @param {*} callback 
      */
     async fetchByzantineSwapFee(value, callback = {}) {
-        return this.callContract({
+        const result = await this.callContract({
             methodName: 'querySwapFeeForNow',
             abiKey: 'swapBridge',
             abiString: swapBridgeABI,
             contractParams: [value],
         }, callback)
+        return result.toString()
     }
 
     /**
