@@ -285,21 +285,21 @@ class TronEvolutionLand {
      * @param s
      * @returns {Promise<PromiEvent<any>>}
      */
-    // withdrawRing({
-    //     nonce,
-    //     value,
-    //     hash,
-    //     v,
-    //     r,
-    //     s
-    // }, callback = {}) {
-    //     return this.triggerContract({
-    //         methodName: "takeBack",
-    //         abiString: withdrawABI,
-    //         params: [nonce, value, hash, v, r, s],
-    //         abiKey: "withdraw",
-    //     }, callback);
-    // }
+    withdrawRing({
+        nonce,
+        value,
+        hash,
+        v,
+        r,
+        s
+    }, callback = {}) {
+        return this.triggerContract({
+            methodName: "takeBack",
+            abiString: withdrawABI,
+            contractParams: [nonce, value, hash, v, r, s],
+            abiKey: "withdraw",
+        }, callback);
+    }
 
     /**
      *  Cancel the Land being auctioned.

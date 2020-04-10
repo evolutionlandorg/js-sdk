@@ -497,7 +497,7 @@ class EthereumEvolutionLand {
         return this.triggerContract({
             methodName: "takeBack",
             abiString: withdrawABI,
-            params: [nonce, value, hash, v, r, s],
+            contractParams: [nonce, value, hash, v, r, s],
             abiKey: "withdraw",
         }, callback);
     }
