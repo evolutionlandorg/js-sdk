@@ -169,22 +169,12 @@ class TronEvolutionLand {
             res.then((hash) => {
                 transactionHashCallback && transactionHashCallback(hash, extendPayload)
                 console.log('hash', hash)
+            }).catch((e) =>{
+                const extendPayload = { ...payload, _contractAddress: _abi.address };
+                errorCallback && errorCallback(e, extendPayload)
             })
             console.log('tron res:', res)
             return res;
-
-            // .on('transactionHash', (hash) => {
-            //     transactionHashCallback && transactionHashCallback(hash)
-            // })
-            // .on('confirmation', (confirmationNumber, receipt) => {
-            //     confirmationCallback && confirmationCallback(confirmationNumber, receipt)
-            // })
-            // .on('receipt', (receipt) => {
-            //     receiptCallback && receiptCallback(receipt)
-            // })
-            // .on('error', (error) => {
-            //     errorCallback && errorCallback(error)
-            // })
         } catch (e) {
             console.error('triggerContract', e)
             let _abi = this.ABIs[abiKey];
