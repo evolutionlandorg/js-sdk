@@ -9,10 +9,13 @@ function createTronweb(config = {}) {
 }
 
 function _getTronweb(config) {
+    if(config && config.fullHost) {
+        return new Tronweb(config)
+    }
+
     if(window.tronWeb) {
         return window.tronWeb
     }
-    return new Tronweb(config)
 }
 
 export default {
