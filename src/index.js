@@ -37,12 +37,12 @@ class Evolution {
      * @param env Ethereum for ['main','ropsten']、 Tron for ['main', 'shasta']
      * @returns {*}
      */
-    createEvolutionLand(chain, env) {
+    createEvolutionLand(chain, env, option) {
         switch (chain) {
             case 'ethereum':
-                return this.ethEvoland = new ethEvolutionLand(this.web3js, env)
+                return this.ethEvoland = new ethEvolutionLand(this.web3js, env, option)
             case 'tron':
-                return this.tronEvoland = new tronEvolutionLand(this.tronweb, env)
+                return this.tronEvoland = new tronEvolutionLand(this.tronweb, env, option)
             default:
                 return null;
         }

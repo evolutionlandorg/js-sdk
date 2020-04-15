@@ -31,12 +31,17 @@ import Utils from '../utils/index'
 const loop = function () {}
 
 class TronEvolutionLand {
-    constructor(tronweb, network) {
+    constructor(tronweb, network, option = {}) {
         this.version = '1.0.0'
         // this.methods = methods
         this._tronweb = tronweb
         this.env = Env(network)
         this.ABIs = getABIConfig(network)
+        this.option = {
+            sign: true,
+            address: null,
+            ...option
+        }
         // this.clientFetch = new ClientFetch({baseUrl: this.env.ABI_DOMAIN, chainId: 60})
     }
 
@@ -125,38 +130,42 @@ class TronEvolutionLand {
         abiKey,
         abiString,
         contractParams = [],
-        sendParams
+        sendParams = {}
     }, {
         beforeFetch = loop,
         transactionHashCallback = loop,
         confirmationCallback = loop,
         receiptCallback = loop,
         errorCallback = loop,
+        unSignedTx = loop,
         payload = {}
     } = {}) {
         try {
             beforeFetch && beforeFetch()
             let _abi = this.ABIs[abiKey];
-            // const {
-            //     functionSelector,
-            //     parameter
-            // } = getContractMethodsParams(
-            //     methodName,
-            //     contractParams,
-            //     abiString
-            // );
 
-            // this._tronweb.transactionBuilder.triggerSmartContract(
-            //     _abi.address,
-            //     functionSelector,
-            //     this._tronweb.toSun(100),
-            //     sendParams.value,
-            //     parameter,
-            //     this.getCurrentAccount('hex')
-            // ).then(({ transaction }) => {
-
-            // })
-
+            if (!this.option.sign) {
+                const {
+                    functionSelector,
+                    parameter
+                } = getContractMethodsParams(
+                    methodName,
+                    contractParams,
+                    abiString
+                );
+                this._tronweb.transactionBuilder.triggerSmartContract(
+                    _abi.address,
+                    functionSelector,
+                    this._tronweb.toSun(100),
+                    sendParams.value || 0,
+                    parameter,
+                    this.getCurrentAccount('hex')
+                ).then(({ transaction }) => {
+                    unSignedTx && unSignedTx(transaction)
+                })
+                return;
+            }
+            
             let _contract = await this._tronweb.contract().at(_abi.address)
             const extendPayload = { ...payload, _contractAddress: _abi.address };
             const _method = _contract.methods[methodName].apply(this, contractParams)

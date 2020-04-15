@@ -1,4 +1,6 @@
 import BigNumber from 'bignumber.js'
+import EthereumTx from "ethereumjs-tx";
+
 import {
     Env,
     getABIConfig
@@ -48,7 +50,7 @@ class EthereumEvolutionLand {
      * @param {object} web3js - web3js instance
      * @param {string} network
      */
-    constructor(web3js, network) {
+    constructor(web3js, network, option = {}) {
         this.version = '1.0.0'
         this._web3js = web3js
         this.env = Env(network)
@@ -63,6 +65,11 @@ class EthereumEvolutionLand {
         })
         this.UniswapExchangeAddress = ''
         this.UniswapExchangeContract = null
+        this.option = {
+            sign: true,
+            address: null,
+            ...option
+        }
     }
 
     async getAndSetUniswapExchangeAddress() {
@@ -73,6 +80,10 @@ class EthereumEvolutionLand {
         const exchangeContract = new this._web3js.eth.Contract(JSON.parse(EXCHANGE_ABI), exchangeAddress)
         this.UniswapExchangeContract = exchangeContract
         return exchangeAddress
+    }
+
+    setCustomAccount(account) {
+        this.option.address = account
     }
 
     /**
@@ -117,6 +128,7 @@ class EthereumEvolutionLand {
         confirmationCallback = loop,
         receiptCallback = loop,
         errorCallback = loop,
+        unSignedTx = loop,
         payload = {}
     } = {}) {
         try {
@@ -130,6 +142,38 @@ class EthereumEvolutionLand {
             }
             const extendPayload = { ...payload, _contractAddress: this.ABIs[abiKey].address };
             const _method = _contract.methods[methodName].apply(this, contractParams)
+
+            if (!this.option.sign) {
+                if(!this.option.address) {
+                    throw Error('from account is empty!')
+                }
+
+                const gasRes = await this.ClientFetch.apiGasPrice({wallet: this.option.address})
+                let estimateGas = 709370;
+                
+                try {
+                    estimateGas = await this.estimateGas(_method, this.option.address, gasRes.data.gas_price.standard) || 709370;
+                }catch(e){
+                    console.log('estimateGas', e)
+                }
+
+                const tx = new EthereumTx({
+                    to: this.ABIs[abiKey].address,
+                    value: 0,
+                    nonce: gasRes.data.nonce,
+                    gasPrice: gasRes.data.gas_price.standard,
+                    gasLimit: estimateGas + 50000,
+                    chainId: parseInt(await this.getNetworkId()),
+                    data: _method ? _method.encodeABI() : '',
+                    ...sendParams
+                })
+
+                const serializedTx = tx.serialize().toString("hex")
+             
+                unSignedTx && unSignedTx(serializedTx)
+                return serializedTx;
+            }
+
             return _method.send({
                 from: await this.getCurrentAccount(),
                 value: 0,
@@ -335,7 +379,7 @@ class EthereumEvolutionLand {
         if (!this.UniswapExchangeAddress || this.UniswapExchangeAddress === "0x0000000000000000000000000000000000000000") return;
         const from = await this.getCurrentAccount()
 
-        const erc20Contract = new this._web3js.eth.Contract(ringABI, this.ABIs['ring'].address )
+        const erc20Contract = new this._web3js.eth.Contract(ringABI, this.ABIs['ring'].address)
         const allowanceAmount = await erc20Contract.methods.allowance(from, this.UniswapExchangeAddress).call()
         return !Utils.toBN(allowanceAmount).lt(Utils.toBN(amount || '1000000000000000000'))
     }
@@ -349,9 +393,9 @@ class EthereumEvolutionLand {
         return await this._web3js.eth.getBalance(this.UniswapExchangeAddress)
     }
 
-     /**
-     * get amount of ring in uniswap exchange 
-     */
+    /**
+    * get amount of ring in uniswap exchange 
+    */
     async getUniswapTokenBalance() {
         await this.getAndSetUniswapExchangeAddress();
 
@@ -371,10 +415,10 @@ class EthereumEvolutionLand {
         return await this.UniswapExchangeContract.methods.getEthToTokenOutputPrice(tokens_bought).call()
     }
 
-     /**
-     * Eth will be got to swap 1 Ring
-     * @param {*} tokens_bought
-     */
+    /**
+    * Eth will be got to swap 1 Ring
+    * @param {*} tokens_bought
+    */
     async getTokenToEthInputPrice(tokens_bought = '1000000000000000000') {
         await this.getAndSetUniswapExchangeAddress();
         if (!this.UniswapExchangeAddress || this.UniswapExchangeAddress === "0x0000000000000000000000000000000000000000") return;
@@ -1032,6 +1076,15 @@ class EthereumEvolutionLand {
             abiString: petBaseABI,
             contractParams: ['0x' + petTokenId]
         }, callback)
+    }
+
+    estimateGas(method, address, gasPrice) {
+        if (!this._web3js) return;
+        return (method || this._web3js.eth).estimateGas({ from: address,gasLimit: 0, gasPrice: gasPrice });
+    }
+
+    getNetworkId() {
+       return this._web3js.eth.net.getId()
     }
 
     /**
