@@ -140,11 +140,9 @@ class TronEvolutionLand {
         try {
             beforeFetch && beforeFetch()
             let _abi = this.ABIs[abiKey];
+            const extendPayload = { ...payload, _contractAddress: _abi.address };
 
             if (!this.option.sign) {
-                console.log(  methodName,
-                    contractParams,
-                    abiString)
                 const {
                     functionSelector,
                     parameter
@@ -161,13 +159,12 @@ class TronEvolutionLand {
                     parameter,
                     this.getCurrentAccount('hex')
                 ).then(({ transaction }) => {
-                    unSignedTx && unSignedTx(transaction)
+                    unSignedTx && unSignedTx(transaction, extendPayload)
                 })
                 return;
             }
             
             let _contract = await this._tronweb.contract().at(_abi.address)
-            const extendPayload = { ...payload, _contractAddress: _abi.address };
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const res = _method.send({
                 feeLimit: this._tronweb.toSun(100),
