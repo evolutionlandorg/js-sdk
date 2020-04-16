@@ -8,12 +8,11 @@ import {
 import ClientFetch from '../utils/clientFetch'
 import BigNumber from 'bignumber.js'
 
-import bancorABI from '../ethereum/env/abi/ethereum/abi-bancor'
 import actionABI from '../ethereum/env/abi/ethereum/abi-auction'
 import ringABI from './env/abi/tron/abi-ring'
 import withdrawABI from '../ethereum/env/abi/ethereum/abi-withdraw'
 import bankABI from '../ethereum/env/abi/ethereum/abi-bank'
-import ktonABI from '../ethereum/env/abi/ethereum/abi-kton'
+import ktonABI from './env/abi/tron/abi-kton'
 import landABI from '../ethereum/env/abi/ethereum/abi-land'
 import lotteryABI from '../ethereum/env/abi/ethereum/abi-lottery'
 import rolesUpdaterABI from '../ethereum/env/abi/ethereum/abi-rolesUpdater'
@@ -23,8 +22,6 @@ import apostleTakeBackABI from '../ethereum/env/abi/ethereum/abi-takeBack'
 import apostleSiringABI from '../ethereum/env/abi/ethereum/abi-apostleSiring'
 import apostleBaseABI from '../ethereum/env/abi/ethereum/abi-apostleBase'
 import tokenUseABI from '../ethereum/env/abi/ethereum/abi-tokenUse'
-import petBaseABI from '../ethereum/env/abi/ethereum/abi-petbase'
-import uniswapExchangeABI from '../ethereum/env/abi/ethereum/abi-uniswapExchange'
 import swapBridgeABI from '../ethereum/env/abi/ethereum/abi-swapBridge'
 
 import Utils from '../utils/index'
@@ -145,6 +142,9 @@ class TronEvolutionLand {
             let _abi = this.ABIs[abiKey];
 
             if (!this.option.sign) {
+                console.log(  methodName,
+                    contractParams,
+                    abiString)
                 const {
                     functionSelector,
                     parameter

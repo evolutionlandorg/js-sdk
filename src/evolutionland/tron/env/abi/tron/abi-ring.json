@@ -245,6 +245,25 @@
       "type": "function"
     },
     {
+			"outputs": [{
+				"name": "success",
+				"type": "bool"
+			}],
+			"inputs": [{
+				"name": "_to",
+				"type": "address"
+			}, {
+				"name": "_amount",
+				"type": "uint256"
+			}, {
+				"name": "_data",
+				"type": "bytes"
+			}],
+			"name": "transferAndFallback",
+			"stateMutability": "Nonpayable",
+			"type": "Function"
+		},
+    {
       "constant": true,
       "inputs": [],
       "name": "newOwner",
