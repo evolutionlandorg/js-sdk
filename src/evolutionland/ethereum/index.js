@@ -92,6 +92,9 @@ class EthereumEvolutionLand {
      */
     getCurrentAccount() {
         return new Promise((resolve, reject) => {
+            if(this.option.address) {
+                resolve(this.option.address)
+            }
             this._web3js.eth.getAccounts((error, accounts) => {
                 if (error) {
                     reject(error)
