@@ -12,11 +12,11 @@ async function _getWeb3js(provider) {
     } else {
         if (window.ethereum) {
             web3Provider = window.ethereum;
-            try {
-                await window.ethereum.enable();
-            } catch (error) {
-                console.error("User denied account access")
-            }
+            // try {
+            //     await window.ethereum.enable();
+            // } catch (error) {
+            //     console.error("User denied account access")
+            // }
         } else if (window.web3) {
             web3Provider = window.web3.currentProvider;
         }
