@@ -160,15 +160,20 @@ class EthereumEvolutionLand {
                     console.log('estimateGas', e)
                 }
 
+                let hexSendParams = {}
+                Object.keys(sendParams).forEach((item) => {
+                    hexSendParams[item] = Utils.toHex(sendParams[item])
+                })
+
                 const tx = new EthereumTx({
                     to: this.ABIs[abiKey].address,
                     value: 0,
                     nonce: gasRes.data.nonce,
                     gasPrice: gasRes.data.gas_price.standard,
-                    gasLimit: estimateGas + 50000,
+                    gasLimit: Utils.toHex(estimateGas + 50000),
                     chainId: parseInt(await this.getNetworkId()),
                     data: _method ? _method.encodeABI() : '',
-                    ...sendParams
+                    ...hexSendParams
                 })
 
                 const serializedTx = tx.serialize().toString("hex")
