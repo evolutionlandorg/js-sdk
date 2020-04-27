@@ -124,7 +124,7 @@ class EthereumEvolutionLand {
         abiKey,
         abiString,
         contractParams = [],
-        sendParams
+        sendParams={}
     }, {
         beforeFetch = loop,
         transactionHashCallback = loop,
