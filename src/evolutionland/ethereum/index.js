@@ -145,19 +145,18 @@ class EthereumEvolutionLand {
             }
             const extendPayload = { ...payload, _contractAddress: this.ABIs[abiKey].address };
             const _method = _contract.methods[methodName].apply(this, contractParams)
+            const from = await this.getCurrentAccount()
+            const gasRes = await this.ClientFetch.apiGasPrice({wallet: this.option.address || from})
+            let estimateGas = 709370;
+            try {
+                estimateGas = await this.estimateGas(_method, this.option.address || from, gasRes.data.gas_price.standard) || 709370;
+            }catch(e){
+                console.log('estimateGas', e)
+            }
 
             if (!this.option.sign) {
                 if(!this.option.address) {
                     throw Error('from account is empty!')
-                }
-
-                const gasRes = await this.ClientFetch.apiGasPrice({wallet: this.option.address})
-                let estimateGas = 709370;
-                
-                try {
-                    estimateGas = await this.estimateGas(_method, this.option.address, gasRes.data.gas_price.standard) || 709370;
-                }catch(e){
-                    console.log('estimateGas', e)
                 }
 
                 let hexSendParams = {}
@@ -185,6 +184,7 @@ class EthereumEvolutionLand {
             return _method.send({
                 from: await this.getCurrentAccount(),
                 value: 0,
+                gasLimit: Utils.toHex(estimateGas + 50000),
                 ...sendParams
             })
                 .on('transactionHash', (hash) => {
