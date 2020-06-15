@@ -41,8 +41,9 @@ export default {
 
         GENESISHOLDER: "0x36f061bc3314793c5637fb79421294c061ead108",
         AUCTIONHOLDER: "0xba332453b171aac634b3bed88bfef28770acf7e3",
-
+        UNISWAP_EXCHANGE: "0xeBD8AA50b26bFa63007d61eBa777A9DdE7e43c64",
         ITERING_CALLBACK: "https://www.evolution.land/api/eth/raw_sign_broadcast"
     },
-    DOMAIN: "https://alpha.evolution.land"
+    DOMAIN: "https://evolution.land",
+    ABI_DOMAIN: "https://static.l2me.com/static"
 };
