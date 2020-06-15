@@ -149,7 +149,11 @@ class EthereumEvolutionLand {
             const gasRes = await this.ClientFetch.apiGasPrice({wallet: this.option.address || from})
             let estimateGas = 709370;
             try {
-                estimateGas = await this.estimateGas(_method, this.option.address || from, gasRes.data.gas_price.standard) || 709370;
+                let hexSendParams = {value: 0}
+                Object.keys(sendParams).forEach((item) => {
+                    hexSendParams[item] = Utils.toHex(sendParams[item])
+                })
+                estimateGas = await this.estimateGas(_method, this.option.address || from, gasRes.data.gas_price.standard, hexSendParams.value) || 709370;
             }catch(e){
                 console.log('estimateGas', e)
             }
@@ -169,7 +173,7 @@ class EthereumEvolutionLand {
                     value: 0,
                     nonce: gasRes.data.nonce,
                     gasPrice: gasRes.data.gas_price.standard,
-                    gasLimit: Utils.toHex(estimateGas + 50000),
+                    gasLimit: Utils.toHex(estimateGas + 30000),
                     chainId: parseInt(await this.getNetworkId()),
                     data: _method ? _method.encodeABI() : '',
                     ...hexSendParams
@@ -184,7 +188,7 @@ class EthereumEvolutionLand {
             return _method.send({
                 from: await this.getCurrentAccount(),
                 value: 0,
-                gasLimit: Utils.toHex(estimateGas + 50000),
+                gasLimit: Utils.toHex(estimateGas + 30000),
                 ...sendParams
             })
                 .on('transactionHash', (hash) => {
@@ -1086,9 +1090,9 @@ class EthereumEvolutionLand {
         }, callback)
     }
 
-    estimateGas(method, address, gasPrice) {
+    estimateGas(method, address, gasPrice, value = 0) {
         if (!this._web3js) return;
-        return (method || this._web3js.eth).estimateGas({ from: address,gasLimit: 0, gasPrice: gasPrice });
+        return (method || this._web3js.eth).estimateGas({ from: address,gasLimit: 0, gasPrice: gasPrice, value });
     }
 
     getNetworkId() {
