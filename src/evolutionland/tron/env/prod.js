@@ -37,5 +37,5 @@ export default {
         AUCTIONHOLDER: "",
         ITERING_CALLBACK: "https://www.evolution.land/api/tron/raw_sign_broadcast"
     },
-    DOMAIN: "https://alpha.evolution.land"
+    DOMAIN: "https://evolution.land"
 };
