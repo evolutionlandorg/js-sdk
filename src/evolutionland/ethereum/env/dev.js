@@ -5,7 +5,7 @@ export default {
         TOKEN_WITHDRAW: "0x115493f616F3D213913F843fB5594C4d004b4782", // takeback
         TOKEN_AUCTION: "0x9a6144237be8B5a6dc793E8848B6AeFc99bd2256", // ClockAuction
         TOKEN_LAND: "0x5eA9ea8E80230E514b5e023e8d956550a22D02c6", //objectOwnership
-        TOKEN_LUCKYBAG: "",
+        TOKEN_LUCKYBAG: "0x87a1f4d7f8dABa01315bcFE0873cE250b0cF47fB",
         TOKEN_REDPACKAGE: "0x4088Db66B8acAA673333b2Ef32648137A95c4476",
         TOKEN_BANCOR: "", // BancorExchange
         TOKEN_BANK: "0x6EF538314829EfA8386Fc43386cB13B4e0A67D1e",
@@ -41,6 +41,7 @@ export default {
         GENESISHOLDER: "0xfE3EE13c28830F7F91Bbb62305D3B616e49998EC",
         UNISWAP_EXCHANGE: "0x95c5541a6abd1fffb729b06eecc220179c819c62",
         AUCTIONHOLDER: "",
+
         ITERING_CALLBACK: "https://alpha.evolution.land/api/eth/raw_sign_broadcast"
     },
     DOMAIN: "https://alpha.evolution.land",

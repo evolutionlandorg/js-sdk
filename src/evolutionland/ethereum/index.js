@@ -24,6 +24,7 @@ import tokenUseABI from './env/abi/ethereum/abi-tokenUse'
 import petBaseABI from './env/abi/ethereum/abi-petbase'
 import uniswapExchangeABI from './env/abi/ethereum/abi-uniswapExchange'
 import swapBridgeABI from './env/abi/ethereum/abi-swapBridge'
+import luckyBoxABI from './env/abi/ethereum/abi-luckyBag'
 import Utils from '../utils/index'
 
 import {
@@ -1088,6 +1089,57 @@ class EthereumEvolutionLand {
             abiString: petBaseABI,
             contractParams: ['0x' + petTokenId]
         }, callback)
+    }
+
+    /**
+     * buy lucky box
+     * @param {*} buyer - Receiver
+     * @param {*} goldBoxAmount - gold box amount
+     * @param {*} silverBoxAmount - silver box amount
+     */
+    async buyLuckyBox(buyer, goldBoxAmount, silverBoxAmount, callback) {
+        const luckyBoxInfo = await this.getLuckyBoxInfo()
+        console.log('luckyBoxInfo', luckyBoxInfo)
+        const cost = Utils.toBN(luckyBoxInfo[0]).muln(goldBoxAmount).add(Utils.toBN(luckyBoxInfo[1]).muln(silverBoxAmount))
+        console.log(cost.toString())
+        return this.triggerContract({
+            methodName: 'buyBoxs',
+            abiKey: 'luckybag',
+            abiString: luckyBoxABI,
+            contractParams: [buyer, goldBoxAmount, silverBoxAmount],
+            sendParams: {
+                value: cost
+            }
+        }, callback)
+    }
+
+    /**
+     * lucky box information
+     * @returns {Array} - promise -> [goldBoxPrice, silverBoxPrice, goldBoxAmountForSale, silverBoxAmountForSale, goldSaleLimit, silverSaleLimit]
+     */
+    getLuckyBoxInfo() {
+        const _contract = new this._web3js.eth.Contract(luckyBoxABI, this.ABIs['luckybag'].address)
+        return Promise.all([
+            _contract.methods.goldBoxPrice().call(),
+            _contract.methods.silverBoxPrice().call(),
+            _contract.methods.goldBoxAmountForSale().call(),
+            _contract.methods.silverBoxAmountForSale().call(),
+            _contract.methods.goldSaleLimit().call(),
+            _contract.methods.silverSaleLimit().call(),
+        ])
+    }
+
+    /**
+     * Number of lucky box already purchased at this address
+     * @param {*} address - buyer
+     * @returns {Array} - promise -> [goldSalesRecord, silverSalesRecord]
+     */
+    getLuckyBoxSalesRecord(address) {
+        const _contract = new this._web3js.eth.Contract(luckyBoxABI, this.ABIs['luckybag'].address)
+        return Promise.all([
+            _contract.methods.goldSalesRecord(address).call(),
+            _contract.methods.silverSalesRecord(address).call(),
+        ])
     }
 
     estimateGas(method, address, gasPrice, value = 0) {
