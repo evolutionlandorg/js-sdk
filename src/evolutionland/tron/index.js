@@ -142,7 +142,6 @@ class TronEvolutionLand {
             beforeFetch && beforeFetch()
             let _abi = this.ABIs[abiKey];
             const extendPayload = { ...payload, _contractAddress: _abi.address };
-            debugger
             if (!this.option.sign) {
                 const {
                     functionSelector,
