@@ -1,6 +1,6 @@
 {
   "name": "@evolutionland/evolution-js",
-  "version": "1.1.25",
+  "version": "1.1.26",
   "description": "",
   "main": "./src/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "dev-watch": "webpack --mode development --watch",
     "analyze": "ANALYZE=true webpack --mode production",
     "generate-docs": "jsdoc --configure .jsdoc.json --verbose",
-    "publish-docs": "gh-pages -d docs/evolution-js/1.0.0"
+    "publish-docs": "gh-pages -d docs/@evolutionland/evolution-js/1.1.25"
   },
   "author": "",
   "license": "ISC",

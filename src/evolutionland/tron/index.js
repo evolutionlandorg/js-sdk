@@ -23,6 +23,7 @@ import apostleSiringABI from '../ethereum/env/abi/ethereum/abi-apostleSiring'
 import apostleBaseABI from '../ethereum/env/abi/ethereum/abi-apostleBase'
 import tokenUseABI from '../ethereum/env/abi/ethereum/abi-tokenUse'
 import swapBridgeABI from '../ethereum/env/abi/ethereum/abi-swapBridge'
+import luckyBoxABI from '../ethereum/env/abi/ethereum/abi-luckyBag'
 
 import Utils from '../utils/index'
 const loop = function () {}
@@ -141,7 +142,7 @@ class TronEvolutionLand {
             beforeFetch && beforeFetch()
             let _abi = this.ABIs[abiKey];
             const extendPayload = { ...payload, _contractAddress: _abi.address };
-
+            debugger
             if (!this.option.sign) {
                 const {
                     functionSelector,
@@ -155,7 +156,7 @@ class TronEvolutionLand {
                     _abi.address,
                     functionSelector,
                     this._tronweb.toSun(10),
-                    sendParams.value || 0,
+                    sendParams.callValue || 0,
                     parameter,
                     this.getCurrentAccount('hex')
                 ).then(({ transaction }) => {
@@ -163,7 +164,6 @@ class TronEvolutionLand {
                 })
                 return;
             }
-            
             let _contract = await this._tronweb.contract().at(_abi.address)
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const res = _method.send({
@@ -824,6 +824,63 @@ class TronEvolutionLand {
             abiString: ringABI,
             contractParams: [this.ABIs['swapBridge'].address, new BigNumber(fee).plus(new BigNumber(value)).toFixed(), extraData],
         }, callback)
+    }
+
+    /**
+     * buy lucky box
+     * @param {*} buyer - Receiver
+     * @param {*} goldBoxAmount - gold box amount
+     * @param {*} silverBoxAmount - silver box amount
+     */
+    async buyLuckyBox(buyer, goldBoxAmount, silverBoxAmount, callback) {
+        const luckyBoxInfo = await this.getLuckyBoxInfo()
+        const cost = Utils.toBN(luckyBoxInfo[0]).muln(goldBoxAmount).add(Utils.toBN(luckyBoxInfo[1]).muln(silverBoxAmount))
+        return this.triggerContract({
+            methodName: 'buyBoxs',
+            abiKey: 'luckybag',
+            abiString: luckyBoxABI,
+            contractParams: [buyer, goldBoxAmount, silverBoxAmount],
+            sendParams: {
+                callValue: cost
+            }
+        }, callback)
+    }
+
+    /**
+     * lucky box information
+     * @returns {Array} - promise -> [goldBoxPrice, silverBoxPrice, goldBoxAmountForSale, silverBoxAmountForSale, goldSaleLimit, silverSaleLimit]
+     */
+    async getLuckyBoxInfo() {
+        const _contract = await this._tronweb.contract().at(this.ABIs['luckybag'].address)
+        const result = await Promise.all([
+            _contract.methods.goldBoxPrice().call(),
+            _contract.methods.silverBoxPrice().call(),
+            _contract.methods.goldBoxAmountForSale().call(),
+            _contract.methods.silverBoxAmountForSale().call(),
+            _contract.methods.goldSaleLimit().call(),
+            _contract.methods.silverSaleLimit().call(),
+        ])
+
+        return result.map((item) => {
+            return item.toString()
+        })
+    }
+
+    /**
+     * Number of lucky box already purchased at this address
+     * @param {*} address - buyer
+     * @returns {Array} - promise -> [goldSalesRecord, silverSalesRecord]
+     */
+    async getLuckyBoxSalesRecord(address) {
+        const _contract = await this._tronweb.contract().at(this.ABIs['luckybag'].address)
+        const result = await Promise.all([
+            _contract.methods.goldSalesRecord(address).call(),
+            _contract.methods.silverSalesRecord(address).call(),
+        ])
+
+        return result.map((item) => {
+            return item.toString()
+        })
     }
 }
 

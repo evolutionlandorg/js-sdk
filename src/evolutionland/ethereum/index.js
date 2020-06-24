@@ -1099,7 +1099,6 @@ class EthereumEvolutionLand {
      */
     async buyLuckyBox(buyer, goldBoxAmount, silverBoxAmount, callback) {
         const luckyBoxInfo = await this.getLuckyBoxInfo()
-        console.log('luckyBoxInfo', luckyBoxInfo)
         const cost = Utils.toBN(luckyBoxInfo[0]).muln(goldBoxAmount).add(Utils.toBN(luckyBoxInfo[1]).muln(silverBoxAmount))
         console.log(cost.toString())
         return this.triggerContract({
