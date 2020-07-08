@@ -47,4 +47,13 @@ Units.fromWei = function(value) {
   return Units.convert(value, 'wei', 'ring')
 }
 
+
+Units.fromSun = function(value) {
+  return Units.convert(value, 'wei', 'mwei')
+}
+
+Units.toTrx = function(value) {
+  return Units.convert(value, 'mwei', 'wei')
+}
+
 export default Units
