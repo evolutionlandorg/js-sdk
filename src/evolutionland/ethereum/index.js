@@ -22,22 +22,13 @@ import apostleSiringABI from './env/abi/ethereum/abi-apostleSiring'
 import apostleBaseABI from './env/abi/ethereum/abi-apostleBase'
 import tokenUseABI from './env/abi/ethereum/abi-tokenUse'
 import petBaseABI from './env/abi/ethereum/abi-petbase'
-import uniswapExchangeABI from './env/abi/ethereum/abi-uniswapExchange'
+import uniswapExchangeABI from './env/abi/ethereum/abi-uniswapExchangeV2'
 import swapBridgeABI from './env/abi/ethereum/abi-swapBridge'
 import luckyBoxABI from './env/abi/ethereum/abi-luckyBag'
 import Utils from '../utils/index'
 
-import {
-    FACTORY_ADDRESS,
-    SUPPORTED_CHAIN_ID,
-    FACTORY_ABI,
-    EXCHANGE_ABI,
-    getTokenReserves,
-    tradeExactEthForTokensWithData,
-    getExecutionDetails,
-    tradeEthForExactTokensWithData,
-    tradeExactTokensForEthWithData
-} from '@uniswap/sdk'
+import { ChainId, Token, TokenAmount, Pair, WETH, Fetcher, Percent, Route, TradeType, Trade } from '@uniswap/sdk'
+
 
 const loop = function () { }
 
@@ -73,15 +64,6 @@ class EthereumEvolutionLand {
         }
     }
 
-    async getAndSetUniswapExchangeAddress() {
-        const factoryAddress = FACTORY_ADDRESS[parseInt(this.env.CONTRACT.NETWORK)]
-        const factoryContract = new this._web3js.eth.Contract(JSON.parse(FACTORY_ABI), factoryAddress)
-        const exchangeAddress = await factoryContract.methods.getExchange(this.env.CONTRACT.TOKEN_RING).call()
-        this.UniswapExchangeAddress = exchangeAddress
-        const exchangeContract = new this._web3js.eth.Contract(JSON.parse(EXCHANGE_ABI), exchangeAddress)
-        this.UniswapExchangeContract = exchangeContract
-        return exchangeAddress
-    }
 
     setCustomAccount(account) {
         this.option.address = account
@@ -93,7 +75,7 @@ class EthereumEvolutionLand {
      */
     getCurrentAccount() {
         return new Promise((resolve, reject) => {
-            if(this.option.address) {
+            if (this.option.address) {
                 resolve(this.option.address)
             }
             this._web3js.eth.getAccounts((error, accounts) => {
@@ -125,7 +107,7 @@ class EthereumEvolutionLand {
         abiKey,
         abiString,
         contractParams = [],
-        sendParams={}
+        sendParams = {}
     }, {
         beforeFetch = loop,
         transactionHashCallback = loop,
@@ -147,20 +129,20 @@ class EthereumEvolutionLand {
             const extendPayload = { ...payload, _contractAddress: this.ABIs[abiKey].address };
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const from = await this.getCurrentAccount()
-            const gasRes = await this.ClientFetch.apiGasPrice({wallet: this.option.address || from})
+            const gasRes = await this.ClientFetch.apiGasPrice({ wallet: this.option.address || from })
             let estimateGas = 709370;
             try {
-                let hexSendParams = {value: 0}
+                let hexSendParams = { value: 0 }
                 Object.keys(sendParams).forEach((item) => {
                     hexSendParams[item] = Utils.toHex(sendParams[item])
                 })
                 estimateGas = await this.estimateGas(_method, this.option.address || from, gasRes.data.gas_price.standard, hexSendParams.value) || 709370;
-            }catch(e){
+            } catch (e) {
                 console.log('estimateGas', e)
             }
 
             if (!this.option.sign) {
-                if(!this.option.address) {
+                if (!this.option.address) {
                     throw Error('from account is empty!')
                 }
 
@@ -181,7 +163,7 @@ class EthereumEvolutionLand {
                 })
 
                 const serializedTx = tx.serialize().toString("hex")
-             
+
                 unSignedTx && unSignedTx(serializedTx, extendPayload)
                 return serializedTx;
             }
@@ -304,17 +286,31 @@ class EthereumEvolutionLand {
      * @returns {Promise<PromiEvent<any>>}
      */
     async buyRingUniswap(value, callback = {}) {
-        const tokenReserves = await getTokenReserves(this.env.CONTRACT.TOKEN_RING, parseInt(this.env.CONTRACT.NETWORK))
-        const tradeDetails = tradeEthForExactTokensWithData(tokenReserves, value)
-        const executionDetails = await getExecutionDetails(tradeDetails, new BigNumber(0))
+        const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
+        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING)
+        const route = new Route([pair], WETH[RING.chainId])
+        const amountIn = value
+        const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_OUTPUT)
+        const slippageTolerance = new Percent('0', '10000') // 30 bips, or 0.30%
+
+        const amountInMax = trade.maximumAmountIn(slippageTolerance).raw // needs to be converted to e.g. hex
+        const path = [WETH[RING.chainId].address, RING.address]
+        const to = await this.getCurrentAccount() // should be a checksummed recipient address
+        const deadline = Math.floor(Date.now() / 1000) + 60 * 20 // 20 minutes from the current Unix time
+        const outputAmount = trade.outputAmount.raw // // needs to be converted to e.g. hex
 
         return this.triggerContract({
-            methodName: 'ethToTokenSwapOutput',
+            methodName: 'swapETHForExactTokens',
             abiKey: 'uniswapExchange',
             abiString: uniswapExchangeABI,
-            contractParams: [executionDetails.methodArguments[0].toFixed(), executionDetails.methodArguments[1] + 600],
+            contractParams: [
+                outputAmount.toString(10),
+                path,
+                to,
+                deadline
+            ],
             sendParams: {
-                value: executionDetails.value.toFixed()
+                value: amountInMax.toString(10)
             }
         }, callback)
     }
@@ -325,18 +321,29 @@ class EthereumEvolutionLand {
      * @returns {Promise<PromiEvent<any>>}
      */
     async sellRingUniswap(value, callback = {}) {
-        const tokenReserves = await getTokenReserves(this.env.CONTRACT.TOKEN_RING, parseInt(this.env.CONTRACT.NETWORK))
-        const tradeDetails = tradeExactTokensForEthWithData(tokenReserves, value)
-        const executionDetails = await getExecutionDetails(tradeDetails, 100)
+        const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
+        const pair = await Fetcher.fetchPairData(RING, WETH[RING.chainId])
+        const route = new Route([pair], RING)
+        const amountIn = value
+        const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_INPUT)
+        const slippageTolerance = new Percent('0', '10000') // 30 bips, or 0.30%
+
+        const amountOutMin = trade.minimumAmountOut(slippageTolerance).raw // needs to be converted to e.g. hex
+        const path = [RING.address, WETH[RING.chainId].address]
+        const to = await this.getCurrentAccount() // should be a checksummed recipient address
+        const deadline = Math.floor(Date.now() / 1000) + 60 * 20 // 20 minutes from the current Unix time
+        const inputAmount = trade.inputAmount.raw // // needs to be converted to e.g. hex
 
         return this.triggerContract({
-            methodName: executionDetails.methodName,
+            methodName: 'swapExactTokensForETH',
             abiKey: 'uniswapExchange',
             abiString: uniswapExchangeABI,
             contractParams: [
-                executionDetails.methodArguments[0].toFixed(),
-                executionDetails.methodArguments[1].toFixed(),
-                executionDetails.methodArguments[2] + 600
+                inputAmount.toString(10),
+                amountOutMin.toString(10),
+                path,
+                to,
+                deadline
             ],
             sendParams: {
                 value: 0
@@ -368,18 +375,15 @@ class EthereumEvolutionLand {
     }
 
     /**
-     * Ethereum Function, Approve Ring to Uniswap Exchange
-     * @param {*} callback 
-     */
+   * Ethereum Function, Approve Ring to Uniswap Exchange
+   * @param {*} callback 
+   */
     async approveRingToUniswap(callback = {}) {
-        await this.getAndSetUniswapExchangeAddress();
-        if (!this.UniswapExchangeAddress || this.UniswapExchangeAddress === "0x0000000000000000000000000000000000000000") return;
-
         return this.triggerContract({
             methodName: 'approve',
             abiKey: 'ring',
             abiString: ringABI,
-            contractParams: [this.UniswapExchangeAddress, '100000000000000000000000000000'],
+            contractParams: [this.ABIs['uniswapExchange'].address, '20000000000000000000000000'],
         }, callback)
     }
 
@@ -388,34 +392,29 @@ class EthereumEvolutionLand {
      * @param {*} amount 
      */
     async checkUniswapAllowance(amount) {
-        await this.getAndSetUniswapExchangeAddress();
-        if (!this.UniswapExchangeAddress || this.UniswapExchangeAddress === "0x0000000000000000000000000000000000000000") return;
         const from = await this.getCurrentAccount()
 
         const erc20Contract = new this._web3js.eth.Contract(ringABI, this.ABIs['ring'].address)
-        const allowanceAmount = await erc20Contract.methods.allowance(from, this.UniswapExchangeAddress).call()
-        return !Utils.toBN(allowanceAmount).lt(Utils.toBN(amount || '1000000000000000000'))
+        const allowanceAmount = await erc20Contract.methods.allowance(from, this.ABIs['uniswapExchange'].address).call()
+        return !Utils.toBN(allowanceAmount).lt(Utils.toBN(amount || '1000000000000000000000000'))
     }
 
     /**
      * get amount of ether in uniswap exchange 
      */
     async getUniswapEthBalance() {
-        await this.getAndSetUniswapExchangeAddress();
-        if (!this.UniswapExchangeAddress || this.UniswapExchangeAddress === "0x0000000000000000000000000000000000000000") return;
-        return await this._web3js.eth.getBalance(this.UniswapExchangeAddress)
+        const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
+        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING)
+        return pair.tokenAmounts[1].raw.toString(10)
     }
 
     /**
     * get amount of ring in uniswap exchange 
     */
     async getUniswapTokenBalance() {
-        await this.getAndSetUniswapExchangeAddress();
-
-        if (!this.UniswapExchangeAddress || this.UniswapExchangeAddress === "0x0000000000000000000000000000000000000000") return;
-        const erc20Contract = new this._web3js.eth.Contract(ringABI, this.ABIs['ring'].address)
-        const tokenBalance = await erc20Contract.methods.balanceOf(this.UniswapExchangeAddress).call()
-        return tokenBalance
+        const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
+        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING)
+        return pair.tokenAmounts[0].raw.toString(10)
     }
 
     /**
@@ -423,9 +422,15 @@ class EthereumEvolutionLand {
      * @param {*} tokens_bought
      */
     async getEthToTokenOutputPrice(tokens_bought = '1000000000000000000') {
-        await this.getAndSetUniswapExchangeAddress();
-        if (!this.UniswapExchangeAddress || this.UniswapExchangeAddress === "0x0000000000000000000000000000000000000000") return;
-        return await this.UniswapExchangeContract.methods.getEthToTokenOutputPrice(tokens_bought).call()
+        const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
+        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING)
+        const route = new Route([pair], WETH[RING.chainId])
+        const amountIn = tokens_bought
+        const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_OUTPUT)
+        const slippageTolerance = new Percent('0', '10000') 
+        const amountInMax = trade.maximumAmountIn(slippageTolerance).raw
+
+        return [new BigNumber(amountInMax.toString(10)).times('1000000000000000000').div(tokens_bought).toFixed(0), amountInMax.toString(10)];
     }
 
     /**
@@ -433,9 +438,14 @@ class EthereumEvolutionLand {
     * @param {*} tokens_bought
     */
     async getTokenToEthInputPrice(tokens_bought = '1000000000000000000') {
-        await this.getAndSetUniswapExchangeAddress();
-        if (!this.UniswapExchangeAddress || this.UniswapExchangeAddress === "0x0000000000000000000000000000000000000000") return;
-        return await this.UniswapExchangeContract.methods.getTokenToEthInputPrice(tokens_bought).call()
+        const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
+        const pair = await Fetcher.fetchPairData(RING, WETH[RING.chainId])
+        const route = new Route([pair], RING)
+        const amountIn = tokens_bought // 1 WETH
+        const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_INPUT)
+        const slippageTolerance = new Percent('0', '10000') // 50 bips, or 0.50%
+        const amountOutMin = trade.minimumAmountOut(slippageTolerance).raw // needs to be converted to e.g. hex
+        return [new BigNumber(amountOutMin.toString(10)).times('1000000000000000000').div(tokens_bought).toFixed(0), amountOutMin.toString(10)];
     }
 
     /**
@@ -1143,11 +1153,11 @@ class EthereumEvolutionLand {
 
     estimateGas(method, address, gasPrice, value = 0) {
         if (!this._web3js) return;
-        return (method || this._web3js.eth).estimateGas({ from: address,gasLimit: 0, gasPrice: gasPrice, value });
+        return (method || this._web3js.eth).estimateGas({ from: address, gasLimit: 0, gasPrice: gasPrice, value });
     }
 
     getNetworkId() {
-       return this._web3js.eth.net.getId()
+        return this._web3js.eth.net.getId()
     }
 
     /**
