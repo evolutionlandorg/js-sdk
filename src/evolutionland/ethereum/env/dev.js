@@ -39,7 +39,7 @@ export default {
         NETWORK: "3",
 
         GENESISHOLDER: "0xfE3EE13c28830F7F91Bbb62305D3B616e49998EC",
-        UNISWAP_EXCHANGE: "0x95c5541a6abd1fffb729b06eecc220179c819c62",
+        UNISWAP_EXCHANGE: "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
         AUCTIONHOLDER: "",
 
         ITERING_CALLBACK: "https://alpha.evolution.land/api/eth/raw_sign_broadcast"
