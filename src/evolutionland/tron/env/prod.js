@@ -1,8 +1,9 @@
 export default {
     CONTRACT: {
-        TOKEN_DEX_BRIDGE: "41b9af025d8c7ecf875b8498562bf1469d24c0b1a8",
+        TOKEN_DEX_BRIDGE: "4165798DC18E6F8382FE96EC797105FC270FD4F466",
         TOKEN_RING: "416e0d26adf5323f5b82d5714354dc3c6870adee7c",
         TOKEN_WITHDRAW: "418507305db28a11038a493821b84117cf9a9f08fe", // takeback
+        TOKEN_WITHDRAW_KTON: "412594D59E47C9CDD2AE0C5BBFD64ACC2D6F67737D", // takeback
         TOKEN_AUCTION: "4176cb443f8280d28d6f84531a92c1330dd3203fdb", // ClockAuction
         TOKEN_LAND: "4100dfe66a889aa22228e7b17236ceb7e6d3b286b2", // objectOwnership
         TOKEN_LUCKYBAG: "",
@@ -35,6 +36,7 @@ export default {
         NETWORK_NODE: "11111",
         GENESISHOLDER: "41fd9ac1a0b242ba7116399174dd7ce5ff462e6c0f",
         AUCTIONHOLDER: "",
+        JUSTSWAP_EXCHANGE: "41394CFB02DA445B95CA61DB8A993AF63E2AAE907A",
         ITERING_CALLBACK: "https://www.evolution.land/api/tron/raw_sign_broadcast"
     },
     DOMAIN: "https://evolution.land"

@@ -24,9 +24,10 @@ import apostleBaseABI from '../ethereum/env/abi/ethereum/abi-apostleBase'
 import tokenUseABI from '../ethereum/env/abi/ethereum/abi-tokenUse'
 import swapBridgeABI from '../ethereum/env/abi/ethereum/abi-swapBridge'
 import luckyBoxABI from '../ethereum/env/abi/ethereum/abi-luckyBag'
+import justswapExchangeABI from '../tron/env/abi/tron/abi-justswapExchange'
 
 import Utils from '../utils/index'
-const loop = function () {}
+const loop = function () { }
 
 class TronEvolutionLand {
     constructor(tronweb, network, option = {}) {
@@ -127,6 +128,7 @@ class TronEvolutionLand {
         methodName,
         abiKey,
         abiString,
+        forceABI = false,
         contractParams = [],
         sendParams = {}
     }, {
@@ -163,7 +165,13 @@ class TronEvolutionLand {
                 })
                 return;
             }
-            let _contract = await this._tronweb.contract().at(_abi.address)
+            let _contract = null;
+
+            if(forceABI) {
+                _contract = await this._tronweb.contract(abiString, _abi.address)
+            } else {
+                _contract = await this._tronweb.contract().at(_abi.address)
+            }
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const res = _method.send({
                 feeLimit: this._tronweb.toSun(10),
@@ -174,7 +182,7 @@ class TronEvolutionLand {
             res.then((hash) => {
                 transactionHashCallback && transactionHashCallback(hash, extendPayload)
                 console.log('hash', hash)
-            }).catch((e) =>{
+            }).catch((e) => {
                 const extendPayload = { ...payload, _contractAddress: _abi.address };
                 errorCallback && errorCallback(e, extendPayload)
             })
@@ -260,8 +268,8 @@ class TronEvolutionLand {
         const finalReferrer = referrer
         const data =
             finalReferrer && this._tronweb.isAddress(finalReferrer) ?
-            `0x${tokenId}${Utils.padLeft(this._tronweb.address.toHex(finalReferrer).substring(2), 64, '0')}` :
-            `0x${tokenId}`
+                `0x${tokenId}${Utils.padLeft(this._tronweb.address.toHex(finalReferrer).substring(2), 64, '0')}` :
+                `0x${tokenId}`
         return this.triggerContract({
             methodName: 'transferAndFallback',
             abiKey: 'ring',
@@ -293,6 +301,32 @@ class TronEvolutionLand {
             abiString: withdrawABI,
             contractParams: [nonce, value, hash, v, r, s],
             abiKey: "withdraw",
+        }, callback);
+    }
+
+    /**
+     *  Withdraw kton from the channel
+     * @param nonce
+     * @param value
+     * @param hash
+     * @param v
+     * @param r
+     * @param s
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    withdrawKton({
+        nonce,
+        value,
+        hash,
+        v,
+        r,
+        s
+    }, callback = {}) {
+        return this.triggerContract({
+            methodName: "takeBack",
+            abiString: withdrawABI,
+            contractParams: [nonce, value, hash, v, r, s],
+            abiKey: "withdrawKton",
         }, callback);
     }
 
@@ -452,8 +486,8 @@ class TronEvolutionLand {
         const finalReferrer = referrer
         const data =
             finalReferrer && Utils.isAddress(finalReferrer) ?
-            `0x${tokenId}${Utils.padLeft(finalReferrer.substring(2), 64, '0')}` :
-            `0x${tokenId}`
+                `0x${tokenId}${Utils.padLeft(finalReferrer.substring(2), 64, '0')}` :
+                `0x${tokenId}`
 
         return this.triggerContract({
             methodName: 'transferAndFallback',
@@ -796,12 +830,21 @@ class TronEvolutionLand {
      */
     async fetchByzantineSwapFee(value, callback = {}) {
         const result = await this.callContract({
-            methodName: 'querySwapFeeForNow',
+            methodName: 'querySwapFee',
             abiKey: 'swapBridge',
             abiString: swapBridgeABI,
             contractParams: [value],
         }, callback)
         return result.toString()
+    }
+
+    getSimpleBridgeStatus(callback = {}) {
+        return this.callContract({
+            methodName: 'paused',
+            abiKey: 'swapBridge',
+            abiString: swapBridgeABI,
+            contractParams: [],
+        }, callback)
     }
 
     /**
@@ -810,7 +853,7 @@ class TronEvolutionLand {
      * @param {string} value ethereum address
      * @param {*} callback 
      */
-    async ByzantineSwapBridge(value, targetAddress, callback = {}) {
+    async ByzantineSwapBridge(value, targetAddress, symbol = 'ring', callback = {}) {
         if (!targetAddress) {
             throw Error('empty targetAddress')
         }
@@ -819,9 +862,9 @@ class TronEvolutionLand {
         const extraData = `${Utils.toHexAndPadLeft(value)}${Utils.toHexAndPadLeft(1).slice(2)}${Utils.padLeft(targetAddress.substring(2), 64, '0')}`
         return this.triggerContract({
             methodName: 'approveAndCall',
-            abiKey: 'ring',
+            abiKey: symbol.toLowerCase(),
             abiString: ringABI,
-            contractParams: [this.ABIs['swapBridge'].address, new BigNumber(fee).plus(new BigNumber(value)).toFixed(), extraData],
+            contractParams: [this.ABIs['swapBridge'].address, new BigNumber(fee).plus(1).plus(new BigNumber(value)).toFixed(0), extraData],
         }, callback)
     }
 
@@ -881,6 +924,146 @@ class TronEvolutionLand {
             return item.toString()
         })
     }
+
+    /**
+    * Tron Function, Approve Ring to Justswap Exchange
+    * @param {*} callback 
+    */
+    async approveRingToJustswap(callback = {}) {
+        return this.triggerContract({
+            methodName: 'approve',
+            abiKey: 'ring',
+            contractParams: [this.ABIs['justswapExchange'].address, '20000000000000000000000000'],
+        }, callback)
+    }
+
+    /**
+     * Check if justswap has sufficient transfer authority
+     * @param {*} amount 
+     */
+    async checkJustswapAllowance(amount) {
+        const from = await this.getCurrentAccount('hex')
+
+        const ringContract = await this._tronweb.contract().at(this.ABIs['ring'].address)
+        const allowanceAmount = await ringContract.methods.allowance(from, this.ABIs['justswapExchange'].address).call()
+        return !Utils.toBN(allowanceAmount).lt(Utils.toBN(amount || '1000000000000000000000000'))
+    }
+
+    /**
+     * get amount of ether in justswap exchange 
+     */
+    async getJustswapTrxBalance() {
+        let tradeobj = await this._tronweb.trx.getAccount(
+            this.ABIs['justswapExchange'].address,
+        );
+
+        return new BigNumber(tradeobj.balance).toString(10)
+    }
+
+    /**
+     * get amount of ring in justswap exchange 
+     */
+    async getJustswapTokenBalance() {
+        const ring = await this._tronweb.contract().at(this.ABIs['ring'].address)
+        const balance = await ring.methods.balanceOf(this.ABIs['justswapExchange'].address).call()
+        return new BigNumber(balance).toString(10)
+    }
+
+    getOutputPrice(outputAmount, inputReserve, outputReserve) {
+        const numerator = new BigNumber(inputReserve).times(outputAmount).times(1000);
+        const denominator = new BigNumber(outputReserve).minus(outputAmount).times(997);
+        return (numerator.div(denominator)).plus(1);
+    }
+
+    getInputPrice(inputAmount, inputReserve, outputReserve) {
+        const input_amount_with_fee = new BigNumber(inputAmount).times(997);
+
+        const numerator = input_amount_with_fee.times(outputReserve);
+        const denominator = new BigNumber(inputReserve).times(1000).plus(input_amount_with_fee);
+        return numerator.div(denominator);
+    }
+
+    /**
+     * Trx will be cost to swap 1 Ring
+     * @param {*} tokens_bought
+     */
+    async getTrxToTokenOutputPrice(tokens_bought = '1000000000000000000') {
+        const amountInMax = this.getOutputPrice(tokens_bought, await this.getJustswapTrxBalance(), await this.getJustswapTokenBalance())
+        return [
+            new BigNumber(amountInMax.toString(10)).times('1000000000000000000').div(tokens_bought).toFixed(0),
+            amountInMax.toString(10)
+        ]
+    }
+
+    /**
+     * Trx will be got to swap 1 Ring
+     * @param {*} tokens_bought
+     */
+    async getTokenToTrxInputPrice(tokens_bought = '1000000000000000000') {
+        const amountOutMin = this.getInputPrice(tokens_bought, await this.getJustswapTokenBalance(), await this.getJustswapTrxBalance())
+        return [
+            new BigNumber(amountOutMin.toString(10)).times('1000000000000000000').div(tokens_bought).toFixed(0),
+            amountOutMin.toString(10)
+        ]
+    }
+
+   /**
+     * Swap Ether to Ring token - Powered by uniswap.
+     * @param {string} value - amount for Ring， unit of measurement(wei)
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    async buyRingJustswap(value, callback = {}) {
+        const deadline = Math.floor(Date.now() / 1000) + 60 * 10 // 10 minutes from the current Unix time
+        const [, amountInMax] = await this.getTrxToTokenOutputPrice(value);
+        //  slippage
+        const slippageAmountInMax = new BigNumber(amountInMax).times(1.005);
+
+        return this.triggerContract({
+            methodName: 'trxToTokenSwapOutput',
+            abiKey: 'justswapExchange',
+            abiString: justswapExchangeABI,
+            forceABI: true,
+            contractParams: [
+                value,
+                deadline
+            ],
+            sendParams: {
+                callValue: slippageAmountInMax.toFixed(0)
+            }
+        }, callback)
+    }
+
+    /**
+     * Swap Ether to Ring token - Powered by uniswap.
+     * @param {string} value - amount for Ring， unit of measurement(wei)
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    async sellRingJustswap(value, callback = {}) {
+        const deadline = Math.floor(Date.now() / 1000) + 60 * 10 // 10 minutes from the current Unix time
+        const [, amountOutMin] = await this.getTokenToTrxInputPrice(value);
+        //  slippage
+        const slippageAmountOutMin = new BigNumber(amountOutMin).times(0.995);
+        console.log(113, [
+            value,
+            slippageAmountOutMin.toFixed(0),
+            deadline
+        ]);
+        return this.triggerContract({
+            methodName: 'tokenToTrxSwapInput',
+            abiKey: 'justswapExchange',
+            abiString: justswapExchangeABI,
+            forceABI: true,
+            contractParams: [
+                value,
+                slippageAmountOutMin.toFixed(0),
+                deadline
+            ],
+            sendParams: {
+                callValue: 0
+            }
+        }, callback)
+    }
+    
 }
 
 export default TronEvolutionLand

@@ -250,10 +250,19 @@ class EthereumEvolutionLand {
      */
     async fetchAtlantisSwapFee(value, callback = {}) {
         return this.callContract({
-            methodName: 'querySwapFeeForNow',
+            methodName: 'querySwapFee',
             abiKey: 'swapBridge',
             abiString: swapBridgeABI,
             contractParams: [value],
+        }, callback)
+    }
+
+    getSimpleBridgeStatus(callback = {}) {
+        return this.callContract({
+            methodName: 'paused',
+            abiKey: 'swapBridge',
+            abiString: swapBridgeABI,
+            contractParams: [],
         }, callback)
     }
 
@@ -263,7 +272,7 @@ class EthereumEvolutionLand {
      * @param {string} value tron address (bs58)
      * @param {*} callback 
      */
-    async AtlantisSwapBridge(value, targetAddress, callback = {}) {
+    async AtlantisSwapBridge(value, targetAddress, symbol = 'ring', callback = {}) {
         if (!targetAddress) {
             throw Error('empty targetAddress')
         }
@@ -274,9 +283,9 @@ class EthereumEvolutionLand {
         const extraData = `${Utils.toHexAndPadLeft(value)}${Utils.toHexAndPadLeft(2).slice(2)}${Utils.padLeft(hexTargetAddress.substring(2), 64, '0')}`
         return this.triggerContract({
             methodName: 'approveAndCall',
-            abiKey: 'ring',
+            abiKey: symbol.toLowerCase(),
             abiString: ringABI,
-            contractParams: [this.ABIs['swapBridge'].address, new BigNumber(fee).plus(new BigNumber(value)).toFixed(), extraData],
+            contractParams: [this.ABIs['swapBridge'].address, new BigNumber(fee).plus(1).plus(new BigNumber(value)).toFixed(0), extraData],
         }, callback)
     }
 
@@ -566,6 +575,32 @@ class EthereumEvolutionLand {
             abiString: withdrawABI,
             contractParams: [nonce, value, hash, v, r, s],
             abiKey: "withdraw",
+        }, callback);
+    }
+
+    /**
+     *  Withdraw kton from the channel
+     * @param nonce
+     * @param value
+     * @param hash
+     * @param v
+     * @param r
+     * @param s
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    withdrawKton({
+        nonce,
+        value,
+        hash,
+        v,
+        r,
+        s
+    }, callback = {}) {
+        return this.triggerContract({
+            methodName: "takeBack",
+            abiString: withdrawABI,
+            contractParams: [nonce, value, hash, v, r, s],
+            abiKey: "withdrawKton",
         }, callback);
     }
 

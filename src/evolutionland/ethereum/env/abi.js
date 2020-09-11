@@ -89,6 +89,10 @@ function getABI(env){
             address: _env.CONTRACT.TOKEN_WITHDRAW,
             api: apiContractWithdraw
         },
+        withdrawKton: {
+            address: _env.CONTRACT.TOKEN_WITHDRAW_KTON,
+            api: apiContractWithdraw
+        },
         auction: {
             address: _env.CONTRACT.TOKEN_AUCTION,
             api: apiContractAuction

@@ -130,6 +130,10 @@ function getABI(env) {
             address: _env.CONTRACT.TOKEN_WITHDRAW,
             api: apiContractWithdraw
         },
+        withdrawKton: {
+            address: _env.CONTRACT.TOKEN_WITHDRAW_KTON,
+            api: apiContractWithdraw
+        },
         auction: {
             address: _env.CONTRACT.TOKEN_AUCTION,
             api: apiContractAuction
@@ -237,6 +241,9 @@ function getABI(env) {
         swapBridge: {
             address: _env.CONTRACT.TOKEN_DEX_BRIDGE,
             api: swapBridge
+        },
+        justswapExchange: {
+            address: _env.CONTRACT.JUSTSWAP_EXCHANGE,
         }
     });
 }
