@@ -43,6 +43,9 @@ export default {
         UNISWAP_EXCHANGE: "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
         AUCTIONHOLDER: "",
 
+        FURNACE_TREASURE: "0xF72361096f11d7E4e45046d7a83726b1A9107D5E",
+        FURNACE_TAKEBACK: "0xA10D0C6e04845A5e998d1936249A30563c553417",
+
         ITERING_CALLBACK: "https://alpha.evolution.land/api/eth/raw_sign_broadcast"
     },
     DOMAIN: "https://alpha.evolution.land",

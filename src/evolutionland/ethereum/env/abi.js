@@ -204,7 +204,13 @@ function getABI(env){
         swapBridge: {
             address: _env.CONTRACT.TOKEN_DEX_BRIDGE,
             api: swapBridge
-        }
+        },
+        itemTreasure: {
+            address: _env.CONTRACT.FURNACE_TREASURE,
+        },
+        itemTakeBack: {
+            address: _env.CONTRACT.FURNACE_TAKEBACK,
+        },
     });
 }
 

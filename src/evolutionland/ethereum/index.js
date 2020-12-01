@@ -25,6 +25,8 @@ import petBaseABI from './env/abi/ethereum/abi-petbase'
 import uniswapExchangeABI from './env/abi/ethereum/abi-uniswapExchangeV2'
 import swapBridgeABI from './env/abi/ethereum/abi-swapBridge'
 import luckyBoxABI from './env/abi/ethereum/abi-luckyBag'
+import itemTreasureABI from './env/abi/ethereum/abi-itemTreasure'
+import itemTakeBackABI from './env/abi/ethereum/abi-itemTakeBack'
 import Utils from '../utils/index'
 
 import { ChainId, Token, TokenAmount, Pair, WETH, Fetcher, Percent, Route, TradeType, Trade } from '@uniswap/sdk'
@@ -130,13 +132,13 @@ class EthereumEvolutionLand {
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const from = await this.getCurrentAccount()
             const gasRes = await this.ClientFetch.apiGasPrice({ wallet: this.option.address || from })
-            let estimateGas = 709370;
+            let estimateGas = 300000;
             try {
                 let hexSendParams = { value: 0 }
                 Object.keys(sendParams).forEach((item) => {
                     hexSendParams[item] = Utils.toHex(sendParams[item])
                 })
-                estimateGas = await this.estimateGas(_method, this.option.address || from, gasRes.data.gas_price.standard, hexSendParams.value) || 709370;
+                estimateGas = await this.estimateGas(_method, this.option.address || from, gasRes.data.gas_price.standard, hexSendParams.value) || 300000;
             } catch (e) {
                 console.log('estimateGas', e)
             }
@@ -1145,7 +1147,6 @@ class EthereumEvolutionLand {
     async buyLuckyBox(buyer, goldBoxAmount, silverBoxAmount, callback) {
         const luckyBoxInfo = await this.getLuckyBoxInfo()
         const cost = Utils.toBN(luckyBoxInfo[0]).muln(goldBoxAmount).add(Utils.toBN(luckyBoxInfo[1]).muln(silverBoxAmount))
-        console.log(cost.toString())
         return this.triggerContract({
             methodName: 'buyBoxs',
             abiKey: 'luckybag',
@@ -1184,6 +1185,116 @@ class EthereumEvolutionLand {
             _contract.methods.goldSalesRecord(address).call(),
             _contract.methods.silverSalesRecord(address).call(),
         ])
+    }
+
+    /**
+     * get furnace treasure price
+     * @returns {} - promise -> {0: "1026000000000000000000", 1: "102000000000000000000", priceGoldBox: "1026000000000000000000", priceSilverBox: "102000000000000000000"}
+     */
+    getFurnaceTreasurePrice() {
+        const _contract = new this._web3js.eth.Contract(itemTreasureABI, this.ABIs['itemTreasure'].address)
+        return _contract.methods.getPrice().call()
+    }
+
+    getFurnaceTakeBackNonce(address) {
+        const _contract = new this._web3js.eth.Contract(itemTakeBackABI, this.ABIs['itemTakeBack'].address)
+        return _contract.methods.userToNonce(address).call()
+    }
+
+    /**
+     * buy lucky box
+     * @param {*} goldBoxAmount - gold box amount
+     * @param {*} silverBoxAmount - silver box amount
+     */
+    async buyFurnaceTreasure(goldBoxAmount = 0, silverBoxAmount = 0, callback) {
+        const treasurePrice = await this.getFurnaceTreasurePrice()
+        const cost = Utils.toBN(treasurePrice.priceGoldBox).muln(goldBoxAmount).add(Utils.toBN(treasurePrice.priceSilverBox).muln(silverBoxAmount))
+
+        // Function: transfer(address _to, uint256 _value, bytes _data) ***
+        // data
+        // 0000000000000000000000000000000000000000000000000000000000000001 gold box amount
+        // 0000000000000000000000000000000000000000000000000000000000000002 silver box amount
+        const data = Utils.toTwosComplement(goldBoxAmount) + Utils.toTwosComplement(silverBoxAmount).substring(2, 66)
+        return this.triggerContract({
+            methodName: 'transfer',
+            abiKey: 'ring',
+            abiString: ringABI,
+            contractParams: [this.ABIs['itemTreasure'].address, cost.toString(10), data],
+            sendParams: {
+                value: 0
+            }
+        }, callback)
+    }
+
+     /**
+     *  open furnace treasure
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    openFurnaceTreasure({
+        boxIds,
+        amounts,
+        hashmessage,
+        v,
+        r,
+        s
+    }, callback = {}) {
+        // During the process of opening the treasure chest, there is the logic of randomly gifting rings, 
+        // which leads to inaccurate gas estimation, so manually set it to avoid out of gas.
+        // https://etherscan.io/tx/0xe71f54aee8f7ab1dd15df955d09c79af5060f20e91c0c5ecfcf17f20c9bf02b3
+        // https://etherscan.io/tx/0x7b04df9b55f33b6edcc402a5733dbc753a6bbe2f78af7c7bef6f3f4d8dce7491
+
+        
+        return this.triggerContract({
+            methodName: "openBoxes",
+            abiString: itemTakeBackABI,
+            contractParams: [
+                boxIds,
+                amounts,
+                hashmessage,
+                v,
+                r,
+                s
+            ],
+            sendParams: {
+                value: 0,
+                gasLimit: new BigNumber(boxIds.length).times(250000).toFixed(0)
+            },
+            abiKey: "itemTakeBack",
+        }, callback);
+    }
+
+    checkFurnaceTreasureStatus(id) {
+        const _contract = new this._web3js.eth.Contract(itemTakeBackABI, this.ABIs['itemTakeBack'].address)
+        return _contract.methods.ids(id).call()
+    }
+
+    getRingBalance(address) {
+        const _contract = new this._web3js.eth.Contract(ringABI, this.ABIs['ring'].address)
+        return _contract.methods.balanceOf(address).call()
+    }
+
+    getKtonBalance(address) {
+        const _contract = new this._web3js.eth.Contract(ktonABI, this.ABIs['kton'].address)
+        return _contract.methods.balanceOf(address).call()
+    }
+
+    /**
+     * transfer evo land 721 object
+     * @param {*} to recevier
+     * @param {*} tokenId 721 tokenid
+     * @param {*} callback 
+     */
+    async transferFromObjectOwnership(to, tokenId, callback = {}) {
+        if (!to) {
+            return null
+        }
+        const from = await this.getCurrentAccount()
+        return this.triggerContract({
+            methodName: 'transferFrom',
+            abiKey: 'land',
+            abiString: landABI,
+            contractParams: [from, to, '0x' + tokenId],
+        }, callback)
     }
 
     estimateGas(method, address, gasPrice, value = 0) {
