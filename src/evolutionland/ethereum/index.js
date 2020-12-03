@@ -1243,6 +1243,19 @@ class EthereumEvolutionLand {
         // https://etherscan.io/tx/0xe71f54aee8f7ab1dd15df955d09c79af5060f20e91c0c5ecfcf17f20c9bf02b3
         // https://etherscan.io/tx/0x7b04df9b55f33b6edcc402a5733dbc753a6bbe2f78af7c7bef6f3f4d8dce7491
 
+        // no return ring - gas used - 229,289
+        // https://etherscan.io/tx/0x4e1fc1dcec64bb497405126e55ab743368f1cb1cede945936937e0cde1d254e7
+        // prize ring - gas used - 254,776 
+        // https://etherscan.io/tx/0xd2b3f05b19e74627940edfe98daee31eeab84b67e88dcf0e77d595430b3b1afc
+
+        let gasLimit = new BigNumber(amounts[0]).lt('1000000000000000000000') ? new BigNumber(260000) : new BigNumber(300000);
+
+        if(amounts.length > 1) {
+            for (let index = 1; index < amounts.length; index++) {
+                const amount = amounts[index];
+                gasLimit = gasLimit.plus(new BigNumber(amount).lt('1000000000000000000000') ? new BigNumber(260000) : new BigNumber(260000));
+            }
+        }
         
         return this.triggerContract({
             methodName: "openBoxes",
@@ -1257,7 +1270,7 @@ class EthereumEvolutionLand {
             ],
             sendParams: {
                 value: 0,
-                gasLimit: new BigNumber(boxIds.length).times(310000).toFixed(0)
+                gasLimit: gasLimit.toFixed(0)
             },
             abiKey: "itemTakeBack",
         }, callback);
