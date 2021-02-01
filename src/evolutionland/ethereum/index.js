@@ -57,8 +57,6 @@ class EthereumEvolutionLand {
             baseUrl: this.env.DOMAIN,
             chainId: 60
         })
-        this.UniswapExchangeAddress = ''
-        this.UniswapExchangeContract = null
         this.option = {
             sign: true,
             address: null,
@@ -120,19 +118,17 @@ class EthereumEvolutionLand {
         payload = {}
     } = {}) {
         try {
-            beforeFetch && beforeFetch()
-            let _contract = null
-            if (abiString) {
-                _contract = new this._web3js.eth.Contract(abiString, this.ABIs[abiKey].address);
-            } else {
-                const _abi = await this.ABIClientFetch.$getAbi(this.ABIs[abiKey].api())
-                _contract = new this._web3js.eth.Contract(_abi, this.ABIs[abiKey].address)
-            }
+            beforeFetch && beforeFetch();
+
+            let _contract = null;
+            _contract = new this._web3js.eth.Contract(abiString, this.ABIs[abiKey].address);
+
             const extendPayload = { ...payload, _contractAddress: this.ABIs[abiKey].address };
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const from = await this.getCurrentAccount()
             const gasRes = await this.ClientFetch.apiGasPrice({ wallet: this.option.address || from })
             let estimateGas = 300000;
+
             try {
                 let hexSendParams = { value: 0 }
                 Object.keys(sendParams).forEach((item) => {
@@ -227,12 +223,7 @@ class EthereumEvolutionLand {
         try {
             beforeFetch && beforeFetch()
             let _contract = null
-            if (abiString) {
-                _contract = new this._web3js.eth.Contract(abiString, this.ABIs[abiKey].address);
-            } else {
-                const _abi = await this.ABIClientFetch.$getAbi(this.ABIs[abiKey].api())
-                _contract = new this._web3js.eth.Contract(_abi, this.ABIs[abiKey].address)
-            }
+            _contract = new this._web3js.eth.Contract(abiString, this.ABIs[abiKey].address);
 
             const _method = _contract.methods[methodName].apply(this, contractParams)
             return _method.call({
@@ -389,12 +380,12 @@ class EthereumEvolutionLand {
    * Ethereum Function, Approve Ring to Uniswap Exchange
    * @param {*} callback 
    */
-    async approveRingToUniswap(callback = {}) {
+    async approveRingToUniswap(callback = {}, value="20000000000000000000000000") {
         return this.triggerContract({
             methodName: 'approve',
             abiKey: 'ring',
             abiString: ringABI,
-            contractParams: [this.ABIs['uniswapExchange'].address, '20000000000000000000000000'],
+            contractParams: [this.ABIs['uniswapExchange'].address, value],
         }, callback)
     }
 
@@ -782,7 +773,7 @@ class EthereumEvolutionLand {
             methodName: 'transfer',
             abiKey: 'ring',
             abiString: ringABI,
-            contractParams: [this.ABIs['apostleBid'].address, amount, data],
+            contractParams: [this.ABIs['apostleAuction'].address, amount, data],
         }, callback)
     }
 
@@ -819,7 +810,7 @@ class EthereumEvolutionLand {
             methodName: 'approveAndCall',
             abiKey: 'land',
             abiString: landABI,
-            contractParams: [this.ABIs['apostleSell'].address, '0x' + tokenId, data],
+            contractParams: [this.ABIs['apostleAuction'].address, '0x' + tokenId, data],
         }, callback)
     }
 
@@ -874,7 +865,7 @@ class EthereumEvolutionLand {
             abiKey: 'ring',
             abiString: ringABI,
             contractParams: [
-                this.ABIs["apostleBreed"].address,
+                this.ABIs["apostleBase"].address,
                 amount,
                 `0x${tokenId}${targetTokenId}`
             ]
@@ -931,7 +922,7 @@ class EthereumEvolutionLand {
     apostleCancelBreedAuction(tokenId, callback = {}) {
         return this.triggerContract({
             methodName: 'cancelAuction',
-            abiKey: 'apostleSiringCancelAuction',
+            abiKey: 'apostleSiringAuction',
             abiString: apostleSiringABI,
             contractParams: [
                 '0x' + tokenId
