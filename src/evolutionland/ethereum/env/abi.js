@@ -1,215 +1,143 @@
 import {Env} from './index'
 
-export function apiContractlottey() {
-    return ("/abi-lottery.json");
-}
+import bancorABI from './abi/ethereum/abi-bancor'
+import actionABI from './abi/ethereum/abi-auction'
+import ringABI from './abi/ethereum/abi-ring'
+import ktonABI from './abi/ethereum/abi-kton'
+import withdrawABI from './abi/ethereum/abi-withdraw'
+import bankABI from './abi/ethereum/abi-bank'
 
-export function apiContractPetBase() {
-    return ("/abi-petbase.json");
-}
-
-export function apiContractRing() {
-    return ("/abi-ring.json");
-}
-
-export function apiContractAuction() {
-    return ("/abi-auction.json");
-}
-
-export function apiContractLand() {
-    return ("/abi-land.json");
-}
-
-export function apiContractWithdraw() {
-    return ("/abi-withdraw.json");
-}
-
-export function apiContractLuckybag() {
-    return ("/abi-luckyBag.json");
-}
-
-export function apiContractBancor() {
-    return ("/abi-bancor.json");
-}
-
-export function apiContractBank() {
-    return ("/abi-bank.json");
-}
-
-export function apiContractKton() {
-    return ("/abi-kton.json");
-}
-
-export function apiContractRolesUpdater() {
-    return ("/abi-rolesUpdater.json");
-}
-
-export function apiContractApostle() {
-    return ("/abi-land.json");
-}
-export function apiContractApostleBase() {
-    return ("/abi-apostleBase.json");
-}
-export function apiContractApostleAuction() {
-    return ("/abi-apostleAuction.json");
-}
-
-export function apiContractApostleSiring() {
-    return ("/abi-apostleSiring.json");
-}
-
-export function apiContractLandResource() {
-    return ("/abi-landResource.json");
-}
-
-export function apiContractTokenUse() {
-    return ("/abi-tokenUse.json");
-}
-
-export function apiContractTakeBack() {
-    return ("/abi-takeBack.json");
-}
-
-export function uniswapExchange() {
-    return ("/abi-uniswapExchange.json");
-}
-
-export function swapBridge() {
-    return ("/abi-swapBridge.json");
-}
+import landABI from './abi/ethereum/abi-land'
+import lotteryABI from './abi/ethereum/abi-lottery'
+import rolesUpdaterABI from './abi/ethereum/abi-rolesUpdater'
+import landResourceABI from './abi/ethereum/abi-landResource'
+import apostleAuctionABI from './abi/ethereum/abi-apostleAuction'
+import apostleTakeBackABI from './abi/ethereum/abi-takeBack'
+import apostleSiringABI from './abi/ethereum/abi-apostleSiring'
+import apostleBaseABI from './abi/ethereum/abi-apostleBase'
+import tokenUseABI from './abi/ethereum/abi-tokenUse'
+import petBaseABI from './abi/ethereum/abi-petbase'
+import uniswapExchangeABI from './abi/ethereum/abi-uniswapExchangeV2'
+import swapBridgeABI from './abi/ethereum/abi-swapBridge'
+import luckybagABI from './abi/ethereum/abi-luckyBag'
+import itemTreasureABI from './abi/ethereum/abi-itemTreasure'
+import itemTakeBackABI from './abi/ethereum/abi-itemTakeBack'
+import redPackageABI from './abi/ethereum/abi-redPackage'
 
 function getABI(env){
     let _env = Env(env)
     return Object.freeze({
         ring: {
             address: _env.CONTRACT.TOKEN_RING,
-            api: apiContractRing
+            abi: ringABI
         },
         withdraw: {
             address: _env.CONTRACT.TOKEN_WITHDRAW,
-            api: apiContractWithdraw
+            abi: withdrawABI
         },
         withdrawKton: {
             address: _env.CONTRACT.TOKEN_WITHDRAW_KTON,
-            api: apiContractWithdraw
+            abi: withdrawABI
         },
         auction: {
             address: _env.CONTRACT.TOKEN_AUCTION,
-            api: apiContractAuction
+            abi: actionABI
         },
         land: {
             address: _env.CONTRACT.TOKEN_LAND,
-            api: apiContractLand
+            abi: landABI
         },
         luckybag: {
             address: _env.CONTRACT.TOKEN_LUCKYBAG,
-            api: apiContractLuckybag
+            abi: luckybagABI
         },
         redPackage: {
             address: _env.CONTRACT.TOKEN_REDPACKAGE,
-            api: apiContractRing
+            abi: redPackageABI
         },
         bancor: {
             address: _env.CONTRACT.TOKEN_BANCOR,
-            api: apiContractBancor
+            abi: bancorABI
         },
         bank: {
             address: _env.CONTRACT.TOKEN_BANK,
-            api: apiContractBank
+            abi: bankABI
         },
         kton: {
             address: _env.CONTRACT.TOKEN_KTON,
-            api: apiContractKton
+            abi: ktonABI
         },
         lottery: {
             address: _env.CONTRACT.TOKEN_LOTTERY,
-            api: apiContractlottey
+            abi: lotteryABI
         },
         rolesUpdater: {
             address: _env.CONTRACT.TOKEN_ROLES_UPDATER,
-            api: apiContractRolesUpdater
+            abi: rolesUpdaterABI
         },
         apostleBase: {
             address: _env.CONTRACT.TOKEN_APOSTLE_BASE,
-            api: apiContractApostleBase
-        },
-        apostleSell: {
-            address: _env.CONTRACT.TOKEN_APOSTLE_CLOCK_AUCTION,
-            api: apiContractApostle
-        },
-        apostleBid: {
-            address: _env.CONTRACT.TOKEN_APOSTLE_CLOCK_AUCTION,
-            api: apiContractRing
+            abi: apostleBaseABI
         },
         apostleAuction: {
             address: _env.CONTRACT.TOKEN_APOSTLE_CLOCK_AUCTION,
-            api: apiContractApostleAuction
+            abi: apostleAuctionABI
         },
         apostleSiringAuction: {
             address: _env.CONTRACT.TOKEN_APOSTLE_SIRING_AUCTION,
-            api: apiContractLand
+            abi: apostleSiringABI
         },
-        apostleSiringCancelAuction: {
-            address: _env.CONTRACT.TOKEN_APOSTLE_SIRING_AUCTION,
-            api: apiContractApostleSiring
-        },
-        apostleBreed: {
-            address: _env.CONTRACT.TOKEN_APOSTLE_BASE,
-            api: apiContractRing
-        },
-        // apostleTransfer: {
-        //   address: TOKEN_LAND,
-        //   api:apiContractRing
-        // }
         apostleLandResource: {
             address: _env.CONTRACT.TOKEN_LAND_RESOURCE,
-            api: apiContractLandResource
+            abi: landResourceABI
         },
         apostleTokenUse: {
             address: _env.CONTRACT.TOKEN_TOKEN_USE,
-            api: apiContractTokenUse
+            abi: tokenUseABI
         },
         apostleTakeBack: {
             address: _env.CONTRACT.TOKEN_APOSTLE_TAKE_BACK,
-            api: apiContractTakeBack
+            abi: apostleTakeBackABI
         },
         petBase: {
             address: _env.CONTRACT.TOKEN_PET_BASE,
-            api: apiContractPetBase
+            abi: petBaseABI
         },
         gold: {
             address: _env.CONTRACT.TOKEN_ELEMENT_GOLD,
-            api: apiContractRing
+            abi: ringABI
         },
         wood: {
             address: _env.CONTRACT.TOKEN_ELEMENT_WOOD,
-            api: apiContractRing
+            abi: ringABI
         },
         water: {
             address: _env.CONTRACT.TOKEN_ELEMENT_WATER,
-            api: apiContractRing
+            abi: ringABI
         },
         fire: {
             address: _env.CONTRACT.TOKEN_ELEMENT_FIRE,
-            api: apiContractRing
+            abi: ringABI
         },
         soil: {
             address: _env.CONTRACT.TOKEN_ELEMENT_SOIL,
-            api: apiContractRing
+            abi: ringABI
         },
         uniswapExchange: {
             address: _env.CONTRACT.UNISWAP_EXCHANGE,
-            api: uniswapExchange
+            abi: uniswapExchangeABI
         },
         swapBridge: {
             address: _env.CONTRACT.TOKEN_DEX_BRIDGE,
-            api: swapBridge
+            abi: swapBridgeABI
         },
         itemTreasure: {
             address: _env.CONTRACT.FURNACE_TREASURE,
+            abi: itemTreasureABI
         },
         itemTakeBack: {
             address: _env.CONTRACT.FURNACE_TAKEBACK,
+            abi: itemTakeBackABI
         },
     });
 }
