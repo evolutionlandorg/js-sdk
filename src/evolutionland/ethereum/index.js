@@ -28,8 +28,9 @@ import luckyBoxABI from './env/abi/ethereum/abi-luckyBag'
 import itemTreasureABI from './env/abi/ethereum/abi-itemTreasure'
 import itemTakeBackABI from './env/abi/ethereum/abi-itemTakeBack'
 import Utils from '../utils/index'
+import UniswapUtils from '../utils/uniswap'
 
-import { ChainId, Token, TokenAmount, Pair, WETH, Fetcher, Percent, Route, TradeType, Trade } from '@uniswap/sdk'
+import { Currency, ChainId, Token, TokenAmount, Pair, WETH, Fetcher, Percent, Route, TradeType, Trade, JSBI, CurrencyAmount } from '@uniswap/sdk'
 
 
 const loop = function () { }
@@ -114,16 +115,18 @@ class EthereumEvolutionLand {
         confirmationCallback = loop,
         receiptCallback = loop,
         errorCallback = loop,
+        receiptFinal = loop,
         unSignedTx = loop,
         payload = {}
     } = {}) {
         try {
             beforeFetch && beforeFetch();
-
             let _contract = null;
-            _contract = new this._web3js.eth.Contract(abiString, this.ABIs[abiKey].address);
+            let contractAddress = (this.ABIs[abiKey] && this.ABIs[abiKey].address) || abiKey;
 
-            const extendPayload = { ...payload, _contractAddress: this.ABIs[abiKey].address };
+            _contract = new this._web3js.eth.Contract(abiString, contractAddress);
+
+            const extendPayload = { ...payload, _contractAddress: contractAddress };
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const from = await this.getCurrentAccount()
             const gasRes = await this.ClientFetch.apiGasPrice({ wallet: this.option.address || from })
@@ -150,7 +153,7 @@ class EthereumEvolutionLand {
                 })
 
                 const tx = new EthereumTx({
-                    to: this.ABIs[abiKey].address,
+                    to: contractAddress,
                     value: 0,
                     nonce: gasRes.data.nonce,
                     gasPrice: gasRes.data.gas_price.standard,
@@ -172,21 +175,24 @@ class EthereumEvolutionLand {
                 gasLimit: Utils.toHex(estimateGas + 30000),
                 ...sendParams
             })
-                .on('transactionHash', (hash) => {
+                .once('transactionHash', (hash) => {
                     transactionHashCallback && transactionHashCallback(hash, extendPayload)
                 })
-                .on('confirmation', (confirmationNumber, receipt) => {
+                .once('confirmation', (confirmationNumber, receipt) => {
                     confirmationCallback && confirmationCallback(confirmationNumber, receipt, extendPayload)
                 })
-                .on('receipt', (receipt) => {
+                .once('receipt', (receipt) => {
                     receiptCallback && receiptCallback(receipt, extendPayload)
                 })
-                .on('error', (error) => {
+                .once('error', (error) => {
                     errorCallback && errorCallback(error, extendPayload)
                 })
+                // .then((receipt) =>{
+                //     receiptFinal && receiptFinal(receipt, extendPayload);
+                // })
         } catch (e) {
             console.error('triggerContract', e)
-            const extendPayload = { ...payload, _contractAddress: this.ABIs[abiKey].address };
+            const extendPayload = { ...payload, _contractAddress: contractAddress };
             errorCallback && errorCallback(e, extendPayload)
         }
 
@@ -377,9 +383,9 @@ class EthereumEvolutionLand {
     }
 
     /**
-   * Ethereum Function, Approve Ring to Uniswap Exchange
-   * @param {*} callback 
-   */
+     * Ethereum Function, Approve Ring to Uniswap Exchange
+     * @param {*} callback 
+     */
     async approveRingToUniswap(callback = {}, value="20000000000000000000000000") {
         return this.triggerContract({
             methodName: 'approve',
@@ -390,13 +396,30 @@ class EthereumEvolutionLand {
     }
 
     /**
+     * Ethereum Function, Approve token to Uniswap Exchange
+     * @param {*} callback 
+     */
+    async approveTokenToUniswap(addressOrType, value="0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", callback = {}) {
+        if(!addressOrType) {
+            throw 'ethereum::approveTokenToUniswap: missing addressOrType param'
+        }
+
+        return this.triggerContract({
+            methodName: 'approve',
+            abiKey: addressOrType,
+            abiString: ringABI,
+            contractParams: [this.ABIs['uniswapExchange'].address, value],
+        }, callback)
+    }
+
+    /**
      * Check if uniswap has sufficient transfer authority
      * @param {*} amount 
      */
-    async checkUniswapAllowance(amount) {
-        const from = await this.getCurrentAccount()
+    async checkUniswapAllowance(amount, addressOrType = 'ring') {
+        const from = await this.getCurrentAccount();
 
-        const erc20Contract = new this._web3js.eth.Contract(ringABI, this.ABIs['ring'].address)
+        const erc20Contract = new this._web3js.eth.Contract(ringABI, (this.ABIs[addressOrType] && this.ABIs[addressOrType].address) || addressOrType)
         const allowanceAmount = await erc20Contract.methods.allowance(from, this.ABIs['uniswapExchange'].address).call()
         return !Utils.toBN(allowanceAmount).lt(Utils.toBN(amount || '1000000000000000000000000'))
     }
@@ -1300,6 +1323,140 @@ class EthereumEvolutionLand {
             contractParams: [from, to, '0x' + tokenId],
         }, callback)
     }
+
+    getUniswapToken(tokenType) {
+        switch (tokenType.toLowerCase()) {
+            case 'ring':
+                return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token");
+            case 'kton':
+                return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_KTON, 18, "KTON", "KTON");
+            case 'gold':
+                return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_GOLD, 18, "GOLD", "GOLD");
+            case 'wood':
+                return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_WOOD, 18, "WOOD", "WOOD");
+            case 'water':
+                return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_WATER, 18, "WATER", "WATER");
+            case 'fire':
+                return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_FIRE, 18, "FIRE", "FIRE");
+            case 'soil':
+                return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_SOIL, 18, "SOIL", "SOIL");
+            default:
+                break;
+        }
+
+    }
+
+    async getDerivedPairInfo(tokenA, tokenB) {
+        if(!tokenA || !tokenB) {
+            return;
+        }
+
+        const currencyA = this.getUniswapToken(tokenA);
+        const currencyB = this.getUniswapToken(tokenB);
+        const pair = await Fetcher.fetchPairData(currencyA, currencyB);
+
+        return pair;
+    }
+
+    async addUniswapLiquidity({token: tokenAType, amount: amountA}, {token: tokenBType, amount: amountB}, to, slippage = 100, callback = {}) {
+        const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
+
+        if(!pair || !pair.token0.address || !pair.token1.address) {
+            return;
+        }
+
+        if(!to) {
+            to = await this.getCurrentAccount();    
+        }
+
+        const independentToken = amountA ? 
+            { token: this.getUniswapToken(tokenAType), amount: amountA} : 
+            { token: this.getUniswapToken(tokenBType), amount: amountB};
+        const dependentToken = amountA ? 
+            { token: this.getUniswapToken(tokenBType), amount: amountB} : 
+            { token: this.getUniswapToken(tokenAType), amount: amountA};
+
+        const parsedAmounts = {
+            [pair.token0.address]: independentToken.token.equals(pair.token0) ? independentToken.amount : pair.priceOf(independentToken.token).quote(new CurrencyAmount(independentToken.token, JSBI.BigInt(independentToken.amount))).raw.toString(),
+            [pair.token1.address]: independentToken.token.equals(pair.token1) ? independentToken.amount : pair.priceOf(independentToken.token).quote(new CurrencyAmount(independentToken.token, JSBI.BigInt(independentToken.amount))).raw.toString(),
+        }
+
+        const amountsMin = {
+            [pair.token0.address]: UniswapUtils.calculateSlippageAmount(JSBI.BigInt(parsedAmounts[pair.token0.address]), slippage)[0],
+            [pair.token1.address]: UniswapUtils.calculateSlippageAmount(JSBI.BigInt(parsedAmounts[pair.token1.address]), slippage)[0]
+        }
+
+        const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 20 minutes from the current Unix time
+
+        return this.triggerContract({
+            methodName: 'addLiquidity',
+            abiKey: 'uniswapExchange',
+            abiString: uniswapExchangeABI,
+            contractParams: [
+                pair.token0.address,
+                pair.token1.address,
+                parsedAmounts[pair.token0.address],
+                parsedAmounts[pair.token1.address],
+                amountsMin[pair.token0.address].toString(),
+                amountsMin[pair.token1.address].toString(),
+                to,
+                deadline
+            ],
+            sendParams: {
+                value: 0
+            }
+        }, callback)
+    }
+
+    // async removeUniswapLiquidity({token: tokenAType}, {token: tokenBType}, liquidityAmount, to, slippage = 100, callback = {}) {
+    //     const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
+
+    //     if(!pair || !pair.token0.address || !pair.token1.address) {
+    //         return;
+    //     }
+
+    //     if(!to) {
+    //         to = await this.getCurrentAccount();    
+    //     }
+
+    //     const independentToken = amountA ? 
+    //         { token: this.getUniswapToken(tokenAType), amount: amountA} : 
+    //         { token: this.getUniswapToken(tokenBType), amount: amountB};
+    //     const dependentToken = amountA ? 
+    //         { token: this.getUniswapToken(tokenBType), amount: amountB} : 
+    //         { token: this.getUniswapToken(tokenAType), amount: amountA};
+
+    //     const parsedAmounts = {
+    //         [pair.token0.address]: independentToken.token.equals(pair.token0) ? independentToken.amount : pair.priceOf(independentToken.token).quote(new CurrencyAmount(independentToken.token, JSBI.BigInt(independentToken.amount))).raw.toString(),
+    //         [pair.token1.address]: independentToken.token.equals(pair.token1) ? independentToken.amount : pair.priceOf(independentToken.token).quote(new CurrencyAmount(independentToken.token, JSBI.BigInt(independentToken.amount))).raw.toString(),
+    //     }
+
+    //     const amountsMin = {
+    //         [pair.token0.address]: UniswapUtils.calculateSlippageAmount(JSBI.BigInt(parsedAmounts[pair.token0.address]), slippage)[0],
+    //         [pair.token1.address]: UniswapUtils.calculateSlippageAmount(JSBI.BigInt(parsedAmounts[pair.token1.address]), slippage)[0]
+    //     }
+
+    //     const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 20 minutes from the current Unix time
+
+    //     return this.triggerContract({
+    //         methodName: 'addLiquidity',
+    //         abiKey: 'uniswapExchange',
+    //         abiString: uniswapExchangeABI,
+    //         contractParams: [
+    //             pair.token0.address,
+    //             pair.token1.address,
+    //             parsedAmounts[pair.token0.address],
+    //             parsedAmounts[pair.token1.address],
+    //             amountsMin[pair.token0.address].toString(),
+    //             amountsMin[pair.token1.address].toString(),
+    //             to,
+    //             deadline
+    //         ],
+    //         sendParams: {
+    //             value: 0
+    //         }
+    //     }, callback)
+    // }
 
     estimateGas(method, address, gasPrice, value = 0) {
         if (!this._web3js) return;
