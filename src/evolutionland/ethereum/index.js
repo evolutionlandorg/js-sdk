@@ -399,7 +399,7 @@ class EthereumEvolutionLand {
      * Ethereum Function, Approve token to Uniswap Exchange
      * @param {*} callback 
      */
-    async approveTokenToUniswap(addressOrType, value="0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", callback = {}) {
+    approveTokenToUniswap(addressOrType, value="0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", callback = {}) {
         if(!addressOrType) {
             throw 'ethereum::approveTokenToUniswap: missing addressOrType param'
         }
@@ -410,6 +410,16 @@ class EthereumEvolutionLand {
             abiString: ringABI,
             contractParams: [this.ABIs['uniswapExchange'].address, value],
         }, callback)
+    }
+
+    async approveLiquidityTokenToUniswap(tokenAType, tokenBType, value="0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", callback = {}) {
+        if(!tokenAType || !tokenBType) {
+            throw 'ethereum::approveLiquidityTokenToUniswap: missing addressOrType param'
+        }
+
+        const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
+
+        return this.approveTokenToUniswap(pair.liquidityToken.address, value, callback);
     }
 
     /**
@@ -1305,6 +1315,16 @@ class EthereumEvolutionLand {
         return _contract.methods.balanceOf(address).call()
     }
 
+    getTokenBalance(account, contractAddress) {
+        const _contract = new this._web3js.eth.Contract(ringABI, contractAddress)
+        return _contract.methods.balanceOf(account).call()
+    }
+
+    getTokenTotalSupply(contractAddress) {
+        const _contract = new this._web3js.eth.Contract(ringABI, contractAddress)
+        return _contract.methods.totalSupply().call()
+    }
+
     /**
      * transfer evo land 721 object
      * @param {*} to recevier
@@ -1358,6 +1378,36 @@ class EthereumEvolutionLand {
         return pair;
     }
 
+    async getDerivedBurnInfo(tokenAType, tokenBType, percent = '100', callback) {
+        const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
+        const walletAddress = await this.getCurrentAccount();
+        const lpBalanceStr = await this.getTokenBalance(walletAddress, pair.liquidityToken.address);
+        const userLiquidity = new TokenAmount(pair.liquidityToken, JSBI.BigInt(lpBalanceStr));
+
+        const totalSupply = new TokenAmount(pair.liquidityToken, await this.getTokenTotalSupply(pair.liquidityToken.address));
+
+        const liquidityValueA = pair &&
+        totalSupply &&
+        userLiquidity &&
+        pair.token0 && new TokenAmount(pair.token0, pair.getLiquidityValue(pair.token0, totalSupply, userLiquidity, false).raw);
+
+        const liquidityValueB = pair &&
+        totalSupply &&
+        userLiquidity &&
+        pair.token1 && new TokenAmount(pair.token1, pair.getLiquidityValue(pair.token1, totalSupply, userLiquidity, false).raw);
+
+        let percentToRemove = new Percent(percent, '100');
+
+        const parsedAmounts = {
+            LIQUIDITY_PERCENT: percentToRemove,
+            [pair.liquidityToken.address]: new TokenAmount(userLiquidity.token, percentToRemove.multiply(userLiquidity.raw).quotient),
+            [pair.token0.address]: new TokenAmount(pair.token0, percentToRemove.multiply(liquidityValueA.raw).quotient),
+            [pair.token1.address]: new TokenAmount(pair.token1, percentToRemove.multiply(liquidityValueB.raw).quotient),
+        }
+
+        return { pair, parsedAmounts }
+    }
+
     async addUniswapLiquidity({token: tokenAType, amount: amountA}, {token: tokenBType, amount: amountB}, to, slippage = 100, callback = {}) {
         const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
 
@@ -1409,7 +1459,7 @@ class EthereumEvolutionLand {
     }
 
     // async removeUniswapLiquidity({token: tokenAType}, {token: tokenBType}, liquidityAmount, to, slippage = 100, callback = {}) {
-    //     const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
+    //     const pair = await this.getDerivedBurnInfo(tokenAType, tokenBType);
 
     //     if(!pair || !pair.token0.address || !pair.token1.address) {
     //         return;
