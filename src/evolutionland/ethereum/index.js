@@ -426,8 +426,8 @@ class EthereumEvolutionLand {
      * Check if uniswap has sufficient transfer authority
      * @param {*} amount 
      */
-    async checkUniswapAllowance(amount, addressOrType = 'ring') {
-        const from = await this.getCurrentAccount();
+    async checkUniswapAllowance(amount, addressOrType = 'ring', account) {
+        const from = account || await this.getCurrentAccount();
 
         const erc20Contract = new this._web3js.eth.Contract(ringABI, (this.ABIs[addressOrType] && this.ABIs[addressOrType].address) || addressOrType)
         const allowanceAmount = await erc20Contract.methods.allowance(from, this.ABIs['uniswapExchange'].address).call()
