@@ -1395,8 +1395,7 @@ class EthereumEvolutionLand {
      * Get uniswap pair info
      * @param {*} tokenA token address or lowercase symbol (ring kton gold wood water fire soil)
      * @param {*} tokenB token address or lowercase symbol (ring kton gold wood water fire soil)
-     * @returns { pair } 
-     * pair - https://uniswap.org/docs/v2/SDK/pair/
+     * @returns { pair } pair - https://uniswap.org/docs/v2/SDK/pair/
      */
     async getDerivedPairInfo(tokenA, tokenB) {
         if(!tokenA || !tokenB) {
