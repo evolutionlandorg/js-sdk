@@ -1378,7 +1378,7 @@ class EthereumEvolutionLand {
         return pair;
     }
 
-    async getDerivedBurnInfo(tokenAType, tokenBType, percent = '100', callback) {
+    async getDerivedBurnInfo(tokenAType, tokenBType, percent = '100') {
         const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
         const walletAddress = await this.getCurrentAccount();
         const lpBalanceStr = await this.getTokenBalance(walletAddress, pair.liquidityToken.address);
@@ -1458,55 +1458,42 @@ class EthereumEvolutionLand {
         }, callback)
     }
 
-    // async removeUniswapLiquidity({token: tokenAType}, {token: tokenBType}, liquidityAmount, to, slippage = 100, callback = {}) {
-    //     const pair = await this.getDerivedBurnInfo(tokenAType, tokenBType);
+    async removeUniswapLiquidity(tokenAType, tokenBType, percent, to, slippage = 100, callback = {}) {
+        const { pair, parsedAmounts } = await this.getDerivedBurnInfo(tokenAType, tokenBType, percent);
 
-    //     if(!pair || !pair.token0.address || !pair.token1.address) {
-    //         return;
-    //     }
+        if(!pair || !pair.token0.address || !pair.token1.address) {
+            return;
+        }
 
-    //     if(!to) {
-    //         to = await this.getCurrentAccount();    
-    //     }
+        if(!to) {
+            to = await this.getCurrentAccount();    
+        }
 
-    //     const independentToken = amountA ? 
-    //         { token: this.getUniswapToken(tokenAType), amount: amountA} : 
-    //         { token: this.getUniswapToken(tokenBType), amount: amountB};
-    //     const dependentToken = amountA ? 
-    //         { token: this.getUniswapToken(tokenBType), amount: amountB} : 
-    //         { token: this.getUniswapToken(tokenAType), amount: amountA};
+        const amountsMin = {
+            [pair.token0.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token0.address].raw, slippage)[0],
+            [pair.token1.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token1.address].raw, slippage)[0]
+        }
 
-    //     const parsedAmounts = {
-    //         [pair.token0.address]: independentToken.token.equals(pair.token0) ? independentToken.amount : pair.priceOf(independentToken.token).quote(new CurrencyAmount(independentToken.token, JSBI.BigInt(independentToken.amount))).raw.toString(),
-    //         [pair.token1.address]: independentToken.token.equals(pair.token1) ? independentToken.amount : pair.priceOf(independentToken.token).quote(new CurrencyAmount(independentToken.token, JSBI.BigInt(independentToken.amount))).raw.toString(),
-    //     }
+        const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 20 minutes from the current Unix time
 
-    //     const amountsMin = {
-    //         [pair.token0.address]: UniswapUtils.calculateSlippageAmount(JSBI.BigInt(parsedAmounts[pair.token0.address]), slippage)[0],
-    //         [pair.token1.address]: UniswapUtils.calculateSlippageAmount(JSBI.BigInt(parsedAmounts[pair.token1.address]), slippage)[0]
-    //     }
-
-    //     const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 20 minutes from the current Unix time
-
-    //     return this.triggerContract({
-    //         methodName: 'addLiquidity',
-    //         abiKey: 'uniswapExchange',
-    //         abiString: uniswapExchangeABI,
-    //         contractParams: [
-    //             pair.token0.address,
-    //             pair.token1.address,
-    //             parsedAmounts[pair.token0.address],
-    //             parsedAmounts[pair.token1.address],
-    //             amountsMin[pair.token0.address].toString(),
-    //             amountsMin[pair.token1.address].toString(),
-    //             to,
-    //             deadline
-    //         ],
-    //         sendParams: {
-    //             value: 0
-    //         }
-    //     }, callback)
-    // }
+        return this.triggerContract({
+            methodName: 'removeLiquidity',
+            abiKey: 'uniswapExchange',
+            abiString: uniswapExchangeABI,
+            contractParams: [
+                pair.token0.address,
+                pair.token1.address,
+                parsedAmounts[pair.liquidityToken.address].raw.toString(),
+                amountsMin[pair.token0.address].toString(),
+                amountsMin[pair.token1.address].toString(),
+                to,
+                deadline
+            ],
+            sendParams: {
+                value: 0
+            }
+        }, callback)
+    }
 
     estimateGas(method, address, gasPrice, value = 0) {
         if (!this._web3js) return;
