@@ -1424,12 +1424,14 @@ class EthereumEvolutionLand {
      */
     async getDerivedMintInfo({token: tokenAType, amount: amountA}, {token: tokenBType, amount: amountB}) {
         const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
+        const totalSupply = new TokenAmount(pair.liquidityToken, await this.getTokenTotalSupply(pair.liquidityToken.address));
 
         const independentToken = amountA ? 
         { token: this.getUniswapToken(tokenAType), amount: amountA} : 
         { token: this.getUniswapToken(tokenBType), amount: amountB};
 
         const parsedAmounts = {
+            [pair.liquidityToken.address]: totalSupply,
             [pair.token0.address]: new TokenAmount(pair.token0, independentToken.token.equals(pair.token0) ? JSBI.BigInt(independentToken.amount) : pair.priceOf(independentToken.token).quote(new CurrencyAmount(independentToken.token, JSBI.BigInt(independentToken.amount))).raw),
             [pair.token1.address]: new TokenAmount(pair.token1, independentToken.token.equals(pair.token1) ? JSBI.BigInt(independentToken.amount) : pair.priceOf(independentToken.token).quote(new CurrencyAmount(independentToken.token, JSBI.BigInt(independentToken.amount))).raw),
         }
