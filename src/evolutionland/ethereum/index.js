@@ -1416,11 +1416,10 @@ class EthereumEvolutionLand {
      * 
      * tokenType - token address or lowercase symbol (ring kton gold wood water fire soil)
      * amount - amount in WEI
+     * 
      * @param {*} param0 {token: tokenAType, amount: amountA}  
      * @param {*} param1 {token: tokenBType, amount: amountB}
-     * @returns {pair, parsedAmounts} 
-     * pair - https://uniswap.org/docs/v2/SDK/pair/
-     * parsedAmounts - {token0address: amount, token1address: amount}
+     * @returns {*} {pair, parsedAmounts}  pair - https://uniswap.org/docs/v2/SDK/pair/   parsedAmounts - {token0address: amount, token1address: amount}
      */
     async getDerivedMintInfo({token: tokenAType, amount: amountA}, {token: tokenBType, amount: amountB}) {
         const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
@@ -1442,11 +1441,6 @@ class EthereumEvolutionLand {
      * 
      * tokenType - token address or lowercase symbol (ring kton gold wood water fire soil)
      * 
-     * @param {*} tokenAType 
-     * @param {*} tokenBType 
-     * @param {*} percent The percentage of liquidity removed, the percentage base is the number of liquidity tokens in the account
-     * @param {*} account 
-     * @returns {pair, parsedAmounts}
      * pair - https://uniswap.org/docs/v2/SDK/pair/
      * TokenAmount - https://github.com/Uniswap/uniswap-sdk/blob/v2/src/entities/fractions/tokenAmount.ts
      * parsedAmounts - {
@@ -1455,6 +1449,12 @@ class EthereumEvolutionLand {
      *  token0Address: TokenAmount,
      *  token1Address: TokenAmount
      * }
+     * 
+     * @param {*} tokenAType 
+     * @param {*} tokenBType 
+     * @param {*} percent The percentage of liquidity removed, the percentage base is the number of liquidity tokens in the account
+     * @param {*} account 
+     * @returns {*} {pair, parsedAmounts}
      */
     async getDerivedBurnInfo(tokenAType, tokenBType, percent = '100', account) {
         const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
