@@ -1378,10 +1378,29 @@ class EthereumEvolutionLand {
         return pair;
     }
 
-    async getDerivedBurnInfo(tokenAType, tokenBType, percent = '100') {
+    async getDerivedMintInfo({token: tokenAType, amount: amountA}, {token: tokenBType, amount: amountB}) {
         const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
-        const walletAddress = await this.getCurrentAccount();
-        const lpBalanceStr = await this.getTokenBalance(walletAddress, pair.liquidityToken.address);
+
+        const independentToken = amountA ? 
+        { token: this.getUniswapToken(tokenAType), amount: amountA} : 
+        { token: this.getUniswapToken(tokenBType), amount: amountB};
+
+        const parsedAmounts = {
+            [pair.token0.address]: independentToken.token.equals(pair.token0) ? independentToken.amount : pair.priceOf(independentToken.token).quote(new CurrencyAmount(independentToken.token, JSBI.BigInt(independentToken.amount))).raw.toString(),
+            [pair.token1.address]: independentToken.token.equals(pair.token1) ? independentToken.amount : pair.priceOf(independentToken.token).quote(new CurrencyAmount(independentToken.token, JSBI.BigInt(independentToken.amount))).raw.toString(),
+        }
+
+        return { pair, parsedAmounts }
+    }
+
+    async getDerivedBurnInfo(tokenAType, tokenBType, percent = '100', account) {
+        const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
+
+        if(!to) {
+            to = account || await this.getCurrentAccount();    
+        }
+
+        const lpBalanceStr = await this.getTokenBalance(to, pair.liquidityToken.address);
         const userLiquidity = new TokenAmount(pair.liquidityToken, JSBI.BigInt(lpBalanceStr));
 
         const totalSupply = new TokenAmount(pair.liquidityToken, await this.getTokenTotalSupply(pair.liquidityToken.address));
@@ -1409,7 +1428,7 @@ class EthereumEvolutionLand {
     }
 
     async addUniswapLiquidity({token: tokenAType, amount: amountA}, {token: tokenBType, amount: amountB}, to, slippage = 100, callback = {}) {
-        const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
+        const { pair, parsedAmounts } = await this.getDerivedMintInfo({token: tokenAType, amount: amountA}, {token: tokenBType, amount: amountB});
 
         if(!pair || !pair.token0.address || !pair.token1.address) {
             return;
@@ -1419,24 +1438,12 @@ class EthereumEvolutionLand {
             to = await this.getCurrentAccount();    
         }
 
-        const independentToken = amountA ? 
-            { token: this.getUniswapToken(tokenAType), amount: amountA} : 
-            { token: this.getUniswapToken(tokenBType), amount: amountB};
-        const dependentToken = amountA ? 
-            { token: this.getUniswapToken(tokenBType), amount: amountB} : 
-            { token: this.getUniswapToken(tokenAType), amount: amountA};
-
-        const parsedAmounts = {
-            [pair.token0.address]: independentToken.token.equals(pair.token0) ? independentToken.amount : pair.priceOf(independentToken.token).quote(new CurrencyAmount(independentToken.token, JSBI.BigInt(independentToken.amount))).raw.toString(),
-            [pair.token1.address]: independentToken.token.equals(pair.token1) ? independentToken.amount : pair.priceOf(independentToken.token).quote(new CurrencyAmount(independentToken.token, JSBI.BigInt(independentToken.amount))).raw.toString(),
-        }
-
         const amountsMin = {
             [pair.token0.address]: UniswapUtils.calculateSlippageAmount(JSBI.BigInt(parsedAmounts[pair.token0.address]), slippage)[0],
             [pair.token1.address]: UniswapUtils.calculateSlippageAmount(JSBI.BigInt(parsedAmounts[pair.token1.address]), slippage)[0]
         }
 
-        const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 20 minutes from the current Unix time
+        const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 120 minutes from the current Unix time
 
         return this.triggerContract({
             methodName: 'addLiquidity',
@@ -1459,16 +1466,17 @@ class EthereumEvolutionLand {
     }
 
     async removeUniswapLiquidity(tokenAType, tokenBType, percent, to, slippage = 100, callback = {}) {
-        const { pair, parsedAmounts } = await this.getDerivedBurnInfo(tokenAType, tokenBType, percent);
+        if(!to) {
+            to = await this.getCurrentAccount();    
+        }
+
+        const { pair, parsedAmounts } = await this.getDerivedBurnInfo(tokenAType, tokenBType, percent, to);
 
         if(!pair || !pair.token0.address || !pair.token1.address) {
             return;
         }
 
-        if(!to) {
-            to = await this.getCurrentAccount();    
-        }
-
+        
         const amountsMin = {
             [pair.token0.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token0.address].raw, slippage)[0],
             [pair.token1.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token1.address].raw, slippage)[0]
