@@ -1305,21 +1305,40 @@ class EthereumEvolutionLand {
         return _contract.methods.ids(id).call()
     }
 
+
+    /**
+     * Returns the amount of RING owned by account
+     * @param {*} address 
+     */
     getRingBalance(address) {
         const _contract = new this._web3js.eth.Contract(ringABI, this.ABIs['ring'].address)
         return _contract.methods.balanceOf(address).call()
     }
 
+
+    /**
+     * Returns the amount of KTON owned by account
+     * @param {*} address 
+     */
     getKtonBalance(address) {
         const _contract = new this._web3js.eth.Contract(ktonABI, this.ABIs['kton'].address)
         return _contract.methods.balanceOf(address).call()
     }
 
+    /**
+     * Returns the amount of tokens owned by account
+     * @param {*} account 
+     * @param {*} contractAddress 
+     */
     getTokenBalance(account, contractAddress) {
         const _contract = new this._web3js.eth.Contract(ringABI, contractAddress)
         return _contract.methods.balanceOf(account).call()
     }
 
+    /**
+     * Get total supply of erc20 token
+     * @param {*} contractAddress Erc20 contract address
+     */
     getTokenTotalSupply(contractAddress) {
         const _contract = new this._web3js.eth.Contract(ringABI, contractAddress)
         return _contract.methods.totalSupply().call()
@@ -1344,6 +1363,11 @@ class EthereumEvolutionLand {
         }, callback)
     }
 
+    /**
+     * Get uniswap Token info by lowercase symbol
+     * @param {*} tokenType  ring kton gold wood water fire soil
+     * Token - https://uniswap.org/docs/v2/SDK/token/
+     */
     getUniswapToken(tokenType) {
         switch (tokenType.toLowerCase()) {
             case 'ring':
@@ -1363,9 +1387,15 @@ class EthereumEvolutionLand {
             default:
                 break;
         }
-
     }
 
+    /**
+     * Get uniswap pair info
+     * @param {*} tokenA token address or lowercase symbol (ring kton gold wood water fire soil)
+     * @param {*} tokenB token address or lowercase symbol (ring kton gold wood water fire soil)
+     * @returns { pair } 
+     * pair - https://uniswap.org/docs/v2/SDK/pair/
+     */
     async getDerivedPairInfo(tokenA, tokenB) {
         if(!tokenA || !tokenB) {
             return;
@@ -1378,6 +1408,20 @@ class EthereumEvolutionLand {
         return pair;
     }
 
+    /**
+     * Support for addUniswapLiquidity function, and the return router pair instances and elements are returned.
+     * 
+     * Only one account needs to be provided, and the other quantity 
+     * needs to be provided according to the current pool price
+     * 
+     * tokenType - token address or lowercase symbol (ring kton gold wood water fire soil)
+     * amount - amount in WEI
+     * @param {*} param0 {token: tokenAType, amount: amountA}  
+     * @param {*} param1 {token: tokenBType, amount: amountB}
+     * @returns {pair, parsedAmounts} 
+     * pair - https://uniswap.org/docs/v2/SDK/pair/
+     * parsedAmounts - {token0address: amount, token1address: amount}
+     */
     async getDerivedMintInfo({token: tokenAType, amount: amountA}, {token: tokenBType, amount: amountB}) {
         const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
 
@@ -1386,13 +1430,32 @@ class EthereumEvolutionLand {
         { token: this.getUniswapToken(tokenBType), amount: amountB};
 
         const parsedAmounts = {
-            [pair.token0.address]: independentToken.token.equals(pair.token0) ? independentToken.amount : pair.priceOf(independentToken.token).quote(new CurrencyAmount(independentToken.token, JSBI.BigInt(independentToken.amount))).raw.toString(),
-            [pair.token1.address]: independentToken.token.equals(pair.token1) ? independentToken.amount : pair.priceOf(independentToken.token).quote(new CurrencyAmount(independentToken.token, JSBI.BigInt(independentToken.amount))).raw.toString(),
+            [pair.token0.address]: new TokenAmount(pair.token0, independentToken.token.equals(pair.token0) ? JSBI.BigInt(independentToken.amount) : pair.priceOf(independentToken.token).quote(new CurrencyAmount(independentToken.token, JSBI.BigInt(independentToken.amount))).raw),
+            [pair.token1.address]: new TokenAmount(pair.token1, independentToken.token.equals(pair.token1) ? JSBI.BigInt(independentToken.amount) : pair.priceOf(independentToken.token).quote(new CurrencyAmount(independentToken.token, JSBI.BigInt(independentToken.amount))).raw),
         }
 
         return { pair, parsedAmounts }
     }
 
+    /**
+     * Support for removeUniswapLiquidity function, assuming removal percentage of liquidity and the return router pair instances and elements are returned.
+     * 
+     * tokenType - token address or lowercase symbol (ring kton gold wood water fire soil)
+     * 
+     * @param {*} tokenAType 
+     * @param {*} tokenBType 
+     * @param {*} percent The percentage of liquidity removed, the percentage base is the number of liquidity tokens in the account
+     * @param {*} account 
+     * @returns {pair, parsedAmounts}
+     * pair - https://uniswap.org/docs/v2/SDK/pair/
+     * TokenAmount - https://github.com/Uniswap/uniswap-sdk/blob/v2/src/entities/fractions/tokenAmount.ts
+     * parsedAmounts - {
+     *  LIQUIDITY_PERCENT: percent,
+     *  liquidityTokenAddress: TokenAmount,
+     *  token0Address: TokenAmount,
+     *  token1Address: TokenAmount
+     * }
+     */
     async getDerivedBurnInfo(tokenAType, tokenBType, percent = '100', account) {
         const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
 
@@ -1427,6 +1490,17 @@ class EthereumEvolutionLand {
         return { pair, parsedAmounts }
     }
 
+    /**
+     * Adds liquidity to an ERC-20⇄ERC-20 pool
+     * msg.sender should have already given the router an allowance of at least amount on tokenA/tokenB.
+     * Always adds assets at the ideal ratio, according to the price when the transaction is executed.
+     * 
+     * @param {*} param0 {token: tokenAType, amount: amountA}
+     * @param {*} param1 {token: tokenBType, amount: amountB}
+     * @param {*} to Recipient of the liquidity tokens.
+     * @param {*} slippage The amount the price moves in a trading pair between when a transaction is submitted and when it is executed.
+     * @param {*} callback 
+     */
     async addUniswapLiquidity({token: tokenAType, amount: amountA}, {token: tokenBType, amount: amountB}, to, slippage = 100, callback = {}) {
         const { pair, parsedAmounts } = await this.getDerivedMintInfo({token: tokenAType, amount: amountA}, {token: tokenBType, amount: amountB});
 
@@ -1439,12 +1513,13 @@ class EthereumEvolutionLand {
         }
 
         const amountsMin = {
-            [pair.token0.address]: UniswapUtils.calculateSlippageAmount(JSBI.BigInt(parsedAmounts[pair.token0.address]), slippage)[0],
-            [pair.token1.address]: UniswapUtils.calculateSlippageAmount(JSBI.BigInt(parsedAmounts[pair.token1.address]), slippage)[0]
+            [pair.token0.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token0.address].raw, slippage)[0],
+            [pair.token1.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token1.address].raw, slippage)[0]
         }
 
         const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 120 minutes from the current Unix time
 
+        //  https://uniswap.org/docs/v2/smart-contracts/router02/#addliquidity
         return this.triggerContract({
             methodName: 'addLiquidity',
             abiKey: 'uniswapExchange',
@@ -1452,8 +1527,8 @@ class EthereumEvolutionLand {
             contractParams: [
                 pair.token0.address,
                 pair.token1.address,
-                parsedAmounts[pair.token0.address],
-                parsedAmounts[pair.token1.address],
+                parsedAmounts[pair.token0.address].raw.toString(),
+                parsedAmounts[pair.token1.address].raw.toString(),
                 amountsMin[pair.token0.address].toString(),
                 amountsMin[pair.token1.address].toString(),
                 to,
@@ -1465,6 +1540,17 @@ class EthereumEvolutionLand {
         }, callback)
     }
 
+    /**
+     * Removes liquidity from an ERC-20⇄ERC-20 pool.
+     * msg.sender should have already given the router an allowance of at least liquidity on the pool.
+     * 
+     * @param {*} tokenAType A pool token.
+     * @param {*} tokenBType A pool token.
+     * @param {*} percent The percent of liquidity tokens to remove.
+     * @param {*} to Recipient of the underlying assets.
+     * @param {*} slippage The amount the price moves in a trading pair between when a transaction is submitted and when it is executed.
+     * @param {*} callback 
+     */
     async removeUniswapLiquidity(tokenAType, tokenBType, percent, to, slippage = 100, callback = {}) {
         if(!to) {
             to = await this.getCurrentAccount();    
@@ -1484,6 +1570,7 @@ class EthereumEvolutionLand {
 
         const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 20 minutes from the current Unix time
 
+        // https://uniswap.org/docs/v2/smart-contracts/router02/#removeliquidity
         return this.triggerContract({
             methodName: 'removeLiquidity',
             abiKey: 'uniswapExchange',
