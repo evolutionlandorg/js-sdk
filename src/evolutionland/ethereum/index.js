@@ -1365,8 +1365,10 @@ class EthereumEvolutionLand {
 
     /**
      * Get uniswap Token info by lowercase symbol
-     * @param {*} tokenType  ring kton gold wood water fire soil
+     * 
      * Token - https://uniswap.org/docs/v2/SDK/token/
+     * 
+     * @param {*} tokenType  ring kton gold wood water fire soil
      */
     getUniswapToken(tokenType) {
         switch (tokenType.toLowerCase()) {
@@ -1411,10 +1413,10 @@ class EthereumEvolutionLand {
     /**
      * Support for addUniswapLiquidity function, and the return router pair instances and elements are returned.
      * 
-     * Only one account needs to be provided, and the other quantity 
-     * needs to be provided according to the current pool price
+     * Only one account needs to be provided, and the other quantity needs to be provided according to the current pool price
      * 
      * tokenType - token address or lowercase symbol (ring kton gold wood water fire soil)
+     * 
      * amount - amount in WEI
      * 
      * @param {*} param0 {token: tokenAType, amount: amountA}  
@@ -1442,12 +1444,19 @@ class EthereumEvolutionLand {
      * tokenType - token address or lowercase symbol (ring kton gold wood water fire soil)
      * 
      * pair - https://uniswap.org/docs/v2/SDK/pair/
+     * 
      * TokenAmount - https://github.com/Uniswap/uniswap-sdk/blob/v2/src/entities/fractions/tokenAmount.ts
+     * 
      * parsedAmounts - {
+     * 
      *  LIQUIDITY_PERCENT: percent,
+     * 
      *  liquidityTokenAddress: TokenAmount,
+     * 
      *  token0Address: TokenAmount,
+     * 
      *  token1Address: TokenAmount
+     * 
      * }
      * 
      * @param {*} tokenAType 
@@ -1492,7 +1501,9 @@ class EthereumEvolutionLand {
 
     /**
      * Adds liquidity to an ERC-20⇄ERC-20 pool
+     * 
      * msg.sender should have already given the router an allowance of at least amount on tokenA/tokenB.
+     * 
      * Always adds assets at the ideal ratio, according to the price when the transaction is executed.
      * 
      * @param {*} param0 {token: tokenAType, amount: amountA}
@@ -1542,6 +1553,7 @@ class EthereumEvolutionLand {
 
     /**
      * Removes liquidity from an ERC-20⇄ERC-20 pool.
+     * 
      * msg.sender should have already given the router an allowance of at least liquidity on the pool.
      * 
      * @param {*} tokenAType A pool token.
