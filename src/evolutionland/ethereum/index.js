@@ -27,6 +27,7 @@ import swapBridgeABI from './env/abi/ethereum/abi-swapBridge'
 import luckyBoxABI from './env/abi/ethereum/abi-luckyBag'
 import itemTreasureABI from './env/abi/ethereum/abi-itemTreasure'
 import itemTakeBackABI from './env/abi/ethereum/abi-itemTakeBack'
+import itemBaseABI from './env/abi/ethereum/abi-itemBase'
 import Utils from '../utils/index'
 import UniswapUtils from '../utils/uniswap'
 
@@ -122,7 +123,7 @@ class EthereumEvolutionLand {
         try {
             beforeFetch && beforeFetch();
             let _contract = null;
-            let contractAddress = (this.ABIs[abiKey] && this.ABIs[abiKey].address) || abiKey;
+            let contractAddress = await this.getContractAddress(abiKey);
 
             _contract = new this._web3js.eth.Contract(abiString, contractAddress);
 
@@ -229,7 +230,8 @@ class EthereumEvolutionLand {
         try {
             beforeFetch && beforeFetch()
             let _contract = null
-            _contract = new this._web3js.eth.Contract(abiString, this.ABIs[abiKey].address);
+            let contractAddress = await this.getContractAddress(abiKey);
+            _contract = new this._web3js.eth.Contract(abiString, contractAddress);
 
             const _method = _contract.methods[methodName].apply(this, contractParams)
             return _method.call({
@@ -240,6 +242,107 @@ class EthereumEvolutionLand {
             console.error('triggerContract', e)
             errorCallback && errorCallback(e)
         }
+    }
+
+    /**
+     * Get the contract address of evolution land by key.
+     * @param {*} tokenKey ring | kton | gold ... | [ring, kton] (uniswap pair)
+     */
+    async getContractAddress(tokenKey) {
+        let token = (this.ABIs[tokenKey] && this.ABIs[tokenKey].address) || tokenKey;
+        if(Array.isArray(tokenKey) && tokenKey.length === 2) {
+            const pair = await this.getDerivedPairInfo(...tokenKey)
+            token = pair.liquidityToken.address
+        }
+        
+        return token;
+    }
+
+    /**
+     * Query if an address is an authorized operator for another address
+     * @param {*} owner The address that owns the NFTs
+     * @param {*} operator The address that acts on behalf of the owner
+     * @param {*} contractAddress ERC721 contract address
+     */
+    erc721IsApprovedForAll(owner, operator, contractAddress, callback={}) {
+        return this.callContract({
+            methodName: 'isApprovedForAll',
+            abiKey: contractAddress,
+            abiString: this.ABIs['erc721'].abi,
+            contractParams: [owner, operator],
+        }, callback)
+    }
+
+    /**
+     * Returns whether `spender` is allowed to manage `tokenId`.
+     * @param {*} spender The address that acts on behalf of the owner
+     * @param {*} contractAddress The factory of tokenId.
+     * @param {*} tokenId ERC721 token Id;
+     */
+    async erc721IsApprovedOrOwner(spender, contractAddress, tokenId) {
+        const owner = await this.callContract({
+            methodName: 'ownerOf',
+            abiKey: contractAddress,
+            abiString: this.ABIs['erc721'].abi,
+            contractParams: [tokenId],
+        });
+
+        const approvedAddress = await this.callContract({
+            methodName: 'getApproved',
+            abiKey: contractAddress,
+            abiString: this.ABIs['erc721'].abi,
+            contractParams: [tokenId],
+        });
+
+        const isApprovedForAll = await this.erc721IsApprovedForAll(owner, spender, contractAddress);
+
+        return (owner.toLowerCase() === spender.toLowerCase() || approvedAddress.toLowerCase() === spender.toLowerCase() || isApprovedForAll);
+    }
+
+    /**
+     * 
+     * @param {*} owner 
+     * @param {*} operator 
+     * @param {*} contractAddress 
+     * @param {*} callback 
+     */    
+    erc721IsApprovedForAll(owner, operator, contractAddress, callback={}) {
+        return this.callContract({
+            methodName: 'isApprovedForAll',
+            abiKey: contractAddress,
+            abiString: this.ABIs['erc721'].abi,
+            contractParams: [owner, operator],
+        }, callback)
+    }
+
+    /**
+     * Change or reaffirm the approved address for an NFT
+     * @param {*} to The new approved NFT controller
+     * @param {*} tokenId The NFT to approve
+     */
+    async erc721Approve(to, tokenId, contractAddress, callback={}) {
+        return this.triggerContract({
+            methodName: 'approve',
+            abiKey: contractAddress,
+            abiString: this.ABIs['erc721'].abi,
+            contractParams: [to, tokenId],
+        }, callback)
+    }
+
+    /**
+     * Enable or disable approval for a third party ("operator") to manage
+     * @param {*} to Address to add to the set of authorized operators
+     * @param {*} approved True if the operator is approved, false to revoke approval
+     * @param {*} contractAddress ERC721 contract address
+     * @param {*} callback 
+     */
+    async erc721SetApprovalForAll(to, approved, contractAddress, callback={}) {
+        return this.triggerContract({
+            methodName: 'setApprovalForAll',
+            abiKey: contractAddress,
+            abiString: this.ABIs['erc721'].abi,
+            contractParams: [to, approved],
+        }, callback)
     }
 
     /**
@@ -423,14 +526,72 @@ class EthereumEvolutionLand {
     }
 
     /**
+     * Ethereum Function, Approve Ring to spender
+     * @param {*} callback 
+     */
+    async approveToken(tokenContractOrType, spender, value="0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", callback = {}) {
+        if(!spender) {
+            return;
+        }
+
+        return this.triggerContract({
+            methodName: 'approve',
+            abiKey: tokenContractOrType,
+            abiString: ringABI,
+            contractParams: [spender, value],
+        }, callback)
+    }
+
+    /**
+     * Approve uniswap liquidity token to spender.
+     * @param {*} tokenAType 
+     * @param {*} tokenBType 
+     * @param {*} value 
+     * @param {*} callback 
+     */
+    async approveUniswapLiquidityToken(tokenAType, tokenBType, spender, value="0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", callback = {}) {
+        if(!tokenAType || !tokenBType) {
+            throw 'ethereum::approveUniswapLiquidityToken: missing addressOrType param'
+        }
+
+        const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
+
+        return this.triggerContract({
+            methodName: 'approve',
+            abiKey: pair.liquidityToken.address,
+            abiString: ringABI,
+            contractParams: [spender, value],
+        }, callback)
+    }
+
+    /**
      * Check if uniswap has sufficient transfer authority
      * @param {*} amount 
      */
-    async checkUniswapAllowance(amount, addressOrType = 'ring', account) {
+    async checkUniswapAllowance(amount, tokenAddressOrType = 'ring', account) {
         const from = account || await this.getCurrentAccount();
-
-        const erc20Contract = new this._web3js.eth.Contract(ringABI, (this.ABIs[addressOrType] && this.ABIs[addressOrType].address) || addressOrType)
+        const token = this.getContractAddress(tokenAddressOrType);
+        const erc20Contract = new this._web3js.eth.Contract(ringABI, token)
         const allowanceAmount = await erc20Contract.methods.allowance(from, this.ABIs['uniswapExchange'].address).call()
+
+        return !Utils.toBN(allowanceAmount).lt(Utils.toBN(amount || '1000000000000000000000000'))
+    }
+
+    /**
+     * Check if spender has sufficient transfer authority
+     * @param {*} amount 
+     */
+    async checkTokenAllowance(amount, tokenAddressOrType, account, spender) {
+        if(!amount || !tokenAddressOrType || !spender) {
+            throw 'ethereum::checkTokenAllowance: missing param'
+        }
+
+        const from = account || await this.getCurrentAccount();
+        const token = await this.getContractAddress(tokenAddressOrType);
+        const erc20Contract = new this._web3js.eth.Contract(ringABI, token)
+        console.log(111, from, spender, token)
+        const allowanceAmount = await erc20Contract.methods.allowance(from, spender).call()
+
         return !Utils.toBN(allowanceAmount).lt(Utils.toBN(amount || '1000000000000000000000000'))
     }
 
@@ -1575,7 +1736,6 @@ class EthereumEvolutionLand {
             return;
         }
 
-        
         const amountsMin = {
             [pair.token0.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token0.address].raw, slippage)[0],
             [pair.token1.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token1.address].raw, slippage)[0]
@@ -1596,6 +1756,29 @@ class EthereumEvolutionLand {
                 amountsMin[pair.token1.address].toString(),
                 to,
                 deadline
+            ],
+            sendParams: {
+                value: 0
+            }
+        }, callback)
+    }
+
+    /**
+     * Use nft and elements or LP tokens in the furnace formula to the props.
+     * @param {*} formulaIndex Formula for props - https://github.com/evolutionlandorg/furnace/blob/dev/src/Formula.sol
+     * @param {*} majorTokenId ERC721 token Id
+     * @param {*} minorTokenAddress Elements or LP tokens contract address
+     * @param {*} callback callback
+     */
+    async enchantFurnanceProps( formulaIndex, majorTokenId, minorTokenAddress, callback = {}) {
+        return this.triggerContract({
+            methodName: 'enchant',
+            abiKey: 'itemBase',
+            abiString: itemBaseABI,
+            contractParams: [
+                formulaIndex,
+                majorTokenId,
+                minorTokenAddress
             ],
             sendParams: {
                 value: 0
