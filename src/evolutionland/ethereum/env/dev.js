@@ -45,6 +45,7 @@ export default {
 
         FURNACE_TREASURE: "0xF72361096f11d7E4e45046d7a83726b1A9107D5E",
         FURNACE_TAKEBACK: "0xA10D0C6e04845A5e998d1936249A30563c553417",
+        FURNACE_ITEMBASE: "0x1e257d7AE1Cf0da031480C5fE75478eB2d638540",
 
         ITERING_CALLBACK: "https://alpha.evolution.land/api/eth/raw_sign_broadcast"
     },

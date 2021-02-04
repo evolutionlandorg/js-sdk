@@ -23,6 +23,8 @@ import luckybagABI from './abi/ethereum/abi-luckyBag'
 import itemTreasureABI from './abi/ethereum/abi-itemTreasure'
 import itemTakeBackABI from './abi/ethereum/abi-itemTakeBack'
 import redPackageABI from './abi/ethereum/abi-redPackage'
+import itemBaseABI from './abi/ethereum/abi-itemBase'
+import erc721ABI from './abi/ethereum/abi-erc721'
 
 function getABI(env){
     let _env = Env(env)
@@ -44,6 +46,10 @@ function getABI(env){
             abi: actionABI
         },
         land: {
+            address: _env.CONTRACT.TOKEN_LAND,
+            abi: landABI
+        },
+        objectOwnership: {
             address: _env.CONTRACT.TOKEN_LAND,
             abi: landABI
         },
@@ -139,6 +145,13 @@ function getABI(env){
             address: _env.CONTRACT.FURNACE_TAKEBACK,
             abi: itemTakeBackABI
         },
+        itemBase: {
+            address: _env.CONTRACT.FURNACE_ITEMBASE,
+            abi: itemBaseABI
+        },
+        erc721: {
+            abi: erc721ABI
+        }
     });
 }
 
