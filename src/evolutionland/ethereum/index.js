@@ -246,14 +246,14 @@ class EthereumEvolutionLand {
 
     /**
      * Get the contract address of evolution land by key.
-     * @param {*} tokenKey ring | kton | gold ... | [ring, kton] (uniswap pair)
+     * @param {*} tokenKey ring | kton | gold ... 
      */
     async getContractAddress(tokenKey) {
         let token = (this.ABIs[tokenKey] && this.ABIs[tokenKey].address) || tokenKey;
-        if(Array.isArray(tokenKey) && tokenKey.length === 2) {
-            const pair = await this.getDerivedPairInfo(...tokenKey)
-            token = pair.liquidityToken.address
-        }
+        // if(Array.isArray(tokenKey) && tokenKey.length === 2) {
+        //     const pair = await this.getDerivedPairInfo(...tokenKey)
+        //     token = pair.liquidityToken.address
+        // }
         
         return token;
     }
@@ -499,7 +499,9 @@ class EthereumEvolutionLand {
     }
 
     /**
-     * Ethereum Function, Approve token to Uniswap Exchange
+     * Allows Uniswap to withdraw from your account multiple times, up to the value amount. 
+     * @param {*} addressOrType ERC20 token contract address.
+     * @param {*} value
      * @param {*} callback 
      */
     approveTokenToUniswap(addressOrType, value="0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", callback = {}) {
@@ -526,7 +528,10 @@ class EthereumEvolutionLand {
     }
 
     /**
-     * Ethereum Function, Approve Ring to spender
+     * Allows spender to withdraw from your account multiple times, up to the value amount. If this function is called again it overwrites the current allowance with value.
+     * @param {*} tokenContractOrType Erc20 token contract address
+     * @param {*} spender
+     * @param {*} value
      * @param {*} callback 
      */
     async approveToken(tokenContractOrType, spender, value="0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", callback = {}) {
@@ -566,11 +571,13 @@ class EthereumEvolutionLand {
 
     /**
      * Check if uniswap has sufficient transfer authority
-     * @param {*} amount 
+     * @param {*} amount
+     * @param {*} tokenAddressOrType
+     * @param {*} account
      */
     async checkUniswapAllowance(amount, tokenAddressOrType = 'ring', account) {
         const from = account || await this.getCurrentAccount();
-        const token = this.getContractAddress(tokenAddressOrType);
+        const token = await this.getContractAddress(tokenAddressOrType);
         const erc20Contract = new this._web3js.eth.Contract(ringABI, token)
         const allowanceAmount = await erc20Contract.methods.allowance(from, this.ABIs['uniswapExchange'].address).call()
 
@@ -580,6 +587,9 @@ class EthereumEvolutionLand {
     /**
      * Check if spender has sufficient transfer authority
      * @param {*} amount 
+     * @param {*} tokenAddressOrType,
+     * @param {*} account
+     * @param {*} spender
      */
     async checkTokenAllowance(amount, tokenAddressOrType, account, spender) {
         if(!amount || !tokenAddressOrType || !spender) {
@@ -589,7 +599,7 @@ class EthereumEvolutionLand {
         const from = account || await this.getCurrentAccount();
         const token = await this.getContractAddress(tokenAddressOrType);
         const erc20Contract = new this._web3js.eth.Contract(ringABI, token)
-        console.log(111, from, spender, token)
+
         const allowanceAmount = await erc20Contract.methods.allowance(from, spender).call()
 
         return !Utils.toBN(allowanceAmount).lt(Utils.toBN(amount || '1000000000000000000000000'))
