@@ -947,12 +947,12 @@ class EthereumEvolutionLand {
 
     /**
      *  claim resource on the Land
-     * @param tokenId
+     * @param tokenId Land token Id.
      * @returns {Promise<PromiEvent<any>>}
      */
-    resourceClaim(tokenId, callback = {}) {
+    claimLandResource(tokenId, callback = {}) {
         return this.triggerContract({
-            methodName: 'claimAllResource',
+            methodName: 'claimLandResource',
             abiKey: 'apostleLandResource',
             abiString: landResourceABI,
             contractParams: ['0x' + tokenId],
@@ -1780,7 +1780,7 @@ class EthereumEvolutionLand {
      * @param {*} minorTokenAddress Elements or LP tokens contract address
      * @param {*} callback callback
      */
-    async enchantFurnanceProps( formulaIndex, majorTokenId, minorTokenAddress, callback = {}) {
+    enchantFurnanceProps( formulaIndex, majorTokenId, minorTokenAddress, callback = {}) {
         return this.triggerContract({
             methodName: 'enchant',
             abiKey: 'furnaceItemBase',
@@ -1793,6 +1793,101 @@ class EthereumEvolutionLand {
             sendParams: {
                 value: 0
             }
+        }, callback)
+    }
+
+    /**
+     * Disenchant furnace props, and will get elements or LP and nft
+     * @param {*} propsTokenId Token Id of the Props
+     * @param {*} depth Supports one-time decomposition of high-level props. If a prop is in the second level, it needs to be restored to its original state, and the depth needs to be passed in 2
+     * @param {*} callback 
+     */
+    disenchantFurnanceProps( propsTokenId, depth, callback = {}) {
+        return this.triggerContract({
+            methodName: 'disenchant',
+            abiKey: 'furnaceItemBase',
+            abiString: furnaceItemBaseABI,
+            contractParams: [
+                propsTokenId,
+                depth
+            ],
+            sendParams: {
+                value: 0
+            }
+        }, callback)
+    }
+
+    /**
+     * Transfers the ownership of an NFT from one address to another address
+     * @param {*} from The current owner of the NFT
+     * @param {*} to The new owner
+     * @param {*} tokenId The NFT to transfer
+     * @param {*} callback 
+     */
+    safeTransferFromEvoErc721(from, to, tokenId, callback = {}) {
+        return this.triggerContract({
+            methodName: 'safeTransferFrom',
+            abiKey: 'objectOwnership',
+            abiString: this.ABIs['erc721'].abi,
+            contractParams: [
+                from,
+                to,
+                tokenId
+            ]
+        }, callback)
+    }
+
+    /**
+     * Equip function, A NFT can equip to EVO Bar (LandBar or ApostleBar).
+     * @param {*} tokenId Land token Id which to be quiped.
+     * @param {*} resource Which resouce appply to.
+     * @param {*} index Index of the Bar.
+     * @param {*} token Props token address which to quip.
+     * @param {*} id Props token Id which to quip.
+     * @param {*} callabck 
+     */
+    async equipLandResource(tokenId, resource, index, token, id, callback = {}) {
+        const resourceAddress = await this.getContractAddress(resource);
+
+        return this.triggerContract({
+            methodName: 'equip',
+            abiKey: 'apostleLandResource',
+            abiString: this.ABIs['apostleLandResource'].abi,
+            contractParams: [
+                tokenId, resourceAddress, index, token, id
+            ]
+        }, callback) 
+    }
+
+    /**
+     * Divest the props on the index slot on the tokenid land
+     * @param {*} tokenId The tokenId of land
+     * @param {*} index The index slot
+     * @param {*} callback 
+     */
+    divestLandProps(tokenId, index, callback = {}) {
+        return this.triggerContract({
+            methodName: 'divest',
+            abiKey: 'apostleLandResource',
+            abiString: this.ABIs['apostleLandResource'].abi,
+            contractParams: [
+                tokenId, index
+            ]
+        }, callback) 
+    }
+
+    /**
+     *  claim resource on the Land
+     * @param tokenAddress The nft of props contract address
+     * @param tokenId Land token Id
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    claimFurnaceItemResource(tokenAddress, tokenId, callback = {}) {
+        return this.triggerContract({
+            methodName: 'claimItemResource',
+            abiKey: 'apostleLandResource',
+            abiString: landResourceABI,
+            contractParams: [tokenAddress, Utils.pad0x(tokenId)],
         }, callback)
     }
 

@@ -25,6 +25,7 @@ import itemTakeBackABI from './abi/ethereum/abi-itemTakeBack'
 import redPackageABI from './abi/ethereum/abi-redPackage'
 import furnaceItemBaseABI from './abi/ethereum/abi-furnaceItemBase'
 import erc721ABI from './abi/ethereum/abi-erc721'
+import gegoTokenABI from './abi/ethereum/abi-gegoToken'
 
 function getABI(env){
     let _env = Env(env)
@@ -155,6 +156,10 @@ function getABI(env){
         },
         erc721: {
             abi: erc721ABI
+        },
+        gego: {
+            address: _env.CONTRACT.TOKEN_GEGO,
+            abi: gegoTokenABI
         }
     });
 }
