@@ -20,7 +20,7 @@ export default {
         TOKEN_APOSTLE_CLOCK_AUCTION: "0xa665271c365f9d9a149866574a5b047dd9e3d31b", //ApostleClockAuction
         TOKEN_APOSTLE_SIRING_AUCTION: "0xe0a0489d93aeb831a04e8b631ebd9827a4db4a58", //SiringClockAuction
         TOKEN_APOSTLE_BASE: "0x7469966be391e8fe5e85ab972819560c7c3d6e4c", //ApostleBase
-        TOKEN_LAND_RESOURCE: "0xa9203f3303126243c8d181006ab03b2474e3c084", //landResource
+        TOKEN_LAND_RESOURCE: "0xD22065369994568096FB841e024462F4d7F5f2f9", //landResource
         TOKEN_TOKEN_USE: "0xa70abeaca1d6bba0f511758a0d66b7f59fd3f166", //token use
 
         TOKEN_KITTY_CORE: "0x06012c8cf97bead5deae237070f9587f8e7a266d", // KittyCore
