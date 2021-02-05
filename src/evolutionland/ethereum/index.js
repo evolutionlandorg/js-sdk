@@ -517,6 +517,13 @@ class EthereumEvolutionLand {
         }, callback)
     }
 
+    /**
+     * Approve liquidity to uniswap
+     * @param {*} tokenAType Token 0 contract address 
+     * @param {*} tokenBType Token 1 contract address 
+     * @param {*} value Approved value
+     * @param {*} callback 
+     */
     async approveLiquidityTokenToUniswap(tokenAType, tokenBType, value="0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", callback = {}) {
         if(!tokenAType || !tokenBType) {
             throw 'ethereum::approveLiquidityTokenToUniswap: missing addressOrType param'
@@ -1633,15 +1640,15 @@ class EthereumEvolutionLand {
      * 
      * @param {*} tokenAType 
      * @param {*} tokenBType 
-     * @param {*} percent The percentage of liquidity removed, the percentage base is the number of liquidity tokens in the account
-     * @param {*} account 
+     * @param {*} liquidityValue The value of liquidity removed
+     * @param {*} to 
      * @returns {*} {pair, parsedAmounts}
      */
-    async getDerivedBurnInfo(tokenAType, tokenBType, percent = '100', account) {
+    async getDerivedBurnInfo(tokenAType, tokenBType, liquidityValue, to) {
         const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
 
         if(!to) {
-            to = account || await this.getCurrentAccount();    
+            to = await this.getCurrentAccount();    
         }
 
         const lpBalanceStr = await this.getTokenBalance(to, pair.liquidityToken.address);
@@ -1659,7 +1666,7 @@ class EthereumEvolutionLand {
         userLiquidity &&
         pair.token1 && new TokenAmount(pair.token1, pair.getLiquidityValue(pair.token1, totalSupply, userLiquidity, false).raw);
 
-        let percentToRemove = new Percent(percent, '100');
+        const percentToRemove = new Percent(JSBI.BigInt(liquidityValue), userLiquidity.raw);
 
         const parsedAmounts = {
             LIQUIDITY_PERCENT: percentToRemove,
@@ -1730,17 +1737,17 @@ class EthereumEvolutionLand {
      * 
      * @param {*} tokenAType A pool token.
      * @param {*} tokenBType A pool token.
-     * @param {*} percent The percent of liquidity tokens to remove.
+     * @param {*} liquidityValue The value of liquidity tokens to remove.
      * @param {*} to Recipient of the underlying assets.
      * @param {*} slippage The amount the price moves in a trading pair between when a transaction is submitted and when it is executed.
      * @param {*} callback 
      */
-    async removeUniswapLiquidity(tokenAType, tokenBType, percent, to, slippage = 100, callback = {}) {
+    async removeUniswapLiquidity(tokenAType, tokenBType, liquidityValue, to, slippage = 100, callback = {}) {
         if(!to) {
             to = await this.getCurrentAccount();    
         }
 
-        const { pair, parsedAmounts } = await this.getDerivedBurnInfo(tokenAType, tokenBType, percent, to);
+        const { pair, parsedAmounts } = await this.getDerivedBurnInfo(tokenAType, tokenBType, liquidityValue, to);
 
         if(!pair || !pair.token0.address || !pair.token1.address) {
             return;
