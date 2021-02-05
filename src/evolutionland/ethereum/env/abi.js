@@ -23,7 +23,7 @@ import luckybagABI from './abi/ethereum/abi-luckyBag'
 import itemTreasureABI from './abi/ethereum/abi-itemTreasure'
 import itemTakeBackABI from './abi/ethereum/abi-itemTakeBack'
 import redPackageABI from './abi/ethereum/abi-redPackage'
-import itemBaseABI from './abi/ethereum/abi-itemBase'
+import furnaceItemBaseABI from './abi/ethereum/abi-furnaceItemBase'
 import erc721ABI from './abi/ethereum/abi-erc721'
 
 function getABI(env){
@@ -147,7 +147,11 @@ function getABI(env){
         },
         itemBase: {
             address: _env.CONTRACT.FURNACE_ITEMBASE,
-            abi: itemBaseABI
+            abi: furnaceItemBaseABI
+        },
+        furnaceItemBase: {
+            address: _env.CONTRACT.FURNACE_ITEMBASE,
+            abi: furnaceItemBaseABI
         },
         erc721: {
             abi: erc721ABI
