@@ -27,7 +27,7 @@ import swapBridgeABI from './env/abi/ethereum/abi-swapBridge'
 import luckyBoxABI from './env/abi/ethereum/abi-luckyBag'
 import itemTreasureABI from './env/abi/ethereum/abi-itemTreasure'
 import itemTakeBackABI from './env/abi/ethereum/abi-itemTakeBack'
-import itemBaseABI from './env/abi/ethereum/abi-itemBase'
+import furnaceItemBaseABI from './env/abi/ethereum/abi-furnaceItemBase'
 import Utils from '../utils/index'
 import UniswapUtils from '../utils/uniswap'
 
@@ -1783,8 +1783,8 @@ class EthereumEvolutionLand {
     async enchantFurnanceProps( formulaIndex, majorTokenId, minorTokenAddress, callback = {}) {
         return this.triggerContract({
             methodName: 'enchant',
-            abiKey: 'itemBase',
-            abiString: itemBaseABI,
+            abiKey: 'furnaceItemBase',
+            abiString: furnaceItemBaseABI,
             contractParams: [
                 formulaIndex,
                 majorTokenId,
