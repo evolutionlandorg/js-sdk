@@ -1898,6 +1898,53 @@ class EthereumEvolutionLand {
         }, callback)
     }
 
+    /**
+     * Get the amount of resources available.
+     * @param {*} ContractTokenAddress  The contract address of props.
+     * @param {*} tokenId The token id of props.
+     * @param {*} resources The contract address of resources.
+     * @param {*} callback 
+     */
+    getAvailableFurnaceItemResources(ContractTokenAddress, tokenId, resources, callback={}) {
+        return this.callContract({
+            methodName: 'availableItemResources',
+            abiKey: 'apostleLandResource',
+            abiString: this.ABIs['apostleLandResource'].abi,
+            contractParams: [ContractTokenAddress, Utils.pad0x(tokenId), resources],
+        }, callback)
+    }
+
+    /**
+     * Get the Land Id where the item is located
+     * @param {*} ContractTokenAddress The nft token contract address
+     * @param {*} tokenId The token Id of nft
+     * @param {*} callback 
+     */
+    getLandIdByFurnaceItem(ContractTokenAddress, tokenId, callback={}) {
+        return this.callContract({
+            methodName: 'getLandIdByItem',
+            abiKey: 'apostleLandResource',
+            abiString: this.ABIs['apostleLandResource'].abi,
+            contractParams: [ContractTokenAddress, Utils.pad0x(tokenId)],
+        }, callback)
+    }
+
+    /**
+     * Get the amount of resources that the props can be mined daily.
+     * @param {*} landTokenId The token Id of land.
+     * @param {*} resourceAddress Resource contract address.
+     * @param {*} slotIndex The index of land slot.
+     * @param {*} callback 
+     */
+    getLandBarMiningStrength(landTokenId, resourceAddress, slotIndex, callback={}) {
+        return this.callContract({
+            methodName: 'getBarMiningStrength',
+            abiKey: 'apostleLandResource',
+            abiString: this.ABIs['apostleLandResource'].abi,
+            contractParams: [Utils.pad0x(landTokenId), resourceAddress, slotIndex],
+        }, callback)
+    }
+
     estimateGas(method, address, gasPrice, value = 0) {
         if (!this._web3js) return;
         return (method || this._web3js.eth).estimateGas({ from: address, gasLimit: 0, gasPrice: gasPrice, value });
