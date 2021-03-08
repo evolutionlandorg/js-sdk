@@ -131,14 +131,14 @@ class EthereumEvolutionLand {
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const from = await this.getCurrentAccount()
             const gasRes = await this.ClientFetch.apiGasPrice({ wallet: this.option.address || from })
-            let estimateGas = 300000;
+            let estimateGas = null;
 
             try {
                 let hexSendParams = { value: 0 }
                 Object.keys(sendParams).forEach((item) => {
                     hexSendParams[item] = Utils.toHex(sendParams[item])
                 })
-                estimateGas = await this.estimateGas(_method, this.option.address || from, gasRes.data.gas_price.standard, hexSendParams.value) || 300000;
+                estimateGas = await this.estimateGas(_method, this.option.address || from, hexSendParams.value);
             } catch (e) {
                 console.log('estimateGas', e)
             }
@@ -157,10 +157,11 @@ class EthereumEvolutionLand {
                     to: contractAddress,
                     value: 0,
                     nonce: gasRes.data.nonce,
-                    gasPrice: gasRes.data.gas_price.standard,
-                    gasLimit: Utils.toHex(estimateGas + 30000),
+                    gasPrice: Utils.toHex(gasRes.data.gas_price.standard),
+                    
                     chainId: parseInt(await this.getNetworkId()),
                     data: _method ? _method.encodeABI() : '',
+                    ...(estimateGas ? {gasLimit: Utils.toHex(estimateGas + 30000)} : {}),
                     ...hexSendParams
                 })
 
@@ -173,7 +174,7 @@ class EthereumEvolutionLand {
             return _method.send({
                 from: await this.getCurrentAccount(),
                 value: 0,
-                gasLimit: Utils.toHex(estimateGas + 30000),
+                ...(estimateGas ? {gasLimit: Utils.toHex(estimateGas + 30000)} : {}),
                 ...sendParams
             })
                 .once('transactionHash', (hash) => {
@@ -193,6 +194,7 @@ class EthereumEvolutionLand {
                 // })
         } catch (e) {
             console.error('triggerContract', e)
+            let contractAddress = await this.getContractAddress(abiKey);
             const extendPayload = { ...payload, _contractAddress: contractAddress };
             errorCallback && errorCallback(e, extendPayload)
         }
@@ -293,7 +295,6 @@ class EthereumEvolutionLand {
             abiString: this.ABIs['erc721'].abi,
             contractParams: [tokenId],
         });
-
         const isApprovedForAll = await this.erc721IsApprovedForAll(owner, spender, contractAddress);
 
         return (owner.toLowerCase() === spender.toLowerCase() || approvedAddress.toLowerCase() === spender.toLowerCase() || isApprovedForAll);
@@ -1945,9 +1946,9 @@ class EthereumEvolutionLand {
         }, callback)
     }
 
-    estimateGas(method, address, gasPrice, value = 0) {
+    estimateGas(method, address, value = 0) {
         if (!this._web3js) return;
-        return (method || this._web3js.eth).estimateGas({ from: address, gasLimit: 0, gasPrice: gasPrice, value });
+        return (method || this._web3js.eth).estimateGas({ from: address, value });
     }
 
     getNetworkId() {
