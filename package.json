@@ -10,7 +10,7 @@
     "analyze": "ANALYZE=true webpack --mode production",
     "generate-docs": "jsdoc --configure .jsdoc.json --verbose",
     "publish-docs": "gh-pages -d docs/@evolutionland/evolution-js/1.3.0-beta.3",
-    "cp-evolution-app": "cp -rf ./src/* /Users/beiwan/WebstormProjects/evo-game-v2/EvolutionaryPlanet/node_modules/@evolutionland/evolution-js/src"
+    "cp-evolution-app": "cp -rf ./src/* ../evo-game-v2/EvolutionaryPlanet/node_modules/@evolutionland/evolution-js/src"
   },
   "author": "",
   "license": "ISC",
