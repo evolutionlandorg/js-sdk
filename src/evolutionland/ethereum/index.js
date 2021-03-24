@@ -53,11 +53,11 @@ class EthereumEvolutionLand {
         this.ABIs = getABIConfig(network)
         this.ABIClientFetch = new ClientFetch({
             baseUrl: this.env.ABI_DOMAIN,
-            chainId: 60
+            evoNetwork: 'eth'
         })
         this.ClientFetch = new ClientFetch({
             baseUrl: this.env.DOMAIN,
-            chainId: 60
+            evoNetwork: 'eth'
         })
         this.option = {
             sign: true,
@@ -1450,13 +1450,15 @@ class EthereumEvolutionLand {
         // https://etherscan.io/tx/0x4e1fc1dcec64bb497405126e55ab743368f1cb1cede945936937e0cde1d254e7
         // prize ring - gas used - 254,776 
         // https://etherscan.io/tx/0xd2b3f05b19e74627940edfe98daee31eeab84b67e88dcf0e77d595430b3b1afc
+        const silverBoxGasLimit = this.env.NETWORK === '1' ? new BigNumber(260000) : new BigNumber(350000);
+        const goldBoxGasLimit = this.env.NETWORK === '1' ? new BigNumber(300000) : new BigNumber(400000);
 
-        let gasLimit = new BigNumber(amounts[0]).lt('1000000000000000000000') ? new BigNumber(260000) : new BigNumber(300000);
+        let gasLimit = new BigNumber(amounts[0]).lt('1000000000000000000000') ? silverBoxGasLimit : goldBoxGasLimit;
 
         if(amounts.length > 1) {
             for (let index = 1; index < amounts.length; index++) {
                 const amount = amounts[index];
-                gasLimit = gasLimit.plus(new BigNumber(amount).lt('1000000000000000000000') ? new BigNumber(260000) : new BigNumber(260000));
+                gasLimit = gasLimit.plus(new BigNumber(amount).lt('1000000000000000000000') ? silverBoxGasLimit : silverBoxGasLimit);
             }
         }
         

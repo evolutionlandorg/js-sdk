@@ -53,6 +53,6 @@ export default {
         ITERING_CALLBACK:
             "https://alpha.evolution.land/api/tron/raw_sign_broadcast"
     },
-    DOMAIN: "https://evolution.land.l2me.com",
+    DOMAIN: "https://www.evolution.land.l2me.com",
     ABI_DOMAIN: "https://devstatic.l2me.com/static"
 };

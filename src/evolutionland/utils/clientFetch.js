@@ -28,8 +28,8 @@ export default class ClientFetch {
         return res;
     }
 
-    constructor({baseUrl, chainId}) {
-        this.chainId = chainId
+    constructor({baseUrl, evoNetwork}) {
+        this.chainId = evoNetwork
         this.baseURL = baseUrl
 
         this.instance = axios.create({

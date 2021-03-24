@@ -53,11 +53,11 @@ class EthereumEvolutionLand {
         this.ABIs = getABIConfig(network)
         this.ABIClientFetch = new ClientFetch({
             baseUrl: this.env.ABI_DOMAIN,
-            chainId: 60
+            evoNetwork: 'crab'
         })
         this.ClientFetch = new ClientFetch({
             baseUrl: this.env.DOMAIN,
-            chainId: 'crab'
+            evoNetwork: 'crab'
         })
         this.option = {
             sign: true,
@@ -130,7 +130,7 @@ class EthereumEvolutionLand {
             const extendPayload = { ...payload, _contractAddress: contractAddress };
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const from = await this.getCurrentAccount()
-            const gasRes = await this.ClientFetch.apiGasPrice({ wallet: this.option.address || from })
+            const gasRes = await this.ClientFetch.apiGasPrice({ wallet: this.option.address || from }, true)
             let estimateGas = null;
 
             try {
