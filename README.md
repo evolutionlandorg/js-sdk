@@ -15,13 +15,16 @@ A javascript library for interact with blockchain(Ethereum、Tron) and Evolution
 <script>
     const evo = new Evolution();
 
-    evo.createWeb3js({provider: web3.currentProvider})
-    evo.createTronweb({
-        fullHost: 'https://api.shasta.trongrid.io',
-    })
+    await evo.createWeb3js()
+
+    // await evo.createTronweb()
+    // await evo.createEvolutionLand('tron', 'main');
+
+    // await evo.createEvolutionLand('crab', 'pangolin');
+    // const evolandInstance = evo.crabEvoland
     
-    evo.createEvolutionLand('ethereum', 'kovan')
-    evo.createEvolutionLand('tron', 'shasta')
+    await evo.createEvolutionLand('ethereum', 'ropsten');
+    const evolandInstance = evo.ethEvoland
 
     evo.ethEvoland.buyRing(10000)
 </script>
