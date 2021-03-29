@@ -33,8 +33,10 @@ import UniswapUtils from '../utils/uniswap'
 
 import { Currency, ChainId, Token, TokenAmount, Pair, WETH, Fetcher, Percent, Route, TradeType, Trade, JSBI, CurrencyAmount } from '@uniswap/sdk'
 
-
 const loop = function () { }
+
+// fix metamask approve bug.  https://github.com/MetaMask/metamask-extension/issues/10679
+const FIX_METAMASK_APPROVE = true;
 
 /**
  * @class
@@ -514,7 +516,7 @@ class EthereumEvolutionLand {
             methodName: 'approve',
             abiKey: addressOrType,
             abiString: ringABI,
-            contractParams: [this.ABIs['uniswapExchange'].address, value],
+            contractParams: (this.isEvolutionLandToken(addressOrType) && FIX_METAMASK_APPROVE) ? [this.ABIs['uniswapExchange'].address] : [this.ABIs['uniswapExchange'].address, value],
         }, callback)
     }
 
@@ -551,7 +553,7 @@ class EthereumEvolutionLand {
             methodName: 'approve',
             abiKey: tokenContractOrType,
             abiString: ringABI,
-            contractParams: [spender, value],
+            contractParams: (this.isEvolutionLandToken(tokenContractOrType) && FIX_METAMASK_APPROVE) ? [spender] : [spender, value],
         }, callback)
     }
 
@@ -1562,6 +1564,7 @@ class EthereumEvolutionLand {
             case 'wood':
                 return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_WOOD, 18, "WOOD", "WOOD");
             case 'water':
+            case 'hoo':
                 return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_WATER, 18, "WATER", "WATER");
             case 'fire':
                 return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_FIRE, 18, "FIRE", "FIRE");
@@ -1971,6 +1974,26 @@ class EthereumEvolutionLand {
         return this.ClientFetch.$get('/api/challenge', {
             wallet: address
         })
+    }
+
+    /**
+     * 'RING', 'KTON', 'GOLD'..., '0xxxxx'
+     * @param {*} token 
+     */
+    isEvolutionLandToken(token) {
+        console.log('isEvolutionLandToken', token);
+
+        const tokenList = ['ring', 'kton', 'gold', 'wood', 'water', 'hoo', 'fire', 'soil',
+            this.ABIs['ring'].address.toLowerCase(),
+            this.ABIs['kton'].address.toLowerCase(),
+            this.ABIs['gold'].address.toLowerCase(),
+            this.ABIs['wood'].address.toLowerCase(),
+            this.ABIs['water'].address.toLowerCase(),
+            this.ABIs['fire'].address.toLowerCase(),
+            this.ABIs['soil'].address.toLowerCase(),
+        ];
+
+        return tokenList.includes(token.toLowerCase());
     }
 
     async _sign({

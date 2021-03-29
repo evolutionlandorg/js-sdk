@@ -1043,11 +1043,7 @@ class TronEvolutionLand {
         const [, amountOutMin] = await this.getTokenToTrxInputPrice(value);
         //  slippage
         const slippageAmountOutMin = new BigNumber(amountOutMin).times(0.995);
-        console.log(113, [
-            value,
-            slippageAmountOutMin.toFixed(0),
-            deadline
-        ]);
+ 
         return this.triggerContract({
             methodName: 'tokenToTrxSwapInput',
             abiKey: 'justswapExchange',
