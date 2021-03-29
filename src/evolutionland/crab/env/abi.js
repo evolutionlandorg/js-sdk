@@ -2,8 +2,9 @@ import {Env} from './index'
 
 import bancorABI from './abi/ethereum/abi-bancor'
 import actionABI from './abi/ethereum/abi-auction'
-import ringABI from './abi/ethereum/abi-ring'
-import ktonABI from './abi/ethereum/abi-kton'
+import ringABI from './abi/ethereum/abi-wcring'
+import ktonABI from './abi/ethereum/abi-wcring'
+
 import withdrawABI from './abi/ethereum/abi-withdraw'
 import bankABI from './abi/ethereum/abi-bank'
 

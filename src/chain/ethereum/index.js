@@ -1,4 +1,5 @@
 import Web3 from "web3";
+import detectEthereumProvider from '@metamask/detect-provider'
 
 async function createWeb3js(config = {}) {
     return await _getWeb3js(config.provider)
@@ -10,15 +11,12 @@ async function _getWeb3js(provider) {
     if(provider) {
         return new Web3(provider);
     } else {
-        if (window.ethereum) {
-            web3Provider = window.ethereum;
-            // try {
-            //     await window.ethereum.enable();
-            // } catch (error) {
-            //     console.error("User denied account access")
-            // }
-        } else if (window.web3) {
-            web3Provider = window.web3.currentProvider;
+        const provider = await detectEthereumProvider()
+
+        if (provider) {
+            web3Provider = provider;
+        } else {
+            throw 'chain::ethereum: missing web3 provider'
         }
         return new Web3(web3Provider)
     }

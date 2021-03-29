@@ -28,8 +28,8 @@ export default class ClientFetch {
         return res;
     }
 
-    constructor({baseUrl, chainId}) {
-        this.chainId = chainId
+    constructor({baseUrl, evoNetwork}) {
+        this.chainId = evoNetwork
         this.baseURL = baseUrl
 
         this.instance = axios.create({
@@ -83,7 +83,13 @@ export default class ClientFetch {
         );
     }
 
-    apiGasPrice(data) {
+    apiGasPrice(data, isFixed) {
+        if(isFixed) {
+            return new Promise(function(resolve, reject) {
+                resolve({"code":0,"data":{"gas_price":{"fast":10000000000,"safe":2000000000,"standard":1000000000},"nonce":0},"detail":"success"});
+            })
+        }
+
         return this.$get("/api/eth/gas_price", data);
     }
 

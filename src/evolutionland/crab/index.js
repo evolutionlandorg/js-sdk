@@ -33,10 +33,8 @@ import UniswapUtils from '../utils/uniswap'
 
 import { Currency, ChainId, Token, TokenAmount, Pair, WETH, Fetcher, Percent, Route, TradeType, Trade, JSBI, CurrencyAmount } from '@uniswap/sdk'
 
-const loop = function () { }
 
-// fix metamask approve bug.  https://github.com/MetaMask/metamask-extension/issues/10679
-const FIX_METAMASK_APPROVE = true;
+const loop = function () { }
 
 /**
  * @class
@@ -55,11 +53,11 @@ class EthereumEvolutionLand {
         this.ABIs = getABIConfig(network)
         this.ABIClientFetch = new ClientFetch({
             baseUrl: this.env.ABI_DOMAIN,
-            evoNetwork: 'eth'
+            evoNetwork: 'crab'
         })
         this.ClientFetch = new ClientFetch({
             baseUrl: this.env.DOMAIN,
-            evoNetwork: 'eth'
+            evoNetwork: 'crab'
         })
         this.option = {
             sign: true,
@@ -126,13 +124,13 @@ class EthereumEvolutionLand {
             beforeFetch && beforeFetch();
             let _contract = null;
             let contractAddress = await this.getContractAddress(abiKey);
-
+            
             _contract = new this._web3js.eth.Contract(abiString, contractAddress);
 
             const extendPayload = { ...payload, _contractAddress: contractAddress };
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const from = await this.getCurrentAccount()
-            const gasRes = await this.ClientFetch.apiGasPrice({ wallet: this.option.address || from })
+            const gasRes = await this.ClientFetch.apiGasPrice({ wallet: this.option.address || from }, true)
             let estimateGas = null;
 
             try {
@@ -140,7 +138,7 @@ class EthereumEvolutionLand {
                 Object.keys(sendParams).forEach((item) => {
                     hexSendParams[item] = Utils.toHex(sendParams[item])
                 })
-                estimateGas = await this.estimateGas(_method, this.option.address || from, hexSendParams.value);
+                estimateGas = await this.estimateGas(_method, this.option.address || from, hexSendParams.value) || 300000;
             } catch (e) {
                 console.log('estimateGas', e)
             }
@@ -297,6 +295,7 @@ class EthereumEvolutionLand {
             abiString: this.ABIs['erc721'].abi,
             contractParams: [tokenId],
         });
+
         const isApprovedForAll = await this.erc721IsApprovedForAll(owner, spender, contractAddress);
 
         return (owner.toLowerCase() === spender.toLowerCase() || approvedAddress.toLowerCase() === spender.toLowerCase() || isApprovedForAll);
@@ -516,7 +515,7 @@ class EthereumEvolutionLand {
             methodName: 'approve',
             abiKey: addressOrType,
             abiString: ringABI,
-            contractParams: (this.isEvolutionLandToken(addressOrType) && FIX_METAMASK_APPROVE) ? [this.ABIs['uniswapExchange'].address] : [this.ABIs['uniswapExchange'].address, value],
+            contractParams: [this.ABIs['uniswapExchange'].address, value],
         }, callback)
     }
 
@@ -553,7 +552,7 @@ class EthereumEvolutionLand {
             methodName: 'approve',
             abiKey: tokenContractOrType,
             abiString: ringABI,
-            contractParams: (this.isEvolutionLandToken(tokenContractOrType) && FIX_METAMASK_APPROVE) ? [spender] : [spender, value],
+            contractParams: [spender, value],
         }, callback)
     }
 
@@ -708,7 +707,6 @@ class EthereumEvolutionLand {
             finalReferrer && Utils.isAddress(finalReferrer) ?
                 `0x${tokenId}${Utils.padLeft(finalReferrer.substring(2), 64, '0')}` :
                 `0x${tokenId}`
-
         return this.triggerContract({
             methodName: 'transfer',
             abiKey: 'ring',
@@ -952,6 +950,20 @@ class EthereumEvolutionLand {
             abiKey: 'land',
             abiString: landABI,
             contractParams: [from, to, '0x' + tokenId],
+        }, callback)
+    }
+
+    /**
+     *  claim resource on the Land
+     * @param tokenId Land token Id.
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    resourceClaim(tokenId, callback = {}) {
+        return this.triggerContract({
+            methodName: 'claimLandResource',
+            abiKey: 'apostleLandResource',
+            abiString: landResourceABI,
+            contractParams: ['0x' + tokenId],
         }, callback)
     }
 
@@ -1452,15 +1464,13 @@ class EthereumEvolutionLand {
         // https://etherscan.io/tx/0x4e1fc1dcec64bb497405126e55ab743368f1cb1cede945936937e0cde1d254e7
         // prize ring - gas used - 254,776 
         // https://etherscan.io/tx/0xd2b3f05b19e74627940edfe98daee31eeab84b67e88dcf0e77d595430b3b1afc
-        const silverBoxGasLimit = this.env.NETWORK === '1' ? new BigNumber(260000) : new BigNumber(350000);
-        const goldBoxGasLimit = this.env.NETWORK === '1' ? new BigNumber(300000) : new BigNumber(400000);
 
-        let gasLimit = new BigNumber(amounts[0]).lt('1000000000000000000000') ? silverBoxGasLimit : goldBoxGasLimit;
+        let gasLimit = new BigNumber(amounts[0]).lt('1000000000000000000000') ? new BigNumber(260000) : new BigNumber(300000);
 
         if(amounts.length > 1) {
             for (let index = 1; index < amounts.length; index++) {
                 const amount = amounts[index];
-                gasLimit = gasLimit.plus(new BigNumber(amount).lt('1000000000000000000000') ? silverBoxGasLimit : silverBoxGasLimit);
+                gasLimit = gasLimit.plus(new BigNumber(amount).lt('1000000000000000000000') ? new BigNumber(260000) : new BigNumber(260000));
             }
         }
         
@@ -1564,7 +1574,6 @@ class EthereumEvolutionLand {
             case 'wood':
                 return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_WOOD, 18, "WOOD", "WOOD");
             case 'water':
-            case 'hoo':
                 return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_WATER, 18, "WATER", "WATER");
             case 'fire':
                 return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_FIRE, 18, "FIRE", "FIRE");
@@ -1951,6 +1960,40 @@ class EthereumEvolutionLand {
         }, callback)
     }
 
+    /**
+     * Swap CRING of the Crab Network to wrapped CRING.
+     * @param {*} value Amount of CRING.
+     * @param {*} callback 
+     */
+    swapRingToWring(value, callback={}) {
+        return this.triggerContract({
+            methodName: 'deposit',
+            abiKey: 'ring',
+            abiString: this.ABIs['ring'].abi,
+            contractParams: [
+            ],
+            sendParams: {
+                value: value
+            }
+        }, callback)
+    }
+
+    /**
+     * Swap wrapped CRING to native token of the Crab Network.
+     * @param {*} value Amount of WCRING.
+     * @param {*} callback 
+     */
+    swapWringToRing(value, callback={}) {
+        return this.triggerContract({
+            methodName: 'withdraw',
+            abiKey: 'ring',
+            abiString: this.ABIs['ring'].abi,
+            contractParams: [
+                value
+            ]
+        }, callback)
+    }
+
     estimateGas(method, address, value = 0) {
         if (!this._web3js) return;
         return (method || this._web3js.eth).estimateGas({ from: address, value });
@@ -1974,26 +2017,6 @@ class EthereumEvolutionLand {
         return this.ClientFetch.$get('/api/challenge', {
             wallet: address
         })
-    }
-
-    /**
-     * 'RING', 'KTON', 'GOLD'..., '0xxxxx'
-     * @param {*} token 
-     */
-    isEvolutionLandToken(token) {
-        console.log('isEvolutionLandToken', token);
-
-        const tokenList = ['ring', 'kton', 'gold', 'wood', 'water', 'hoo', 'fire', 'soil',
-            this.ABIs['ring'].address.toLowerCase(),
-            this.ABIs['kton'].address.toLowerCase(),
-            this.ABIs['gold'].address.toLowerCase(),
-            this.ABIs['wood'].address.toLowerCase(),
-            this.ABIs['water'].address.toLowerCase(),
-            this.ABIs['fire'].address.toLowerCase(),
-            this.ABIs['soil'].address.toLowerCase(),
-        ];
-
-        return tokenList.includes(token.toLowerCase());
     }
 
     async _sign({

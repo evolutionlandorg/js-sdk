@@ -1,5 +1,6 @@
 export default {
     CONTRACT: {
+        // 合约
         TOKEN_DEX_BRIDGE: "0xab1Cb6a9467b77B9451c1c61140FB34494baFFDD",
         TOKEN_RING: "0x9469d013805bffb7d3debe5e7839237e535ec483",
         TOKEN_WITHDRAW: "0xf45e406067798d2df7913704edcc2ac8d07f3d9e", // takeback
@@ -19,18 +20,18 @@ export default {
         TOKEN_APOSTLE_CLOCK_AUCTION: "0xa665271c365f9d9a149866574a5b047dd9e3d31b", //ApostleClockAuction
         TOKEN_APOSTLE_SIRING_AUCTION: "0xe0a0489d93aeb831a04e8b631ebd9827a4db4a58", //SiringClockAuction
         TOKEN_APOSTLE_BASE: "0x7469966be391e8fe5e85ab972819560c7c3d6e4c", //ApostleBase
-        TOKEN_LAND_RESOURCE: "0xa9203f3303126243C8D181006ab03B2474E3C084", //landResource
+        TOKEN_LAND_RESOURCE: "0xD22065369994568096FB841e024462F4d7F5f2f9", //landResource
         TOKEN_TOKEN_USE: "0xa70abeaca1d6bba0f511758a0d66b7f59fd3f166", //token use
 
         TOKEN_KITTY_CORE: "0x06012c8cf97bead5deae237070f9587f8e7a266d", // KittyCore
         TOKEN_PET_BASE: "0xb0c85c099094e73ffc1df23c8309a8b14c64420a", // PetBaseProxy
-        TOKEN_GEGO: "0x27b4bc90fbe56f02ef50f2e2f79d7813aa8941a7", // Dego Token
 
         TOKEN_ELEMENT_GOLD: "0x358dba28848cca268ba8a76b65e5b3ef9ef92238",
         TOKEN_ELEMENT_WOOD: "0xd4b784ae5c12153d11ca55853d832d2a2d514a08",
         TOKEN_ELEMENT_WATER: "0x19e22a73a046f19ecb51a46ace4ca7a4bb7c20c6",
         TOKEN_ELEMENT_FIRE: "0x8469a695d70033ecd170c82be1253842162aa77e",
         TOKEN_ELEMENT_SOIL: "0x1320994fa466e19f17b143995999c7275eae50e1",
+
         PROVIDER: `http://mainnet.infura.io/v3/616e88b770be403a8be78c4b545a5298`,
 
         SCAN_URL: "https://etherscan.io/",
@@ -45,7 +46,6 @@ export default {
 
         FURNACE_TREASURE: "0xc7D7E731d6bf9182701096adCd5bba3bb0CF76fc",
         FURNACE_TAKEBACK: "0x8d7af9d2310016712b8f269df266f957cb12a27b",
-        FURNACE_ITEMBASE: "0xfd9C2B86f71C1484Bc51F97Bd9E323cB2Cd475C9",
 
         ITERING_CALLBACK: "https://www.evolution.land/api/eth/raw_sign_broadcast"
     },

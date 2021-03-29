@@ -14,7 +14,6 @@ export default {
         TOKEN_LOTTERY: "0xc7eFAaa1b57EB6d5A1855dAf1a37f27cBEa5b5A5", // PointsRewardPool
         TOKEN_USER_POINTS: "0x42a1D26d764a4ec858aB9e955B70e55FE409C749", //UserPoints
         TOKEN_ROLES_UPDATER: "0xdB131373218b9E3bAAAC807C540F4EAeEb2274b3", // rolesUpdater
-
         TOKEN_GEN0_APOSTLE: "0x30F7e8C1e53D1201AfBC99e32272e98fc168E4A6", //Gen0Apostle
         TOKEN_APOSTLE_TAKE_BACK: "", //TakeBackNFT
         TOKEN_APOSTLE_CLOCK_AUCTION: "0xE862c7551b4361ee7DA08806affdB09850E8A284", //ApostleClockAuction
@@ -25,6 +24,7 @@ export default {
 
         TOKEN_KITTY_CORE: "0x56eeea3d9fc769cd8229d10ed40b7b1c897bc750", // KittyCore
         TOKEN_PET_BASE: "0x100CFd21Fa502c706Ca33fCB544b626B20300b8E", // PetBaseProxy
+        TOKEN_GEGO: "0x956b94bEbeCa5736236463b131095f8005661B1f", // Dego Token
 
         TOKEN_ELEMENT_GOLD: "0xB6A07A36FA73758Ce9D58a2C6a8Da74CECCa438d",
         TOKEN_ELEMENT_WOOD: "0xda4d84c604977220D58ade0CF0D915b1a4099E35",
@@ -45,9 +45,10 @@ export default {
 
         FURNACE_TREASURE: "0xF72361096f11d7E4e45046d7a83726b1A9107D5E",
         FURNACE_TAKEBACK: "0xA10D0C6e04845A5e998d1936249A30563c553417",
+        FURNACE_ITEMBASE: "0x1e257d7AE1Cf0da031480C5fE75478eB2d638540",
 
         ITERING_CALLBACK: "https://alpha.evolution.land/api/eth/raw_sign_broadcast"
     },
-    DOMAIN: "https://alpha.evolution.land",
+    DOMAIN: "https://www.evolution.land.l2me.com",
     ABI_DOMAIN: "https://devstatic.l2me.com/static"
 };

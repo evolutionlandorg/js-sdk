@@ -60,20 +60,9 @@ module.exports = {
             exclude: [/node_modules/],
             loader: require.resolve("babel-loader"),
             options: {
-                babelrc: false,
+                babelrc: true,
                 configFile: false,
                 compact: false,
-                presets: [
-                    [
-                        "@babel/env",
-                        {
-                            targets: {
-                                ie: "11"
-                            },
-                            useBuiltIns: "usage"
-                        }
-                    ]
-                ],
                 plugins: [
                     "@babel/plugin-proposal-class-properties",
                     "@babel/plugin-transform-runtime",
