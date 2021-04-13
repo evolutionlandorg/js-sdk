@@ -48,7 +48,7 @@ class Evolution {
             case 'crab':
                 return this.crabEvoland = new crabEvolutionLand(this.web3js, env, option)
             case 'heco':
-                return this.crabEvoland = new hecoEvolutionLand(this.web3js, env, option)
+                return this.hecoEvoland = new hecoEvolutionLand(this.web3js, env, option)
             default:
                 return null;
         }
