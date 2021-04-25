@@ -32,11 +32,9 @@ export default {
         TOKEN_ELEMENT_FIRE: "0x8469a695d70033ecd170c82be1253842162aa77e",
         TOKEN_ELEMENT_SOIL: "0x1320994fa466e19f17b143995999c7275eae50e1",
 
-        PROVIDER: `http://mainnet.infura.io/v3/616e88b770be403a8be78c4b545a5298`,
+        PROVIDER: `https://http-mainnet-node.huobichain.com`,
 
-        SCAN_URL: "https://etherscan.io/",
-        SCAN_TRANSACTION: "https://etherscan.io/tx",
-        SCAN_ADDRESS: "https://etherscan.io/address",
+        SCAN_URL: "https://hecoinfo.com/",
 
         NETWORK: "1",
 

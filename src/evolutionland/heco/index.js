@@ -30,9 +30,14 @@ import itemTakeBackABI from './env/abi/ethereum/abi-itemTakeBack'
 import furnaceItemBaseABI from './env/abi/ethereum/abi-furnaceItemBase'
 import Utils from '../utils/index'
 import UniswapUtils from '../utils/uniswap'
+import { ethers } from 'ethers'
+import { Fetcher } from '../utils/uniswapFetcher';
 
-import { Currency, ChainId, Token, TokenAmount, Pair, WETH, Fetcher, Percent, Route, TradeType, Trade, JSBI, CurrencyAmount } from '@uniswap/sdk'
+import { Currency, ChainId, Token, TokenAmount, Pair, Percent, Route, TradeType, Trade, JSBI, CurrencyAmount } from '@uniswap/sdk'
 
+const WETH = {
+    "256": new Token(256, '0xD4C2F962B8b94cdD2e0B2e8E765d39f32980a1c1', 18, 'WHT', "Wrapped HT")
+};
 
 const loop = function () { }
 
@@ -55,6 +60,9 @@ class HecoEvolutionLand {
             baseUrl: this.env.ABI_DOMAIN,
             evoNetwork: 'heco'
         })
+
+        this.etherjsProvider = null;
+
         this.ClientFetch = new ClientFetch({
             baseUrl: this.env.DOMAIN,
             evoNetwork: 'heco'
@@ -63,6 +71,13 @@ class HecoEvolutionLand {
             sign: true,
             address: null,
             ...option
+        }
+    }
+
+    async setEtherjsProvider() {
+        if(!this.etherjsProvider) {
+            this.etherjsProvider = await new ethers.providers.JsonRpcProvider(this.env.CONTRACT.PROVIDER);
+            this.etherjsProvider._isProvider = true;
         }
     }
 
@@ -399,12 +414,15 @@ class HecoEvolutionLand {
      * @returns {Promise<PromiEvent<any>>}
      */
     async buyRingUniswap(value, callback = {}) {
+        await this.setEtherjsProvider()
+
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING)
+       
+        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING, this.etherjsProvider)
         const route = new Route([pair], WETH[RING.chainId])
         const amountIn = value
         const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_OUTPUT)
-        const slippageTolerance = new Percent('0', '10000') // 30 bips, or 0.30%
+        const slippageTolerance = new Percent('30', '10000') // 30 bips, or 0.30%
 
         const amountInMax = trade.maximumAmountIn(slippageTolerance).raw // needs to be converted to e.g. hex
         const path = [WETH[RING.chainId].address, RING.address]
@@ -434,8 +452,10 @@ class HecoEvolutionLand {
      * @returns {Promise<PromiEvent<any>>}
      */
     async sellRingUniswap(value, callback = {}) {
+        await this.setEtherjsProvider()
+
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-        const pair = await Fetcher.fetchPairData(RING, WETH[RING.chainId])
+        const pair = await Fetcher.fetchPairData(RING, WETH[RING.chainId], this.etherjsProvider)
         const route = new Route([pair], RING)
         const amountIn = value
         const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_INPUT)
@@ -618,8 +638,10 @@ class HecoEvolutionLand {
      * get amount of ether in uniswap exchange 
      */
     async getUniswapEthBalance() {
+        await this.setEtherjsProvider()
+
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING)
+        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING, this.etherjsProvider)
         return pair.tokenAmounts[1].raw.toString(10)
     }
 
@@ -627,8 +649,10 @@ class HecoEvolutionLand {
     * get amount of ring in uniswap exchange 
     */
     async getUniswapTokenBalance() {
+        await this.setEtherjsProvider()
+
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING)
+        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING, this.etherjsProvider)
         return pair.tokenAmounts[0].raw.toString(10)
     }
 
@@ -637,8 +661,10 @@ class HecoEvolutionLand {
      * @param {*} tokens_bought
      */
     async getEthToTokenOutputPrice(tokens_bought = '1000000000000000000') {
+        await this.setEtherjsProvider()
+
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING)
+        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING, this.etherjsProvider)
         const route = new Route([pair], WETH[RING.chainId])
         const amountIn = tokens_bought
         const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_OUTPUT)
@@ -653,8 +679,10 @@ class HecoEvolutionLand {
     * @param {*} tokens_bought
     */
     async getTokenToEthInputPrice(tokens_bought = '1000000000000000000') {
+        await this.setEtherjsProvider()
+
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-        const pair = await Fetcher.fetchPairData(RING, WETH[RING.chainId])
+        const pair = await Fetcher.fetchPairData(RING, WETH[RING.chainId], this.etherjsProvider)
         const route = new Route([pair], RING)
         const amountIn = tokens_bought // 1 WETH
         const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_INPUT)
@@ -1595,9 +1623,11 @@ class HecoEvolutionLand {
             return;
         }
 
+        await this.setEtherjsProvider()
+
         const currencyA = this.getUniswapToken(tokenA);
         const currencyB = this.getUniswapToken(tokenB);
-        const pair = await Fetcher.fetchPairData(currencyA, currencyB);
+        const pair = await Fetcher.fetchPairData(currencyA, currencyB, this.etherjsProvider);
 
         return pair;
     }
@@ -1741,6 +1771,20 @@ class HecoEvolutionLand {
             ],
             sendParams: {
                 value: 0
+            }
+        }, callback)
+    }
+
+    async addUniswapETHLiquidity(value, params, callback = {}) {
+        // const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 120 minutes from the current Unix time
+        //  https://uniswap.org/docs/v2/smart-contracts/router02/#addliquidity
+        return this.triggerContract({
+            methodName: 'addLiquidityETH',
+            abiKey: 'uniswapExchange',
+            abiString: uniswapExchangeABI,
+            contractParams: params,
+            sendParams: {
+                value: value
             }
         }, callback)
     }

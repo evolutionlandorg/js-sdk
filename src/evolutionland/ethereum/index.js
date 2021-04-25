@@ -1998,69 +1998,91 @@ class EthereumEvolutionLand {
 
     /**
      * This function is used to join Gold Rust event through ETH/ERC20 Tokens
+     * @param {*} eventId The event id which to join
      * @param {*} landId The land token id which to join
      * @param {*} amount The ring amount which to submit
      * @param {*} subAddr The dvm address for receiving the new land
-     * @param {*} toChainId The chainId for receiving network
      * @param {*} callback 
      */
-    goldRushRaffleJoin(landTokenId, amount, subAddr, toChainId, callback = {}) {
+    goldRushRaffleJoin(eventId, landTokenId, amount, subAddr, callback = {}) {
         return this.triggerContract({
             methodName: 'join',
             abiKey: 'goldRushRaffle',
             abiString: this.ABIs['goldRushRaffle'].abi,
             contractParams: [
-                Utils.pad0x(landTokenId), amount, subAddr, toChainId
+                eventId, Utils.pad0x(landTokenId), amount, subAddr
             ]
         }, callback);
     }
 
     /**
      * This function is used to change the ring stake amount 
+     * @param {*} eventId event id which to join
      * @param {*} landTokenId The land token id which to change
      * @param {*} amount The new submit ring amount 
      * @param {*} callback 
      */
-    goldRushRaffleChangeAmount(landTokenId, amount, callback = {}) {
+    goldRushRaffleChangeAmount(eventId, landTokenId, amount, callback = {}) {
         return this.triggerContract({
             methodName: 'changeAmount',
             abiKey: 'goldRushRaffle',
             abiString: this.ABIs['goldRushRaffle'].abi,
             contractParams: [
-                Utils.pad0x(landTokenId), amount,
+                eventId, Utils.pad0x(landTokenId), amount,
             ]
         }, callback);
     }
 
     /**
      * This function is used to change the dvm address
+     * @param {*} eventId event id which to join
      * @param {*} landTokenId The land token id which to change
      * @param {*} subAddr The new submit dvm address 
      * @param {*} callback 
      */
-    goldRushRaffleChangeSubAddr(landTokenId, subAddr, callback = {}) {
+    goldRushRaffleChangeSubAddr(eventId, landTokenId, subAddr, callback = {}) {
         return this.triggerContract({
             methodName: 'changeSubAddr',
             abiKey: 'goldRushRaffle',
             abiString: this.ABIs['goldRushRaffle'].abi,
             contractParams: [
-                Utils.pad0x(landTokenId), subAddr,
+                eventId, Utils.pad0x(landTokenId), subAddr,
+            ]
+        }, callback);
+    }
+
+    /**
+     * This function is used to change join info.
+     * @param {*} eventId event id which to join
+     * @param {*} landTokenId The land token id which to change
+     * @param {*} amount The new submit amount 
+     * @param {*} subAddr The new submit dvm address 
+     * @param {*} callback 
+     */
+    goldRushRaffleChangeInfo(eventId, landTokenId, amount, subAddr, callback = {}) {
+        return this.triggerContract({
+            methodName: 'change',
+            abiKey: 'goldRushRaffle',
+            abiString: this.ABIs['goldRushRaffle'].abi,
+            contractParams: [
+                eventId, Utils.pad0x(landTokenId), amount, subAddr,
             ]
         }, callback);
     }
 
     /**
      * This function is used to exit Gold Rush event
+     * @param {*} eventId event id which to join
      * @param {*} landTokenId The land token id which to exit
      * @param {*} callback 
      */
-    goldRushRaffleExit(landTokenId, callback = {}) {
+    goldRushRaffleExit(eventId, landTokenId, callback = {}) {
         return this.triggerContract({
             methodName: 'exit',
             abiKey: 'goldRushRaffle',
             abiString: this.ABIs['goldRushRaffle'].abi,
             contractParams: [
-                Utils.pad0x(landTokenId),
+                eventId, Utils.pad0x(landTokenId),
             ]
         }, callback);
     }
@@ -2070,19 +2092,20 @@ class EthereumEvolutionLand {
      * 
      * _hashmessage = hash("${address(this)}${fromChainId}${toChainId}${eventId}${_landId}${_won}")
      * 
+     * @param {*} eventId event id which to join
      * @param {*} landTokenId The land token id which to draw
      * @param {*} isWon Is winner
      * @param {*} toChainId The chainId for receiving network
      * @param {*} signature _v, _r, _s are from supervisor's signature on _hashmessage while the _hashmessage is signed by supervisor.
      * @param {*} callback 
      */
-    goldRushRaffleDraw(landTokenId, isWon, toChainId, {hashmessage, v, r, s}, callback = {}) {
+    goldRushRaffleDraw(eventId, landTokenId, isWon, {hashmessage, v, r, s}, callback = {}) {
         return this.triggerContract({
             methodName: 'draw',
             abiKey: 'goldRushRaffle',
             abiString: this.ABIs['goldRushRaffle'].abi,
             contractParams: [
-                Utils.pad0x(landTokenId), isWon, toChainId, hashmessage, v, r, s
+                eventId, Utils.pad0x(landTokenId), isWon, hashmessage, v, r, s
             ]
         }, callback);
     }
