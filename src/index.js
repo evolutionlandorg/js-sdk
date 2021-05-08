@@ -42,7 +42,8 @@ class Evolution {
     createEvolutionLand(chain, env, option) {
         switch (chain) {
             case 'ethereum':
-                return this.ethEvoland = this.ethereumEvoLand = new ethEvolutionLand(this.web3js, env, option)
+                this.ethEvoland = new ethEvolutionLand(this.web3js, env, option)
+                return this.ethereumEvoLand = this.ethEvoland;
             case 'tron':
                 return this.tronEvoland = new tronEvolutionLand(this.tronweb, env, option)
             case 'crab':

@@ -96,9 +96,9 @@ class TronEvolutionLand {
     } = {}) {
         try {
             beforeFetch && beforeFetch()
-            let _abi = this.ABIs[abiKey];
+            let contractAddress = await this.getContractAddress(abiKey);
 
-            let _contract = await this._tronweb.contract().at(_abi.address)
+            let _contract = await this._tronweb.contract().at(contractAddress)
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const res = await _method.call()
             console.log('tron res:', res)
@@ -142,8 +142,10 @@ class TronEvolutionLand {
     } = {}) {
         try {
             beforeFetch && beforeFetch()
-            let _abi = this.ABIs[abiKey];
-            const extendPayload = { ...payload, _contractAddress: _abi.address };
+
+            let contractAddress = await this.getContractAddress(abiKey);
+
+            const extendPayload = { ...payload, _contractAddress: contractAddress };
             if (!this.option.sign) {
                 const {
                     functionSelector,
@@ -168,9 +170,9 @@ class TronEvolutionLand {
             let _contract = null;
 
             if(forceABI) {
-                _contract = await this._tronweb.contract(abiString, _abi.address)
+                _contract = await this._tronweb.contract(abiString, contractAddress)
             } else {
-                _contract = await this._tronweb.contract().at(_abi.address)
+                _contract = await this._tronweb.contract().at(contractAddress)
             }
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const res = _method.send({
@@ -183,7 +185,7 @@ class TronEvolutionLand {
                 transactionHashCallback && transactionHashCallback(hash, extendPayload)
                 console.log('hash', hash)
             }).catch((e) => {
-                const extendPayload = { ...payload, _contractAddress: _abi.address };
+                const extendPayload = { ...payload, _contractAddress: contractAddress };
                 errorCallback && errorCallback(e, extendPayload)
             })
             console.log('tron res:', res)
@@ -191,7 +193,7 @@ class TronEvolutionLand {
         } catch (e) {
             console.error('triggerContract', e)
             let _abi = this.ABIs[abiKey];
-            const extendPayload = { ...payload, _contractAddress: _abi.address };
+            const extendPayload = { ...payload, _contractAddress: contractAddress };
             errorCallback && errorCallback(e, extendPayload)
         }
     }
@@ -822,6 +824,94 @@ class TronEvolutionLand {
         }, callback)
     }
 
+    /**
+     * Get the contract address of evolution land by key.
+     * @param {*} tokenKey ring | kton | gold ... 
+     */
+    async getContractAddress(tokenKey) {
+        let token = (this.ABIs[tokenKey] && this.ABIs[tokenKey].address) || tokenKey;
+        return token;
+    }
+
+    /**
+     * Query if an address is an authorized operator for another address
+     * @param {*} owner The address that owns the NFTs
+     * @param {*} operator The address that acts on behalf of the owner
+     * @param {*} contractAddress ERC721 contract address
+     */
+    erc721IsApprovedForAll(owner, operator, contractAddress, callback={}) {
+        return this.callContract({
+            methodName: 'isApprovedForAll',
+            abiKey: contractAddress,
+            contractParams: [owner, operator],
+        }, callback)
+    }
+
+    /**
+     * Returns whether `spender` is allowed to manage `tokenId`.
+     * @param {*} spender The address that acts on behalf of the owner
+     * @param {*} contractAddress The factory of tokenId.
+     * @param {*} tokenId ERC721 token Id;
+     */
+    async erc721IsApprovedOrOwner(spender, contractAddress, tokenId) {
+        const owner = await this.callContract({
+            methodName: 'ownerOf',
+            abiKey: contractAddress,
+            contractParams: [tokenId],
+        });
+
+        const approvedAddress = await this.callContract({
+            methodName: 'getApproved',
+            abiKey: contractAddress,
+            contractParams: [tokenId],
+        });
+        const isApprovedForAll = await this.erc721IsApprovedForAll(owner, spender, contractAddress);
+
+        return (owner.toLowerCase() === spender.toLowerCase() || approvedAddress.toLowerCase() === spender.toLowerCase() || isApprovedForAll);
+    }
+
+    /**
+     * 
+     * @param {*} owner 
+     * @param {*} operator 
+     * @param {*} contractAddress 
+     * @param {*} callback 
+     */    
+    erc721IsApprovedForAll(owner, operator, contractAddress, callback={}) {
+        return this.callContract({
+            methodName: 'isApprovedForAll',
+            abiKey: contractAddress,
+            contractParams: [owner, operator],
+        }, callback)
+    }
+
+    /**
+     * Change or reaffirm the approved address for an NFT
+     * @param {*} to The new approved NFT controller
+     * @param {*} tokenId The NFT to approve
+     */
+    async erc721Approve(to, tokenId, contractAddress, callback={}) {
+        return this.triggerContract({
+            methodName: 'approve',
+            abiKey: contractAddress,
+            contractParams: [to, tokenId],
+        }, callback)
+    }
+
+    /**
+     * Enable or disable approval for a third party ("operator") to manage
+     * @param {*} to Address to add to the set of authorized operators
+     * @param {*} approved True if the operator is approved, false to revoke approval
+     * @param {*} contractAddress ERC721 contract address
+     * @param {*} callback 
+     */
+    async erc721SetApprovalForAll(to, approved, contractAddress, callback={}) {
+        return this.triggerContract({
+            methodName: 'setApprovalForAll',
+            abiKey: contractAddress,
+            contractParams: [to, approved],
+        }, callback)
+    }
 
     /**
      * Byzantine swap fee
@@ -938,6 +1028,25 @@ class TronEvolutionLand {
     }
 
     /**
+     * Allows spender to withdraw from your account multiple times, up to the value amount. If this function is called again it overwrites the current allowance with value.
+     * @param {*} tokenContractOrType Erc20 token contract address
+     * @param {*} spender
+     * @param {*} value
+     * @param {*} callback 
+     */
+    async approveToken(tokenContractOrType, spender, value="0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", callback = {}) {
+        if(!spender) {
+            return;
+        }
+
+        return this.triggerContract({
+            methodName: 'approve',
+            abiKey: tokenContractOrType,
+            contractParams: [spender, value],
+        }, callback)
+    }
+
+    /**
      * Check if justswap has sufficient transfer authority
      * @param {*} amount 
      */
@@ -946,6 +1055,27 @@ class TronEvolutionLand {
 
         const ringContract = await this._tronweb.contract().at(this.ABIs['ring'].address)
         const allowanceAmount = await ringContract.methods.allowance(from, this.ABIs['justswapExchange'].address).call()
+        return !Utils.toBN(allowanceAmount).lt(Utils.toBN(amount || '1000000000000000000000000'))
+    }
+
+    /**
+     * Check if spender has sufficient transfer authority
+     * @param {*} amount 
+     * @param {*} tokenAddressOrType,
+     * @param {*} account
+     * @param {*} spender
+     */
+    async checkTokenAllowance(amount, tokenAddressOrType, account, spender) {
+        if(!amount || !tokenAddressOrType || !spender) {
+            throw 'tron::checkTokenAllowance: missing param'
+        }
+
+        const from = account || await this.getCurrentAccount();
+        const token = await this.getContractAddress(tokenAddressOrType);
+        const erc20Contract = await this._tronweb.contract().at(token);
+
+        const allowanceAmount = await erc20Contract.methods.allowance(from, spender).call()
+
         return !Utils.toBN(allowanceAmount).lt(Utils.toBN(amount || '1000000000000000000000000'))
     }
 
@@ -1058,6 +1188,172 @@ class TronEvolutionLand {
                 callValue: 0
             }
         }, callback)
+    }
+
+
+    /**
+     * 'RING', 'KTON', 'GOLD'..., '0xxxxx'
+     * @param {*} token 
+     */
+    isEvolutionLandToken(token) {
+        console.log('isEvolutionLandToken', token);
+
+        const tokenList = ['ring', 'kton', 'gold', 'wood', 'water', 'hoo', 'fire', 'soil',
+            this.ABIs['ring'].address.toLowerCase(),
+            this.ABIs['kton'].address.toLowerCase(),
+            this.ABIs['gold'].address.toLowerCase(),
+            this.ABIs['wood'].address.toLowerCase(),
+            this.ABIs['water'].address.toLowerCase(),
+            this.ABIs['fire'].address.toLowerCase(),
+            this.ABIs['soil'].address.toLowerCase(),
+        ];
+
+        return tokenList.includes(token.toLowerCase());
+    }
+
+    /**
+     * This function is used to join Gold Rust event through ETH/ERC20 Tokens
+     * @param {*} eventId The event id which to join
+     * @param {*} landId The land token id which to join
+     * @param {*} amount The ring amount which to submit
+     * @param {*} subAddr The dvm address for receiving the new land
+     * @param {*} callback 
+     */
+    goldRushRaffleJoin(eventId, landTokenId, amount, subAddr, callback = {}) {
+        return this.triggerContract({
+            methodName: 'join',
+            abiKey: 'goldRushRaffle',
+            // abiString: this.ABIs['goldRushRaffle'].abi,
+            contractParams: [
+                eventId, Utils.pad0x(landTokenId), amount, subAddr
+            ]
+        }, callback);
+    }
+
+    /**
+     * This function is used to change the ring stake amount 
+     * @param {*} eventId event id which to join
+     * @param {*} landTokenId The land token id which to change
+     * @param {*} amount The new submit ring amount 
+     * @param {*} callback 
+     */
+    goldRushRaffleChangeAmount(eventId, landTokenId, amount, callback = {}) {
+        return this.triggerContract({
+            methodName: 'changeAmount',
+            abiKey: 'goldRushRaffle',
+            abiString: this.ABIs['goldRushRaffle'].abi,
+            contractParams: [
+                eventId, Utils.pad0x(landTokenId), amount,
+            ]
+        }, callback);
+    }
+
+    /**
+     * This function is used to change the dvm address
+     * @param {*} eventId event id which to join
+     * @param {*} landTokenId The land token id which to change
+     * @param {*} subAddr The new submit dvm address 
+     * @param {*} callback 
+     */
+    goldRushRaffleChangeSubAddr(eventId, landTokenId, subAddr, callback = {}) {
+        return this.triggerContract({
+            methodName: 'changeSubAddr',
+            abiKey: 'goldRushRaffle',
+            abiString: this.ABIs['goldRushRaffle'].abi,
+            contractParams: [
+                eventId, Utils.pad0x(landTokenId), subAddr,
+            ]
+        }, callback);
+    }
+
+    /**
+     * This function is used to change join info.
+     * @param {*} eventId event id which to join
+     * @param {*} landTokenId The land token id which to change
+     * @param {*} amount The new submit amount 
+     * @param {*} subAddr The new submit dvm address 
+     * @param {*} callback 
+     */
+    goldRushRaffleChangeInfo(eventId, landTokenId, amount, subAddr, callback = {}) {
+        return this.triggerContract({
+            methodName: 'change',
+            abiKey: 'goldRushRaffle',
+            abiString: this.ABIs['goldRushRaffle'].abi,
+            contractParams: [
+                eventId, Utils.pad0x(landTokenId), amount, subAddr,
+            ]
+        }, callback);
+    }
+
+    /**
+     * This function is used to exit Gold Rush event
+     * @param {*} eventId event id which to join
+     * @param {*} landTokenId The land token id which to exit
+     * @param {*} callback 
+     */
+    goldRushRaffleExit(eventId, landTokenId, callback = {}) {
+        return this.triggerContract({
+            methodName: 'exit',
+            abiKey: 'goldRushRaffle',
+            abiString: this.ABIs['goldRushRaffle'].abi,
+            contractParams: [
+                eventId, Utils.pad0x(landTokenId),
+            ]
+        }, callback);
+    }
+
+    /**
+     * This function is used to redeem prize after lottery
+     * 
+     * _hashmessage = hash("${address(this)}${fromChainId}${toChainId}${eventId}${_landId}${_won}")
+     * 
+     * @param {*} eventId event id which to join
+     * @param {*} landTokenId The land token id which to draw
+     * @param {*} isWon Is winner
+     * @param {*} toChainId The chainId for receiving network
+     * @param {*} signature _v, _r, _s are from supervisor's signature on _hashmessage while the _hashmessage is signed by supervisor.
+     * @param {*} callback 
+     */
+    goldRushRaffleDraw(eventId, landTokenId, isWon, {hashmessage, v, r, s}, callback = {}) {
+        return this.triggerContract({
+            methodName: 'draw',
+            abiKey: 'goldRushRaffle',
+            abiString: this.ABIs['goldRushRaffle'].abi,
+            contractParams: [
+                eventId, Utils.pad0x(landTokenId), isWon, hashmessage, v, r, s
+            ]
+        }, callback);
+    }
+
+    /**
+     * check the land is valid
+     * @param {*} landTokenId The land token id which to check
+     */
+    goldRushRaffleLandCheck(landTokenId, callback = {}) {
+        return this.callContract({
+            methodName: 'check',
+            abiKey: 'goldRushRaffle',
+            abiString: this.ABIs['goldRushRaffle'].abi,
+            contractParams: [
+                Utils.pad0x(landTokenId)
+            ]
+        }, callback);
+    }
+
+    /**
+     * Get info of Raffle by eventId and landTokenId.
+     * @param {*} eventId Gold Rush Event ID
+     * @param {*} landTokenId The land token id which to query
+     * @param {*} callback 
+     */
+    goldRushRaffleGetHistory(eventId, landTokenId, callback = {}) {
+        return this.callContract({
+            methodName: 'lands',
+            abiKey: 'goldRushRaffle',
+            contractParams: [
+                eventId, Utils.pad0x(landTokenId)
+            ]
+        }, callback);
     }
     
 }

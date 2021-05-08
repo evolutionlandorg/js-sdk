@@ -142,6 +142,10 @@ function getABI(env) {
             address: _env.CONTRACT.TOKEN_LAND,
             api: apiContractLand
         },
+        objectOwnership: {
+            address: _env.CONTRACT.TOKEN_LAND,
+            api: apiContractLand
+        },
         luckybag: {
             address: _env.CONTRACT.TOKEN_LUCKYBAG,
             api: apiContractLuckybag
@@ -244,6 +248,9 @@ function getABI(env) {
         },
         justswapExchange: {
             address: _env.CONTRACT.JUSTSWAP_EXCHANGE,
+        },
+        goldRushRaffle: {
+            address: _env.CONTRACT.GOLD_RUSH_RAFFLE,
         }
     });
 }
