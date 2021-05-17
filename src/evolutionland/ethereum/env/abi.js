@@ -26,6 +26,7 @@ import redPackageABI from './abi/ethereum/abi-redPackage'
 import furnaceItemBaseABI from './abi/ethereum/abi-furnaceItemBase'
 import erc721ABI from './abi/ethereum/abi-ERC721'
 import gegoTokenABI from './abi/ethereum/abi-gegoToken'
+import goldRushRaffleABI from './abi/ethereum/abi-goldRushRaffle'
 
 function getABI(env){
     let _env = Env(env)
@@ -160,6 +161,10 @@ function getABI(env){
         gego: {
             address: _env.CONTRACT.TOKEN_GEGO,
             abi: gegoTokenABI
+        },
+        goldRushRaffle: {
+            address: _env.CONTRACT.GOLD_RUSH_RAFFLE,
+            abi: goldRushRaffleABI
         }
     });
 }

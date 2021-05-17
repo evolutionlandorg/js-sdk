@@ -3,6 +3,8 @@ import Tronweb from './chain/tron/index'
 import ethEvolutionLand from './evolutionland/ethereum'
 import tronEvolutionLand from './evolutionland/tron'
 import crabEvolutionLand from './evolutionland/crab'
+import hecoEvolutionLand from './evolutionland/heco'
+import bscEvolutionLand from './evolutionland/bsc'
 import units from './evolutionland/utils/unitConversion'
 
 /**
@@ -41,11 +43,16 @@ class Evolution {
     createEvolutionLand(chain, env, option) {
         switch (chain) {
             case 'ethereum':
-                return this.ethEvoland = this.ethereumEvoLand = new ethEvolutionLand(this.web3js, env, option)
+                this.ethEvoland = new ethEvolutionLand(this.web3js, env, option)
+                return this.ethereumEvoland = this.ethEvoland;
             case 'tron':
                 return this.tronEvoland = new tronEvolutionLand(this.tronweb, env, option)
             case 'crab':
                 return this.crabEvoland = new crabEvolutionLand(this.web3js, env, option)
+            case 'heco':
+                return this.hecoEvoland = new hecoEvolutionLand(this.web3js, env, option)
+            case 'bsc':
+                return this.bscEvoland = new bscEvolutionLand(this.web3js, env, option)
             default:
                 return null;
         }

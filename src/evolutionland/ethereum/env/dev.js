@@ -47,6 +47,8 @@ export default {
         FURNACE_TAKEBACK: "0xA10D0C6e04845A5e998d1936249A30563c553417",
         FURNACE_ITEMBASE: "0x1e257d7AE1Cf0da031480C5fE75478eB2d638540",
 
+        GOLD_RUSH_RAFFLE: "0x005d5D8D31078e3E3cdaE300BfDc11F6327a189E",
+
         ITERING_CALLBACK: "https://alpha.evolution.land/api/eth/raw_sign_broadcast"
     },
     DOMAIN: "https://www.evolution.land.l2me.com",

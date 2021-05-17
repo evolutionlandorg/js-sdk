@@ -86,6 +86,7 @@ export default class ClientFetch {
     apiGasPrice(data, isFixed) {
         if(isFixed) {
             return new Promise(function(resolve, reject) {
+                // TODO
                 resolve({"code":0,"data":{"gas_price":{"fast":10000000000,"safe":2000000000,"standard":1000000000},"nonce":0},"detail":"success"});
             })
         }
