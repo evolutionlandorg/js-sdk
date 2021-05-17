@@ -9,7 +9,7 @@ import ERC20 from './uniswapErc20.json'
 
 let TOKEN_DECIMALS_CACHE = {
   [ChainId.MAINNET]: {
-    '0xE0B7927c4aF23765Cb51314A0E0521A9645F0E2A': 9 // DGD
+
   }
 }
 

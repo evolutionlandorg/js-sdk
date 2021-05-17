@@ -642,7 +642,7 @@ class HecoEvolutionLand {
 
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
         const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING, this.etherjsProvider)
-        return pair.tokenAmounts[1].raw.toString(10)
+        return pair.tokenAmounts[0].token.equals(WETH[RING.chainId]) ? pair.tokenAmounts[0].raw.toString(10) : pair.tokenAmounts[1].raw.toString(10)
     }
 
     /**
@@ -653,7 +653,7 @@ class HecoEvolutionLand {
 
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
         const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING, this.etherjsProvider)
-        return pair.tokenAmounts[0].raw.toString(10)
+        return pair.tokenAmounts[0].token.equals(RING) ? pair.tokenAmounts[0].raw.toString(10) : pair.tokenAmounts[1].raw.toString(10)
     }
 
     /**

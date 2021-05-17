@@ -45,9 +45,9 @@ export default {
         UNISWAP_EXCHANGE: "",
         AUCTIONHOLDER: "",
 
-        FURNACE_TREASURE: "",
-        FURNACE_TAKEBACK: "",
-        FURNACE_ITEMBASE: "",
+        FURNACE_TREASURE: "0x3217F36AE34aCA2CE60d218af8F47d29101204a8",
+        FURNACE_TAKEBACK: "0x293C3B2D7BA4A6b401c33e7F78deF53dd51ebFA8",
+        FURNACE_ITEMBASE: "0x1313ad62e7315566bfD0de4017Dd6C5D09004e01",
 
         ITERING_CALLBACK: "https://alpha.evolution.land/api/eth/raw_sign_broadcast"
     },
