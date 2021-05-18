@@ -48,6 +48,8 @@ export default {
         FURNACE_ITEMBASE: "0x1e257d7AE1Cf0da031480C5fE75478eB2d638540",
 
         GOLD_RUSH_RAFFLE: "0x005d5D8D31078e3E3cdaE300BfDc11F6327a189E",
+        
+        LIQUIDITY_STAKER_FACTORY: "0x4CF6960c8700654b0379741D77B9d53fc59641CF",
 
         ITERING_CALLBACK: "https://alpha.evolution.land/api/eth/raw_sign_broadcast"
     },

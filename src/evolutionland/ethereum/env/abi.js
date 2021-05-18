@@ -27,6 +27,8 @@ import furnaceItemBaseABI from './abi/ethereum/abi-furnaceItemBase'
 import erc721ABI from './abi/ethereum/abi-ERC721'
 import gegoTokenABI from './abi/ethereum/abi-gegoToken'
 import goldRushRaffleABI from './abi/ethereum/abi-goldRushRaffle'
+import liquidityStakerABI from './abi/ethereum/abi-liquidityStaker'
+import liquidityStakerFactoryABI from './abi/ethereum/abi-liquidityStakerFactory'
 
 function getABI(env){
     let _env = Env(env)
@@ -165,6 +167,13 @@ function getABI(env){
         goldRushRaffle: {
             address: _env.CONTRACT.GOLD_RUSH_RAFFLE,
             abi: goldRushRaffleABI
+        },
+        liquidityStaker: {
+            abi: liquidityStakerABI
+        },
+        liquidityStakerFactory: {
+            address: _env.CONTRACT.LIQUIDITY_STAKER_FACTORY,
+            abi: liquidityStakerFactoryABI
         }
     });
 }
