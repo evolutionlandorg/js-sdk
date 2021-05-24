@@ -34,7 +34,8 @@ import UniswapUtils from '../utils/uniswap'
 import { Currency, ChainId, Token, TokenAmount, Pair, WETH, Fetcher, Percent, Route, TradeType, Trade, JSBI, CurrencyAmount } from '@uniswap/sdk'
 
 
-import LiquidityStaker from '../api/liquidityStaker'
+import LiquidityStakerApi from '../api/liquidityStaker'
+import Erc20Api from '../api/erc20'
 
 const loop = function () { }
 
@@ -2205,6 +2206,7 @@ class EthereumEvolutionLand {
     }
 }
 
-Object.assign(EthereumEvolutionLand.prototype, LiquidityStaker);
+Object.assign(EthereumEvolutionLand.prototype, LiquidityStakerApi);
+Object.assign(EthereumEvolutionLand.prototype, Erc20Api);
 
 export default EthereumEvolutionLand

@@ -1,4 +1,4 @@
-let LiquidityStaker = {
+let LiquidityStakerApi = {
 
   liqidityStakerGetStakerAddress(stakingToken, callback = {}) {
     return this.callContract(
@@ -84,6 +84,18 @@ let LiquidityStaker = {
     );
   },
 
+  liqidityStakerPeriodFinish(stakerContractAddress, callback = {}) {
+    return this.callContract(
+      {
+        methodName: "periodFinish",
+        abiKey: stakerContractAddress,
+        abiString: this.ABIs["liquidityStaker"].abi,
+        contractParams: [],
+      },
+      callback
+    );
+  },
+
   /**
    * This function is used to stake token for farm
    * @param {*} stakerContractAddress The staker contract address
@@ -139,4 +151,4 @@ let LiquidityStaker = {
   }
 }
 
-export default LiquidityStaker;
+export default LiquidityStakerApi;
