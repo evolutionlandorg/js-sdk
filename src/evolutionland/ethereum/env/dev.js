@@ -23,6 +23,7 @@ export default {
         TOKEN_TOKEN_USE: "0xfD9512e7c8d5D481661032768bBBdEA683D78865", //token use
 
         TOKEN_KITTY_CORE: "0x56eeea3d9fc769cd8229d10ed40b7b1c897bc750", // KittyCore
+        TOKEN_POLKAPETS: "0x3aa012406c56efe330a04f241fc6477a87c65dc2", // PolkaPets
         TOKEN_PET_BASE: "0x100CFd21Fa502c706Ca33fCB544b626B20300b8E", // PetBaseProxy
         TOKEN_GEGO: "0x956b94bEbeCa5736236463b131095f8005661B1f", // Dego Token
 
@@ -48,6 +49,8 @@ export default {
         FURNACE_ITEMBASE: "0x1e257d7AE1Cf0da031480C5fE75478eB2d638540",
 
         GOLD_RUSH_RAFFLE: "0x005d5D8D31078e3E3cdaE300BfDc11F6327a189E",
+        
+        LIQUIDITY_STAKER_FACTORY: "0x4CF6960c8700654b0379741D77B9d53fc59641CF",
 
         ITERING_CALLBACK: "https://alpha.evolution.land/api/eth/raw_sign_broadcast"
     },

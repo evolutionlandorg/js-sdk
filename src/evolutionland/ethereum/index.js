@@ -33,6 +33,10 @@ import UniswapUtils from '../utils/uniswap'
 
 import { Currency, ChainId, Token, TokenAmount, Pair, WETH, Fetcher, Percent, Route, TradeType, Trade, JSBI, CurrencyAmount } from '@uniswap/sdk'
 
+
+import LiquidityStakerApi from '../api/liquidityStaker'
+import Erc20Api from '../api/erc20'
+
 const loop = function () { }
 
 // fix metamask approve bug.  https://github.com/MetaMask/metamask-extension/issues/10679
@@ -2201,5 +2205,8 @@ class EthereumEvolutionLand {
         })
     }
 }
+
+Object.assign(EthereumEvolutionLand.prototype, LiquidityStakerApi);
+Object.assign(EthereumEvolutionLand.prototype, Erc20Api);
 
 export default EthereumEvolutionLand
