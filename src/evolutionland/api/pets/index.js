@@ -30,7 +30,7 @@ let PetApi = {
     }
   },
 
-  petISetApprovalForAllToBridge(petsType) {
+  petSetApprovalForAllToBridge(petsType) {
     const contractData = this.petGetPetContractData(petsType);
 
     if(contractData.type === 'erc721') {
@@ -42,6 +42,16 @@ let PetApi = {
       // operator, approved, contractAddress
       return this.erc1155SetApprovalForAll(this.ABIs['petBridge'].address, true, contractData.token.address);
     }
+  },
+
+  petMirrorIsApprovedOrOwnerToBridge(mirrorTokenId) {
+    // spender, contractAddress, tokenId
+    return this.erc721IsApprovedOrOwner(this.ABIs['petBridge'].address, this.ABIs['objectOwnership'].address, Utils.pad0x(mirrorTokenId));
+  },
+
+  petMirrorSetApprovalForAllToBridge() {
+    // operator, approved, contractAddress
+    return this.erc721SetApprovalForAll(this.ABIs['petBridge'].address, true, this.ABIs['objectOwnership'].address);
   },
 
   petSwapOutFromBridge(petsType, mirrorTokenId, callback = {}) {
