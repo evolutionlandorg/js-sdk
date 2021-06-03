@@ -30,6 +30,7 @@ import goldRushRaffleABI from './abi/ethereum/abi-goldRushRaffle'
 import liquidityStakerABI from './abi/ethereum/abi-liquidityStaker'
 import liquidityStakerFactoryABI from './abi/ethereum/abi-liquidityStakerFactory'
 import erc1155ABI from './abi/ethereum/abi-ERC1155'
+import petBridgeABI from './abi/ethereum/abi-petBridge'
 
 function getABI(env){
     let _env = Env(env)
@@ -161,6 +162,9 @@ function getABI(env){
         erc721: {
             abi: erc721ABI
         },
+        erc1155: {
+            abi: erc1155ABI
+        },
         gego: {
             address: _env.CONTRACT.TOKEN_GEGO,
             abi: gegoTokenABI
@@ -183,6 +187,10 @@ function getABI(env){
         petPolkaPets: {
             address: _env.CONTRACT.TOKEN_POLKAPETS,
             abi: erc1155ABI
+        },
+        petBridge: {
+            address: _env.CONTRACT.PET_BRIDGE,
+            abi: petBridgeABI
         }
     });
 }
