@@ -47,6 +47,10 @@ function getABI(env){
             address: _env.CONTRACT.TOKEN_AUCTION,
             abi: actionABI
         },
+        landClockAuction: {
+            address: _env.CONTRACT.TOKEN_AUCTION,
+            abi: actionABI
+        },
         land: {
             address: _env.CONTRACT.TOKEN_LAND,
             abi: landABI
