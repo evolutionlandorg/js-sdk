@@ -49,9 +49,9 @@ let PetApi = {
     return this.erc721IsApprovedOrOwner(this.ABIs['petBridge'].address, this.ABIs['objectOwnership'].address, Utils.pad0x(mirrorTokenId));
   },
 
-  petMirrorSetApprovalForAllToBridge() {
+  petMirrorSetApprovalForAllToBridge(callback = {}) {
     // operator, approved, contractAddress
-    return this.erc721SetApprovalForAll(this.ABIs['petBridge'].address, true, this.ABIs['objectOwnership'].address);
+    return this.erc721SetApprovalForAll(this.ABIs['petBridge'].address, true, this.ABIs['objectOwnership'].address, callback);
   },
 
   petSwapOutFromBridge(petsType, mirrorTokenId, callback = {}) {
