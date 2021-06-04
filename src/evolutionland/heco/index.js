@@ -20,7 +20,8 @@ import LandApi from '../api/land'
 import Erc20Api from '../api/erc20'
 
 const WETH = {
-    "256": new Token(256, '0xD4C2F962B8b94cdD2e0B2e8E765d39f32980a1c1', 18, 'WHT', "Wrapped HT")
+    "256": new Token(256, '0xD4C2F962B8b94cdD2e0B2e8E765d39f32980a1c1', 18, 'WHT', "Wrapped HT"),
+    "128": new Token(128, '0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F', 18, 'WHT', "Wrapped HT")
 };
 
 const loop = function () { }
@@ -442,7 +443,7 @@ class HecoEvolutionLand {
         const route = new Route([pair], RING)
         const amountIn = value
         const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_INPUT)
-        const slippageTolerance = new Percent('0', '10000') // 30 bips, or 0.30%
+        const slippageTolerance = new Percent('30', '10000') // 30 bips, or 0.30%
 
         const amountOutMin = trade.minimumAmountOut(slippageTolerance).raw // needs to be converted to e.g. hex
         const path = [RING.address, WETH[RING.chainId].address]
@@ -646,7 +647,7 @@ class HecoEvolutionLand {
         const route = new Route([pair], WETH[RING.chainId])
         const amountIn = tokens_bought
         const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_OUTPUT)
-        const slippageTolerance = new Percent('0', '10000') 
+        const slippageTolerance = new Percent('30', '10000') 
         const amountInMax = trade.maximumAmountIn(slippageTolerance).raw
 
         return [new BigNumber(amountInMax.toString(10)).times('1000000000000000000').div(tokens_bought).toFixed(0), amountInMax.toString(10)];
@@ -664,7 +665,7 @@ class HecoEvolutionLand {
         const route = new Route([pair], RING)
         const amountIn = tokens_bought // 1 WETH
         const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_INPUT)
-        const slippageTolerance = new Percent('0', '10000') // 50 bips, or 0.50%
+        const slippageTolerance = new Percent('30', '10000') // 50 bips, or 0.50%
         const amountOutMin = trade.minimumAmountOut(slippageTolerance).raw // needs to be converted to e.g. hex
         return [new BigNumber(amountOutMin.toString(10)).times('1000000000000000000').div(tokens_bought).toFixed(0), amountOutMin.toString(10)];
     }

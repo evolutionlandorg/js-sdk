@@ -87,7 +87,7 @@ export default class ClientFetch {
         if(isFixed) {
             return new Promise(function(resolve, reject) {
                 // TODO
-                resolve({"code":0,"data":{"gas_price":{"fast":10000000000,"safe":2000000000,"standard":1000000000},"nonce":0},"detail":"success"});
+                resolve({"code":0,"data":{"gas_price":{"fast":10000000000,"safe":1000000000,"standard":1100000000},"nonce":0},"detail":"success"});
             })
         }
 
