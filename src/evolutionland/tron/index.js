@@ -96,7 +96,7 @@ class TronEvolutionLand {
     } = {}) {
         try {
             beforeFetch && beforeFetch()
-            let contractAddress = await this.getContractAddress(abiKey);
+            let contractAddress = this.getContractAddress(abiKey);
 
             let _contract = await this._tronweb.contract().at(contractAddress)
             const _method = _contract.methods[methodName].apply(this, contractParams)
@@ -143,7 +143,7 @@ class TronEvolutionLand {
         try {
             beforeFetch && beforeFetch()
 
-            let contractAddress = await this.getContractAddress(abiKey);
+            let contractAddress = this.getContractAddress(abiKey);
 
             const extendPayload = { ...payload, _contractAddress: contractAddress };
             if (!this.option.sign) {
@@ -1071,7 +1071,7 @@ class TronEvolutionLand {
         }
 
         const from = account || await this.getCurrentAccount();
-        const token = await this.getContractAddress(tokenAddressOrType);
+        const token = this.getContractAddress(tokenAddressOrType);
         const erc20Contract = await this._tronweb.contract().at(token);
 
         const allowanceAmount = await erc20Contract.methods.allowance(from, spender).call()

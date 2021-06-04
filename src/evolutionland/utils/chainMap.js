@@ -4,6 +4,11 @@ const chainMap = {
         alias: 'eth',
         symbol: 'ether'
     },
+    '128': {
+        coin: 'heco',
+        alias: 'heco',
+        symbol: 'ht'
+    },
     '195': {
         coin: 'tron',
         alias: 'tron',
