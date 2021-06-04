@@ -1,6 +1,6 @@
 import dev from "./dev";
 import prod from "./prod"
-import getABI from './abi'
+import { getABI } from '../../abi'
 
 export function Env(env) {
     switch (env) {
@@ -14,5 +14,6 @@ export function Env(env) {
 }
 
 export function getABIConfig(env){
-    return getABI(env)
+    const envConfig = Env(env);
+    return getABI(envConfig);
 }
