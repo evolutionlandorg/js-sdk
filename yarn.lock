@@ -863,21 +863,6 @@
     "@ethersproject/properties" "^5.0.3"
     "@ethersproject/strings" "^5.0.4"
 
-"@ethersproject/abi@5.1.2":
-  version "5.1.2"
-  resolved "https://registry.nlark.com/@ethersproject/abi/download/@ethersproject/abi-5.1.2.tgz#a8e75cd0455e6dc9e4861c3d1c22bbe436c1d775"
-  integrity sha1-qOdc0EVebcnkhhw9HCK75DbB13U=
-  dependencies:
-    "@ethersproject/address" "^5.1.0"
-    "@ethersproject/bignumber" "^5.1.0"
-    "@ethersproject/bytes" "^5.1.0"
-    "@ethersproject/constants" "^5.1.0"
-    "@ethersproject/hash" "^5.1.0"
-    "@ethersproject/keccak256" "^5.1.0"
-    "@ethersproject/logger" "^5.1.0"
-    "@ethersproject/properties" "^5.1.0"
-    "@ethersproject/strings" "^5.1.0"
-
 "@ethersproject/abi@^5.1.0":
   version "5.1.0"
   resolved "https://registry.npm.taobao.org/@ethersproject/abi/download/@ethersproject/abi-5.1.0.tgz#d582c9f6a8e8192778b5f2c991ce19d7b336b0c5"
@@ -893,19 +878,6 @@
     "@ethersproject/properties" "^5.1.0"
     "@ethersproject/strings" "^5.1.0"
 
-"@ethersproject/abstract-provider@5.1.0", "@ethersproject/abstract-provider@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/abstract-provider/download/@ethersproject/abstract-provider-5.1.0.tgz#1f24c56cda5524ef4ed3cfc562a01d6b6f8eeb0b"
-  integrity sha1-HyTFbNpVJO9O08/FYqAda2+O6ws=
-  dependencies:
-    "@ethersproject/bignumber" "^5.1.0"
-    "@ethersproject/bytes" "^5.1.0"
-    "@ethersproject/logger" "^5.1.0"
-    "@ethersproject/networks" "^5.1.0"
-    "@ethersproject/properties" "^5.1.0"
-    "@ethersproject/transactions" "^5.1.0"
-    "@ethersproject/web" "^5.1.0"
-
 "@ethersproject/abstract-provider@^5.0.8":
   version "5.0.8"
   resolved "https://registry.npmjs.org/@ethersproject/abstract-provider/-/abstract-provider-5.0.8.tgz#880793c29bfed33dff4c2b2be7ecb9ba966d52c0"
@@ -919,16 +891,18 @@
     "@ethersproject/transactions" "^5.0.9"
     "@ethersproject/web" "^5.0.12"
 
-"@ethersproject/abstract-signer@5.1.0", "@ethersproject/abstract-signer@^5.1.0":
+"@ethersproject/abstract-provider@^5.1.0":
   version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/abstract-signer/download/@ethersproject/abstract-signer-5.1.0.tgz#744c7a2d0ebe3cc0bc38294d0f53d5ca3f4e49e3"
-  integrity sha1-dEx6LQ6+PMC8OClND1PVyj9OSeM=
+  resolved "https://registry.npm.taobao.org/@ethersproject/abstract-provider/download/@ethersproject/abstract-provider-5.1.0.tgz#1f24c56cda5524ef4ed3cfc562a01d6b6f8eeb0b"
+  integrity sha1-HyTFbNpVJO9O08/FYqAda2+O6ws=
   dependencies:
-    "@ethersproject/abstract-provider" "^5.1.0"
     "@ethersproject/bignumber" "^5.1.0"
     "@ethersproject/bytes" "^5.1.0"
     "@ethersproject/logger" "^5.1.0"
+    "@ethersproject/networks" "^5.1.0"
     "@ethersproject/properties" "^5.1.0"
+    "@ethersproject/transactions" "^5.1.0"
+    "@ethersproject/web" "^5.1.0"
 
 "@ethersproject/abstract-signer@^5.0.10":
   version "5.0.11"
@@ -941,16 +915,16 @@
     "@ethersproject/logger" "^5.0.8"
     "@ethersproject/properties" "^5.0.7"
 
-"@ethersproject/address@5.1.0", "@ethersproject/address@^5.1.0":
+"@ethersproject/abstract-signer@^5.1.0":
   version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/address/download/@ethersproject/address-5.1.0.tgz#3854fd7ebcb6af7597de66f847c3345dae735b58"
-  integrity sha1-OFT9fry2r3WX3mb4R8M0Xa5zW1g=
+  resolved "https://registry.npm.taobao.org/@ethersproject/abstract-signer/download/@ethersproject/abstract-signer-5.1.0.tgz#744c7a2d0ebe3cc0bc38294d0f53d5ca3f4e49e3"
+  integrity sha1-dEx6LQ6+PMC8OClND1PVyj9OSeM=
   dependencies:
+    "@ethersproject/abstract-provider" "^5.1.0"
     "@ethersproject/bignumber" "^5.1.0"
     "@ethersproject/bytes" "^5.1.0"
-    "@ethersproject/keccak256" "^5.1.0"
     "@ethersproject/logger" "^5.1.0"
-    "@ethersproject/rlp" "^5.1.0"
+    "@ethersproject/properties" "^5.1.0"
 
 "@ethersproject/address@^5.0.4", "@ethersproject/address@^5.0.9":
   version "5.0.9"
@@ -963,12 +937,16 @@
     "@ethersproject/logger" "^5.0.8"
     "@ethersproject/rlp" "^5.0.7"
 
-"@ethersproject/base64@5.1.0", "@ethersproject/base64@^5.1.0":
+"@ethersproject/address@^5.1.0":
   version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/base64/download/@ethersproject/base64-5.1.0.tgz#27240c174d0a4e13f6eae87416fd876caf7f42b6"
-  integrity sha1-JyQMF00KThP26uh0Fv2HbK9/QrY=
+  resolved "https://registry.npm.taobao.org/@ethersproject/address/download/@ethersproject/address-5.1.0.tgz#3854fd7ebcb6af7597de66f847c3345dae735b58"
+  integrity sha1-OFT9fry2r3WX3mb4R8M0Xa5zW1g=
   dependencies:
+    "@ethersproject/bignumber" "^5.1.0"
     "@ethersproject/bytes" "^5.1.0"
+    "@ethersproject/keccak256" "^5.1.0"
+    "@ethersproject/logger" "^5.1.0"
+    "@ethersproject/rlp" "^5.1.0"
 
 "@ethersproject/base64@^5.0.7":
   version "5.0.7"
@@ -977,22 +955,20 @@
   dependencies:
     "@ethersproject/bytes" "^5.0.9"
 
-"@ethersproject/basex@5.1.0", "@ethersproject/basex@^5.1.0":
+"@ethersproject/base64@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.npm.taobao.org/@ethersproject/base64/download/@ethersproject/base64-5.1.0.tgz#27240c174d0a4e13f6eae87416fd876caf7f42b6"
+  integrity sha1-JyQMF00KThP26uh0Fv2HbK9/QrY=
+  dependencies:
+    "@ethersproject/bytes" "^5.1.0"
+
+"@ethersproject/basex@^5.1.0":
   version "5.1.0"
   resolved "https://registry.npm.taobao.org/@ethersproject/basex/download/@ethersproject/basex-5.1.0.tgz#80da2e86f9da0cb5ccd446b337364d791f6a131c"
   integrity sha1-gNouhvnaDLXM1EazNzZNeR9qExw=
   dependencies:
     "@ethersproject/bytes" "^5.1.0"
     "@ethersproject/properties" "^5.1.0"
-
-"@ethersproject/bignumber@5.1.1":
-  version "5.1.1"
-  resolved "https://registry.nlark.com/@ethersproject/bignumber/download/@ethersproject/bignumber-5.1.1.tgz#84812695253ccbc639117f7ac49ee1529b68e637"
-  integrity sha1-hIEmlSU8y8Y5EX96xJ7hUpto5jc=
-  dependencies:
-    "@ethersproject/bytes" "^5.1.0"
-    "@ethersproject/logger" "^5.1.0"
-    bn.js "^4.4.0"
 
 "@ethersproject/bignumber@^5.0.13", "@ethersproject/bignumber@^5.0.7":
   version "5.0.13"
@@ -1012,13 +988,6 @@
     "@ethersproject/logger" "^5.1.0"
     bn.js "^4.4.0"
 
-"@ethersproject/bytes@5.1.0", "@ethersproject/bytes@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/bytes/download/@ethersproject/bytes-5.1.0.tgz#55dfa9c4c21df1b1b538be3accb50fb76d5facfd"
-  integrity sha1-Vd+pxMId8bG1OL46zLUPt21frP0=
-  dependencies:
-    "@ethersproject/logger" "^5.1.0"
-
 "@ethersproject/bytes@^5.0.4", "@ethersproject/bytes@^5.0.9":
   version "5.0.9"
   resolved "https://registry.npmjs.org/@ethersproject/bytes/-/bytes-5.0.9.tgz#2748247402ad20df69f3a3e935dc7b58c0d75c08"
@@ -1026,12 +995,12 @@
   dependencies:
     "@ethersproject/logger" "^5.0.8"
 
-"@ethersproject/constants@5.1.0", "@ethersproject/constants@^5.1.0":
+"@ethersproject/bytes@^5.1.0":
   version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/constants/download/@ethersproject/constants-5.1.0.tgz#4e7da6367ea0e9be87585d8b09f3fccf384b1452"
-  integrity sha1-Tn2mNn6g6b6HWF2LCfP8zzhLFFI=
+  resolved "https://registry.npm.taobao.org/@ethersproject/bytes/download/@ethersproject/bytes-5.1.0.tgz#55dfa9c4c21df1b1b538be3accb50fb76d5facfd"
+  integrity sha1-Vd+pxMId8bG1OL46zLUPt21frP0=
   dependencies:
-    "@ethersproject/bignumber" "^5.1.0"
+    "@ethersproject/logger" "^5.1.0"
 
 "@ethersproject/constants@^5.0.4", "@ethersproject/constants@^5.0.8":
   version "5.0.8"
@@ -1040,21 +1009,12 @@
   dependencies:
     "@ethersproject/bignumber" "^5.0.13"
 
-"@ethersproject/contracts@5.1.1":
-  version "5.1.1"
-  resolved "https://registry.nlark.com/@ethersproject/contracts/download/@ethersproject/contracts-5.1.1.tgz#c66cb6d618fcbd73e20a6b808e8f768b2b781d0b"
-  integrity sha1-xmy21hj8vXPiCmuAjo92iyt4HQs=
+"@ethersproject/constants@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.npm.taobao.org/@ethersproject/constants/download/@ethersproject/constants-5.1.0.tgz#4e7da6367ea0e9be87585d8b09f3fccf384b1452"
+  integrity sha1-Tn2mNn6g6b6HWF2LCfP8zzhLFFI=
   dependencies:
-    "@ethersproject/abi" "^5.1.0"
-    "@ethersproject/abstract-provider" "^5.1.0"
-    "@ethersproject/abstract-signer" "^5.1.0"
-    "@ethersproject/address" "^5.1.0"
     "@ethersproject/bignumber" "^5.1.0"
-    "@ethersproject/bytes" "^5.1.0"
-    "@ethersproject/constants" "^5.1.0"
-    "@ethersproject/logger" "^5.1.0"
-    "@ethersproject/properties" "^5.1.0"
-    "@ethersproject/transactions" "^5.1.0"
 
 "@ethersproject/contracts@^5.1.0":
   version "5.1.0"
@@ -1072,20 +1032,6 @@
     "@ethersproject/properties" "^5.1.0"
     "@ethersproject/transactions" "^5.1.0"
 
-"@ethersproject/hash@5.1.0", "@ethersproject/hash@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/hash/download/@ethersproject/hash-5.1.0.tgz#40961d64837d57f580b7b055e0d74174876d891e"
-  integrity sha1-QJYdZIN9V/WAt7BV4NdBdIdtiR4=
-  dependencies:
-    "@ethersproject/abstract-signer" "^5.1.0"
-    "@ethersproject/address" "^5.1.0"
-    "@ethersproject/bignumber" "^5.1.0"
-    "@ethersproject/bytes" "^5.1.0"
-    "@ethersproject/keccak256" "^5.1.0"
-    "@ethersproject/logger" "^5.1.0"
-    "@ethersproject/properties" "^5.1.0"
-    "@ethersproject/strings" "^5.1.0"
-
 "@ethersproject/hash@^5.0.4":
   version "5.0.10"
   resolved "https://registry.npmjs.org/@ethersproject/hash/-/hash-5.0.10.tgz#41bf37428e8ddbc229ffd81c47af667174cb491a"
@@ -1100,50 +1046,19 @@
     "@ethersproject/properties" "^5.0.7"
     "@ethersproject/strings" "^5.0.8"
 
-"@ethersproject/hdnode@5.1.0", "@ethersproject/hdnode@^5.1.0":
+"@ethersproject/hash@^5.1.0":
   version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/hdnode/download/@ethersproject/hdnode-5.1.0.tgz#2bf5c4048935136ce83e9242e1bd570afcc0bc83"
-  integrity sha1-K/XEBIk1E2zoPpJC4b1XCvzAvIM=
-  dependencies:
-    "@ethersproject/abstract-signer" "^5.1.0"
-    "@ethersproject/basex" "^5.1.0"
-    "@ethersproject/bignumber" "^5.1.0"
-    "@ethersproject/bytes" "^5.1.0"
-    "@ethersproject/logger" "^5.1.0"
-    "@ethersproject/pbkdf2" "^5.1.0"
-    "@ethersproject/properties" "^5.1.0"
-    "@ethersproject/sha2" "^5.1.0"
-    "@ethersproject/signing-key" "^5.1.0"
-    "@ethersproject/strings" "^5.1.0"
-    "@ethersproject/transactions" "^5.1.0"
-    "@ethersproject/wordlists" "^5.1.0"
-
-"@ethersproject/json-wallets@5.1.0", "@ethersproject/json-wallets@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/json-wallets/download/@ethersproject/json-wallets-5.1.0.tgz#bba7af2e520e8aea4d3829d80520db5d2e4fb8d2"
-  integrity sha1-u6evLlIOiupNOCnYBSDbXS5PuNI=
+  resolved "https://registry.npm.taobao.org/@ethersproject/hash/download/@ethersproject/hash-5.1.0.tgz#40961d64837d57f580b7b055e0d74174876d891e"
+  integrity sha1-QJYdZIN9V/WAt7BV4NdBdIdtiR4=
   dependencies:
     "@ethersproject/abstract-signer" "^5.1.0"
     "@ethersproject/address" "^5.1.0"
+    "@ethersproject/bignumber" "^5.1.0"
     "@ethersproject/bytes" "^5.1.0"
-    "@ethersproject/hdnode" "^5.1.0"
     "@ethersproject/keccak256" "^5.1.0"
     "@ethersproject/logger" "^5.1.0"
-    "@ethersproject/pbkdf2" "^5.1.0"
     "@ethersproject/properties" "^5.1.0"
-    "@ethersproject/random" "^5.1.0"
     "@ethersproject/strings" "^5.1.0"
-    "@ethersproject/transactions" "^5.1.0"
-    aes-js "3.0.0"
-    scrypt-js "3.0.1"
-
-"@ethersproject/keccak256@5.1.0", "@ethersproject/keccak256@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/keccak256/download/@ethersproject/keccak256-5.1.0.tgz#fdcd88fb13bfef4271b225cdd8dec4d315c8e60e"
-  integrity sha1-/c2I+xO/70JxsiXN2N7E0xXI5g4=
-  dependencies:
-    "@ethersproject/bytes" "^5.1.0"
-    js-sha3 "0.5.7"
 
 "@ethersproject/keccak256@^5.0.3", "@ethersproject/keccak256@^5.0.7":
   version "5.0.7"
@@ -1153,22 +1068,23 @@
     "@ethersproject/bytes" "^5.0.9"
     js-sha3 "0.5.7"
 
-"@ethersproject/logger@5.1.0", "@ethersproject/logger@^5.1.0":
+"@ethersproject/keccak256@^5.1.0":
   version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/logger/download/@ethersproject/logger-5.1.0.tgz#4cdeeefac029373349d5818f39c31b82cc6d9bbf"
-  integrity sha1-TN7u+sApNzNJ1YGPOcMbgsxtm78=
+  resolved "https://registry.npm.taobao.org/@ethersproject/keccak256/download/@ethersproject/keccak256-5.1.0.tgz#fdcd88fb13bfef4271b225cdd8dec4d315c8e60e"
+  integrity sha1-/c2I+xO/70JxsiXN2N7E0xXI5g4=
+  dependencies:
+    "@ethersproject/bytes" "^5.1.0"
+    js-sha3 "0.5.7"
 
 "@ethersproject/logger@^5.0.5", "@ethersproject/logger@^5.0.8":
   version "5.0.8"
   resolved "https://registry.npmjs.org/@ethersproject/logger/-/logger-5.0.8.tgz#135c1903d35c878265f3cbf2b287042c4c20d5d4"
   integrity sha512-SkJCTaVTnaZ3/ieLF5pVftxGEFX56pTH+f2Slrpv7cU0TNpUZNib84QQdukd++sWUp/S7j5t5NW+WegbXd4U/A==
 
-"@ethersproject/networks@5.1.0", "@ethersproject/networks@^5.1.0":
+"@ethersproject/logger@^5.1.0":
   version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/networks/download/@ethersproject/networks-5.1.0.tgz#f537290cb05aa6dc5e81e910926c04cfd5814bca"
-  integrity sha1-9TcpDLBaptxegekQkmwEz9WBS8o=
-  dependencies:
-    "@ethersproject/logger" "^5.1.0"
+  resolved "https://registry.npm.taobao.org/@ethersproject/logger/download/@ethersproject/logger-5.1.0.tgz#4cdeeefac029373349d5818f39c31b82cc6d9bbf"
+  integrity sha1-TN7u+sApNzNJ1YGPOcMbgsxtm78=
 
 "@ethersproject/networks@^5.0.7":
   version "5.0.7"
@@ -1177,18 +1093,10 @@
   dependencies:
     "@ethersproject/logger" "^5.0.8"
 
-"@ethersproject/pbkdf2@5.1.0", "@ethersproject/pbkdf2@^5.1.0":
+"@ethersproject/networks@^5.1.0":
   version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/pbkdf2/download/@ethersproject/pbkdf2-5.1.0.tgz#6b740a85dc780e879338af74856ca2c0d3b24d19"
-  integrity sha1-a3QKhdx4DoeTOK90hWyiwNOyTRk=
-  dependencies:
-    "@ethersproject/bytes" "^5.1.0"
-    "@ethersproject/sha2" "^5.1.0"
-
-"@ethersproject/properties@5.1.0", "@ethersproject/properties@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/properties/download/@ethersproject/properties-5.1.0.tgz#9484bd6def16595fc6e4bdc26f29dff4d3f6ac42"
-  integrity sha1-lIS9be8WWV/G5L3Cbynf9NP2rEI=
+  resolved "https://registry.npm.taobao.org/@ethersproject/networks/download/@ethersproject/networks-5.1.0.tgz#f537290cb05aa6dc5e81e910926c04cfd5814bca"
+  integrity sha1-9TcpDLBaptxegekQkmwEz9WBS8o=
   dependencies:
     "@ethersproject/logger" "^5.1.0"
 
@@ -1199,30 +1107,12 @@
   dependencies:
     "@ethersproject/logger" "^5.0.8"
 
-"@ethersproject/providers@5.1.2":
-  version "5.1.2"
-  resolved "https://registry.nlark.com/@ethersproject/providers/download/@ethersproject/providers-5.1.2.tgz#4e4459698903f911402fe91aa7544eb07f3921ed"
-  integrity sha1-TkRZaYkD+RFAL+kap1ROsH85Ie0=
+"@ethersproject/properties@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.npm.taobao.org/@ethersproject/properties/download/@ethersproject/properties-5.1.0.tgz#9484bd6def16595fc6e4bdc26f29dff4d3f6ac42"
+  integrity sha1-lIS9be8WWV/G5L3Cbynf9NP2rEI=
   dependencies:
-    "@ethersproject/abstract-provider" "^5.1.0"
-    "@ethersproject/abstract-signer" "^5.1.0"
-    "@ethersproject/address" "^5.1.0"
-    "@ethersproject/basex" "^5.1.0"
-    "@ethersproject/bignumber" "^5.1.0"
-    "@ethersproject/bytes" "^5.1.0"
-    "@ethersproject/constants" "^5.1.0"
-    "@ethersproject/hash" "^5.1.0"
     "@ethersproject/logger" "^5.1.0"
-    "@ethersproject/networks" "^5.1.0"
-    "@ethersproject/properties" "^5.1.0"
-    "@ethersproject/random" "^5.1.0"
-    "@ethersproject/rlp" "^5.1.0"
-    "@ethersproject/sha2" "^5.1.0"
-    "@ethersproject/strings" "^5.1.0"
-    "@ethersproject/transactions" "^5.1.0"
-    "@ethersproject/web" "^5.1.0"
-    bech32 "1.1.4"
-    ws "7.2.3"
 
 "@ethersproject/providers@^5.1.0":
   version "5.1.0"
@@ -1249,18 +1139,10 @@
     bech32 "1.1.4"
     ws "7.2.3"
 
-"@ethersproject/random@5.1.0", "@ethersproject/random@^5.1.0":
+"@ethersproject/random@^5.1.0":
   version "5.1.0"
   resolved "https://registry.npm.taobao.org/@ethersproject/random/download/@ethersproject/random-5.1.0.tgz#0bdff2554df03ebc5f75689614f2d58ea0d9a71f"
   integrity sha1-C9/yVU3wPrxfdWiWFPLVjqDZpx8=
-  dependencies:
-    "@ethersproject/bytes" "^5.1.0"
-    "@ethersproject/logger" "^5.1.0"
-
-"@ethersproject/rlp@5.1.0", "@ethersproject/rlp@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/rlp/download/@ethersproject/rlp-5.1.0.tgz#700f4f071c27fa298d3c1d637485fefe919dd084"
-  integrity sha1-cA9PBxwn+imNPB1jdIX+/pGd0IQ=
   dependencies:
     "@ethersproject/bytes" "^5.1.0"
     "@ethersproject/logger" "^5.1.0"
@@ -1273,7 +1155,15 @@
     "@ethersproject/bytes" "^5.0.9"
     "@ethersproject/logger" "^5.0.8"
 
-"@ethersproject/sha2@5.1.0", "@ethersproject/sha2@^5.1.0":
+"@ethersproject/rlp@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.npm.taobao.org/@ethersproject/rlp/download/@ethersproject/rlp-5.1.0.tgz#700f4f071c27fa298d3c1d637485fefe919dd084"
+  integrity sha1-cA9PBxwn+imNPB1jdIX+/pGd0IQ=
+  dependencies:
+    "@ethersproject/bytes" "^5.1.0"
+    "@ethersproject/logger" "^5.1.0"
+
+"@ethersproject/sha2@^5.1.0":
   version "5.1.0"
   resolved "https://registry.npm.taobao.org/@ethersproject/sha2/download/@ethersproject/sha2-5.1.0.tgz#6ca42d1a26884b3e32ffa943fe6494af7211506c"
   integrity sha1-bKQtGiaISz4y/6lD/mSUr3IRUGw=
@@ -1281,17 +1171,6 @@
     "@ethersproject/bytes" "^5.1.0"
     "@ethersproject/logger" "^5.1.0"
     hash.js "1.1.3"
-
-"@ethersproject/signing-key@5.1.0", "@ethersproject/signing-key@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/signing-key/download/@ethersproject/signing-key-5.1.0.tgz#6eddfbddb6826b597b9650e01acf817bf8991b9c"
-  integrity sha1-bt373baCa1l7llDgGs+Be/iZG5w=
-  dependencies:
-    "@ethersproject/bytes" "^5.1.0"
-    "@ethersproject/logger" "^5.1.0"
-    "@ethersproject/properties" "^5.1.0"
-    bn.js "^4.4.0"
-    elliptic "6.5.4"
 
 "@ethersproject/signing-key@^5.0.8":
   version "5.0.8"
@@ -1303,7 +1182,18 @@
     "@ethersproject/properties" "^5.0.7"
     elliptic "6.5.3"
 
-"@ethersproject/solidity@5.1.0", "@ethersproject/solidity@^5.1.0":
+"@ethersproject/signing-key@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.npm.taobao.org/@ethersproject/signing-key/download/@ethersproject/signing-key-5.1.0.tgz#6eddfbddb6826b597b9650e01acf817bf8991b9c"
+  integrity sha1-bt373baCa1l7llDgGs+Be/iZG5w=
+  dependencies:
+    "@ethersproject/bytes" "^5.1.0"
+    "@ethersproject/logger" "^5.1.0"
+    "@ethersproject/properties" "^5.1.0"
+    bn.js "^4.4.0"
+    elliptic "6.5.4"
+
+"@ethersproject/solidity@^5.1.0":
   version "5.1.0"
   resolved "https://registry.npm.taobao.org/@ethersproject/solidity/download/@ethersproject/solidity-5.1.0.tgz#095a9c75244edccb26c452c155736d363399b954"
   integrity sha1-CVqcdSRO3MsmxFLBVXNtNjOZuVQ=
@@ -1314,15 +1204,6 @@
     "@ethersproject/sha2" "^5.1.0"
     "@ethersproject/strings" "^5.1.0"
 
-"@ethersproject/strings@5.1.0", "@ethersproject/strings@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/strings/download/@ethersproject/strings-5.1.0.tgz#0f95a56c3c8c9d5510a06c241d818779750e2da5"
-  integrity sha1-D5WlbDyMnVUQoGwkHYGHeXUOLaU=
-  dependencies:
-    "@ethersproject/bytes" "^5.1.0"
-    "@ethersproject/constants" "^5.1.0"
-    "@ethersproject/logger" "^5.1.0"
-
 "@ethersproject/strings@^5.0.4", "@ethersproject/strings@^5.0.8":
   version "5.0.8"
   resolved "https://registry.npmjs.org/@ethersproject/strings/-/strings-5.0.8.tgz#11a1b0ed1e8417408693789839f0b5f4e323c0c9"
@@ -1332,20 +1213,14 @@
     "@ethersproject/constants" "^5.0.8"
     "@ethersproject/logger" "^5.0.8"
 
-"@ethersproject/transactions@5.1.1":
-  version "5.1.1"
-  resolved "https://registry.nlark.com/@ethersproject/transactions/download/@ethersproject/transactions-5.1.1.tgz#5a6bbb25fb062c3cc75eb0db12faefcdd3870813"
-  integrity sha1-Wmu7JfsGLDzHXrDbEvrvzdOHCBM=
+"@ethersproject/strings@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.npm.taobao.org/@ethersproject/strings/download/@ethersproject/strings-5.1.0.tgz#0f95a56c3c8c9d5510a06c241d818779750e2da5"
+  integrity sha1-D5WlbDyMnVUQoGwkHYGHeXUOLaU=
   dependencies:
-    "@ethersproject/address" "^5.1.0"
-    "@ethersproject/bignumber" "^5.1.0"
     "@ethersproject/bytes" "^5.1.0"
     "@ethersproject/constants" "^5.1.0"
-    "@ethersproject/keccak256" "^5.1.0"
     "@ethersproject/logger" "^5.1.0"
-    "@ethersproject/properties" "^5.1.0"
-    "@ethersproject/rlp" "^5.1.0"
-    "@ethersproject/signing-key" "^5.1.0"
 
 "@ethersproject/transactions@^5.0.0-beta.135", "@ethersproject/transactions@^5.0.9":
   version "5.0.9"
@@ -1377,47 +1252,6 @@
     "@ethersproject/rlp" "^5.1.0"
     "@ethersproject/signing-key" "^5.1.0"
 
-"@ethersproject/units@5.1.0":
-  version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/units/download/@ethersproject/units-5.1.0.tgz#b6ab3430ebc22adc3cb4839516496f167bee3ad5"
-  integrity sha1-tqs0MOvCKtw8tIOVFklvFnvuOtU=
-  dependencies:
-    "@ethersproject/bignumber" "^5.1.0"
-    "@ethersproject/constants" "^5.1.0"
-    "@ethersproject/logger" "^5.1.0"
-
-"@ethersproject/wallet@5.1.0":
-  version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/wallet/download/@ethersproject/wallet-5.1.0.tgz#134c5816eaeaa586beae9f9ff67891104a2c9a15"
-  integrity sha1-E0xYFurqpYa+rp+f9niREEosmhU=
-  dependencies:
-    "@ethersproject/abstract-provider" "^5.1.0"
-    "@ethersproject/abstract-signer" "^5.1.0"
-    "@ethersproject/address" "^5.1.0"
-    "@ethersproject/bignumber" "^5.1.0"
-    "@ethersproject/bytes" "^5.1.0"
-    "@ethersproject/hash" "^5.1.0"
-    "@ethersproject/hdnode" "^5.1.0"
-    "@ethersproject/json-wallets" "^5.1.0"
-    "@ethersproject/keccak256" "^5.1.0"
-    "@ethersproject/logger" "^5.1.0"
-    "@ethersproject/properties" "^5.1.0"
-    "@ethersproject/random" "^5.1.0"
-    "@ethersproject/signing-key" "^5.1.0"
-    "@ethersproject/transactions" "^5.1.0"
-    "@ethersproject/wordlists" "^5.1.0"
-
-"@ethersproject/web@5.1.0", "@ethersproject/web@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/web/download/@ethersproject/web-5.1.0.tgz#ed56bbe4e3d9a8ffe3b2ed882da5c62d3551381b"
-  integrity sha1-7Va75OPZqP/jsu2ILaXGLTVROBs=
-  dependencies:
-    "@ethersproject/base64" "^5.1.0"
-    "@ethersproject/bytes" "^5.1.0"
-    "@ethersproject/logger" "^5.1.0"
-    "@ethersproject/properties" "^5.1.0"
-    "@ethersproject/strings" "^5.1.0"
-
 "@ethersproject/web@^5.0.12":
   version "5.0.12"
   resolved "https://registry.npmjs.org/@ethersproject/web/-/web-5.0.12.tgz#f123397c107f863c31fce5f31a97c66ec155e755"
@@ -1429,13 +1263,13 @@
     "@ethersproject/properties" "^5.0.7"
     "@ethersproject/strings" "^5.0.8"
 
-"@ethersproject/wordlists@5.1.0", "@ethersproject/wordlists@^5.1.0":
+"@ethersproject/web@^5.1.0":
   version "5.1.0"
-  resolved "https://registry.npm.taobao.org/@ethersproject/wordlists/download/@ethersproject/wordlists-5.1.0.tgz#54eb9ef3a00babbff90ffe124e19c89e07e6aace"
-  integrity sha1-VOue86ALq7/5D/4SThnIngfmqs4=
+  resolved "https://registry.npm.taobao.org/@ethersproject/web/download/@ethersproject/web-5.1.0.tgz#ed56bbe4e3d9a8ffe3b2ed882da5c62d3551381b"
+  integrity sha1-7Va75OPZqP/jsu2ILaXGLTVROBs=
   dependencies:
+    "@ethersproject/base64" "^5.1.0"
     "@ethersproject/bytes" "^5.1.0"
-    "@ethersproject/hash" "^5.1.0"
     "@ethersproject/logger" "^5.1.0"
     "@ethersproject/properties" "^5.1.0"
     "@ethersproject/strings" "^5.1.0"
@@ -1934,6 +1768,13 @@ aws4@^1.8.0:
   resolved "https://registry.npmjs.org/aws4/-/aws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
   integrity sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
 
+axios@^0.19.0:
+  version "0.19.2"
+  resolved "https://registry.npm.taobao.org/axios/download/axios-0.19.2.tgz?cache=0&sync_timestamp=1608609324963&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Faxios%2Fdownload%2Faxios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
+  integrity sha1-PqNsXYgY0NX4qKl6bTa4bNwAyyc=
+  dependencies:
+    follow-redirects "1.5.10"
+
 axios@^0.21.1:
   version "0.21.1"
   resolved "https://registry.npm.taobao.org/axios/download/axios-0.21.1.tgz?cache=0&sync_timestamp=1608609324963&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Faxios%2Fdownload%2Faxios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
@@ -2214,11 +2055,6 @@ bs58check@^2.1.2:
     bs58 "^4.0.0"
     create-hash "^1.1.0"
     safe-buffer "^5.1.2"
-
-buffer-equal-constant-time@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npm.taobao.org/buffer-equal-constant-time/download/buffer-equal-constant-time-1.0.1.tgz#f8e71132f7ffe6e01a5c9697a4c6f3e48d5cc819"
-  integrity sha1-+OcRMvf/5uAaXJaXpMbz5I1cyBk=
 
 buffer-from@^1.0.0:
   version "1.1.1"
@@ -2720,6 +2556,13 @@ debug@2.6.9, debug@^2.2.0, debug@^2.3.3:
   dependencies:
     ms "2.0.0"
 
+debug@=3.1.0:
+  version "3.1.0"
+  resolved "https://registry.npm.taobao.org/debug/download/debug-3.1.0.tgz?cache=0&sync_timestamp=1614330710870&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdebug%2Fdownload%2Fdebug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
+  integrity sha1-W7WgZyYotkFJVmuhaBnmFRjGcmE=
+  dependencies:
+    ms "2.0.0"
+
 debug@^4.1.0:
   version "4.3.1"
   resolved "https://registry.npmjs.org/debug/-/debug-4.3.1.tgz#f0d229c505e0c6d8c49ac553d1b13dc183f6b2ee"
@@ -2895,13 +2738,6 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
 
-ecdsa-sig-formatter@1.0.11:
-  version "1.0.11"
-  resolved "https://registry.npm.taobao.org/ecdsa-sig-formatter/download/ecdsa-sig-formatter-1.0.11.tgz#ae0f0fa2d85045ef14a817daa3ce9acd0489e5bf"
-  integrity sha1-rg8PothQRe8UqBfao86azQSJ5b8=
-  dependencies:
-    safe-buffer "^5.0.1"
-
 ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.npmjs.org/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
@@ -2930,7 +2766,7 @@ elliptic@6.5.3, elliptic@^6.4.0, elliptic@^6.5.2, elliptic@^6.5.3:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.0"
 
-elliptic@6.5.4:
+elliptic@6.5.4, elliptic@^6.4.1:
   version "6.5.4"
   resolved "https://registry.npm.taobao.org/elliptic/download/elliptic-6.5.4.tgz?cache=0&sync_timestamp=1612290637117&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felliptic%2Fdownload%2Felliptic-6.5.4.tgz#da37cebd31e79a1367e941b592ed1fbebd58abbb"
   integrity sha1-2jfOvTHnmhNn6UG1ku0fvr1Yq7s=
@@ -3195,41 +3031,20 @@ ethereumjs-util@^6.0.0:
     ethjs-util "0.1.6"
     rlp "^2.2.3"
 
-ethers@^5.0.8:
-  version "5.1.4"
-  resolved "https://registry.nlark.com/ethers/download/ethers-5.1.4.tgz#8ae973705ed962f8f41dc59693704002a38dd18b"
-  integrity sha1-iulzcF7ZYvj0HcWWk3BAAqON0Ys=
+ethers@^4.0.7:
+  version "4.0.48"
+  resolved "https://registry.nlark.com/ethers/download/ethers-4.0.48.tgz#330c65b8133e112b0613156e57e92d9009d8fbbe"
+  integrity sha1-MwxluBM+ESsGExVuV+ktkAnY+74=
   dependencies:
-    "@ethersproject/abi" "5.1.2"
-    "@ethersproject/abstract-provider" "5.1.0"
-    "@ethersproject/abstract-signer" "5.1.0"
-    "@ethersproject/address" "5.1.0"
-    "@ethersproject/base64" "5.1.0"
-    "@ethersproject/basex" "5.1.0"
-    "@ethersproject/bignumber" "5.1.1"
-    "@ethersproject/bytes" "5.1.0"
-    "@ethersproject/constants" "5.1.0"
-    "@ethersproject/contracts" "5.1.1"
-    "@ethersproject/hash" "5.1.0"
-    "@ethersproject/hdnode" "5.1.0"
-    "@ethersproject/json-wallets" "5.1.0"
-    "@ethersproject/keccak256" "5.1.0"
-    "@ethersproject/logger" "5.1.0"
-    "@ethersproject/networks" "5.1.0"
-    "@ethersproject/pbkdf2" "5.1.0"
-    "@ethersproject/properties" "5.1.0"
-    "@ethersproject/providers" "5.1.2"
-    "@ethersproject/random" "5.1.0"
-    "@ethersproject/rlp" "5.1.0"
-    "@ethersproject/sha2" "5.1.0"
-    "@ethersproject/signing-key" "5.1.0"
-    "@ethersproject/solidity" "5.1.0"
-    "@ethersproject/strings" "5.1.0"
-    "@ethersproject/transactions" "5.1.1"
-    "@ethersproject/units" "5.1.0"
-    "@ethersproject/wallet" "5.1.0"
-    "@ethersproject/web" "5.1.0"
-    "@ethersproject/wordlists" "5.1.0"
+    aes-js "3.0.0"
+    bn.js "^4.4.0"
+    elliptic "6.5.3"
+    hash.js "1.1.3"
+    js-sha3 "0.5.7"
+    scrypt-js "2.0.4"
+    setimmediate "1.0.4"
+    uuid "2.0.1"
+    xmlhttprequest "1.8.0"
 
 ethjs-unit@0.1.6:
   version "0.1.6"
@@ -3482,6 +3297,13 @@ flush-write-stream@^1.0.0:
   dependencies:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
+
+follow-redirects@1.5.10:
+  version "1.5.10"
+  resolved "https://registry.nlark.com/follow-redirects/download/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
+  integrity sha1-e3qfmuov3/NnhqlP9kPtB/T/Xio=
+  dependencies:
+    debug "=3.1.0"
 
 follow-redirects@^1.10.0:
   version "1.14.1"
@@ -4385,22 +4207,6 @@ jsonfile@^4.0.0:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
-jsonwebtoken@^8.5.1:
-  version "8.5.1"
-  resolved "https://registry.npm.taobao.org/jsonwebtoken/download/jsonwebtoken-8.5.1.tgz#00e71e0b8df54c2121a1f26137df2280673bcc0d"
-  integrity sha1-AOceC431TCEhofJhN98igGc7zA0=
-  dependencies:
-    jws "^3.2.2"
-    lodash.includes "^4.3.0"
-    lodash.isboolean "^3.0.3"
-    lodash.isinteger "^4.0.4"
-    lodash.isnumber "^3.0.3"
-    lodash.isplainobject "^4.0.6"
-    lodash.isstring "^4.0.1"
-    lodash.once "^4.0.0"
-    ms "^2.1.1"
-    semver "^5.6.0"
-
 jsprim@^1.2.2:
   version "1.4.1"
   resolved "https://registry.npmjs.org/jsprim/-/jsprim-1.4.1.tgz#313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
@@ -4410,23 +4216,6 @@ jsprim@^1.2.2:
     extsprintf "1.3.0"
     json-schema "0.2.3"
     verror "1.10.0"
-
-jwa@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.npm.taobao.org/jwa/download/jwa-1.4.1.tgz#743c32985cb9e98655530d53641b66c8645b039a"
-  integrity sha1-dDwymFy56YZVUw1TZBtmyGRbA5o=
-  dependencies:
-    buffer-equal-constant-time "1.0.1"
-    ecdsa-sig-formatter "1.0.11"
-    safe-buffer "^5.0.1"
-
-jws@^3.2.2:
-  version "3.2.2"
-  resolved "https://registry.npm.taobao.org/jws/download/jws-3.2.2.tgz#001099f3639468c9414000e99995fa52fb478304"
-  integrity sha1-ABCZ82OUaMlBQADpmZX6UvtHgwQ=
-  dependencies:
-    jwa "^1.4.1"
-    safe-buffer "^5.0.1"
 
 keccak@^3.0.0:
   version "3.0.1"
@@ -4495,41 +4284,6 @@ locate-path@^5.0.0:
   integrity sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==
   dependencies:
     p-locate "^4.1.0"
-
-lodash.includes@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.npm.taobao.org/lodash.includes/download/lodash.includes-4.3.0.tgz#60bb98a87cb923c68ca1e51325483314849f553f"
-  integrity sha1-YLuYqHy5I8aMoeUTJUgzFISfVT8=
-
-lodash.isboolean@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.npm.taobao.org/lodash.isboolean/download/lodash.isboolean-3.0.3.tgz#6c2e171db2a257cd96802fd43b01b20d5f5870f6"
-  integrity sha1-bC4XHbKiV82WgC/UOwGyDV9YcPY=
-
-lodash.isinteger@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.npm.taobao.org/lodash.isinteger/download/lodash.isinteger-4.0.4.tgz#619c0af3d03f8b04c31f5882840b77b11cd68343"
-  integrity sha1-YZwK89A/iwTDH1iChAt3sRzWg0M=
-
-lodash.isnumber@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.npm.taobao.org/lodash.isnumber/download/lodash.isnumber-3.0.3.tgz#3ce76810c5928d03352301ac287317f11c0b1ffc"
-  integrity sha1-POdoEMWSjQM1IwGsKHMX8RwLH/w=
-
-lodash.isplainobject@^4.0.6:
-  version "4.0.6"
-  resolved "https://registry.npm.taobao.org/lodash.isplainobject/download/lodash.isplainobject-4.0.6.tgz#7c526a52d89b45c45cc690b88163be0497f550cb"
-  integrity sha1-fFJqUtibRcRcxpC4gWO+BJf1UMs=
-
-lodash.isstring@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.npm.taobao.org/lodash.isstring/download/lodash.isstring-4.0.1.tgz#d527dfb5456eca7cc9bb95d5daeaf88ba54a5451"
-  integrity sha1-1SfftUVuynzJu5XV2ur4i6VKVFE=
-
-lodash.once@^4.0.0:
-  version "4.1.1"
-  resolved "https://registry.npm.taobao.org/lodash.once/download/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
-  integrity sha1-DdOXEhPHxW34gJd9UEyI+0cal6w=
 
 lodash@^4.17.14, lodash@^4.17.19:
   version "4.17.20"
@@ -4792,11 +4546,6 @@ ms@2.1.2:
   version "2.1.2"
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
-
-ms@^2.1.1:
-  version "2.1.3"
-  resolved "https://registry.npm.taobao.org/ms/download/ms-2.1.3.tgz?cache=0&sync_timestamp=1607433899126&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fms%2Fdownload%2Fms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
-  integrity sha1-V0yBOM4dK1hh8LRFedut1gxmFbI=
 
 multibase@^0.7.0:
   version "0.7.0"
@@ -5653,7 +5402,12 @@ schema-utils@^2.6.5:
     ajv "^6.12.4"
     ajv-keywords "^3.5.2"
 
-scrypt-js@3.0.1, scrypt-js@^3.0.0, scrypt-js@^3.0.1:
+scrypt-js@2.0.4:
+  version "2.0.4"
+  resolved "https://registry.npm.taobao.org/scrypt-js/download/scrypt-js-2.0.4.tgz#32f8c5149f0797672e551c07e230f834b6af5f16"
+  integrity sha1-MvjFFJ8Hl2cuVRwH4jD4NLavXxY=
+
+scrypt-js@^3.0.0, scrypt-js@^3.0.1:
   version "3.0.1"
   resolved "https://registry.npmjs.org/scrypt-js/-/scrypt-js-3.0.1.tgz#d314a57c2aef69d1ad98a138a21fe9eafa9ee312"
   integrity sha512-cdwTTnqPu0Hyvf5in5asVdZocVDTNRmR7XEcJuIzMjJeSHybHl7vpB66AzwTaIg6CLSbtjcxc8fqcySfnTkccA==
@@ -5743,6 +5497,11 @@ set-value@^2.0.0, set-value@^2.0.1:
     is-extendable "^0.1.1"
     is-plain-object "^2.0.3"
     split-string "^3.0.1"
+
+setimmediate@1.0.4:
+  version "1.0.4"
+  resolved "https://registry.nlark.com/setimmediate/download/setimmediate-1.0.4.tgz#20e81de622d4a02588ce0c8da8973cbcf1d3138f"
+  integrity sha1-IOgd5iLUoCWIzgyNqJc8vPHTE48=
 
 setimmediate@^1.0.4, setimmediate@^1.0.5:
   version "1.0.5"
@@ -6167,20 +5926,19 @@ tough-cookie@~2.5.0:
     psl "^1.1.28"
     punycode "^2.1.1"
 
-tronweb@^3.2.6:
-  version "3.2.6"
-  resolved "https://registry.npm.taobao.org/tronweb/download/tronweb-3.2.6.tgz#4a9a5eed70561e4ec3cc6faee02b78831dcfaf64"
-  integrity sha1-Sppe7XBWHk7DzG+u4Ct4gx3Pr2Q=
+tronweb@^2.10.1:
+  version "2.10.2"
+  resolved "https://registry.npm.taobao.org/tronweb/download/tronweb-2.10.2.tgz#ecdb92e01023c101df5f3981638c1242a997a510"
+  integrity sha1-7NuS4BAjwQHfXzmBY4wSQqmXpRA=
   dependencies:
     "@babel/runtime" "^7.0.0"
-    axios "^0.21.1"
+    axios "^0.19.0"
     babel-runtime "^6.26.0"
     bignumber.js "^7.2.1"
-    elliptic "^6.5.3"
-    ethers "^5.0.8"
+    elliptic "^6.4.1"
+    ethers "^4.0.7"
     eventemitter3 "^3.1.0"
     injectpromise "^1.0.0"
-    jsonwebtoken "^8.5.1"
     lodash "^4.17.14"
     semver "^5.6.0"
     validator "^10.7.1"
@@ -6418,6 +6176,11 @@ utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
+
+uuid@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.nlark.com/uuid/download/uuid-2.0.1.tgz#c2a30dedb3e535d72ccf82e343941a50ba8533ac"
+  integrity sha1-wqMN7bPlNdcsz4LjQ5QaULqFM6w=
 
 uuid@3.3.2:
   version "3.3.2"
@@ -6909,6 +6672,11 @@ xhr@^2.0.4, xhr@^2.3.3:
     is-function "^1.0.1"
     parse-headers "^2.0.0"
     xtend "^4.0.0"
+
+xmlhttprequest@1.8.0:
+  version "1.8.0"
+  resolved "https://registry.npm.taobao.org/xmlhttprequest/download/xmlhttprequest-1.8.0.tgz#67fe075c5c24fef39f9d65f5f7b7fe75171968fc"
+  integrity sha1-Z/4HXFwk/vOfnWX197f+dRcZaPw=
 
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.2"
