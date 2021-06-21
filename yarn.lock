@@ -863,6 +863,21 @@
     "@ethersproject/properties" "^5.0.3"
     "@ethersproject/strings" "^5.0.4"
 
+"@ethersproject/abi@5.3.1", "@ethersproject/abi@^5.3.0":
+  version "5.3.1"
+  resolved "https://registry.nlark.com/@ethersproject/abi/download/@ethersproject/abi-5.3.1.tgz#69a1a496729d3a83521675a57cbe21f3cc27241c"
+  integrity sha1-aaGklnKdOoNSFnWlfL4h88wnJBw=
+  dependencies:
+    "@ethersproject/address" "^5.3.0"
+    "@ethersproject/bignumber" "^5.3.0"
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/constants" "^5.3.0"
+    "@ethersproject/hash" "^5.3.0"
+    "@ethersproject/keccak256" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+    "@ethersproject/properties" "^5.3.0"
+    "@ethersproject/strings" "^5.3.0"
+
 "@ethersproject/abi@^5.1.0":
   version "5.1.0"
   resolved "https://registry.npm.taobao.org/@ethersproject/abi/download/@ethersproject/abi-5.1.0.tgz#d582c9f6a8e8192778b5f2c991ce19d7b336b0c5"
@@ -877,6 +892,19 @@
     "@ethersproject/logger" "^5.1.0"
     "@ethersproject/properties" "^5.1.0"
     "@ethersproject/strings" "^5.1.0"
+
+"@ethersproject/abstract-provider@5.3.0", "@ethersproject/abstract-provider@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/abstract-provider/download/@ethersproject/abstract-provider-5.3.0.tgz?cache=0&sync_timestamp=1622517904957&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40ethersproject%2Fabstract-provider%2Fdownload%2F%40ethersproject%2Fabstract-provider-5.3.0.tgz#f4c0ae4a4cef9f204d7781de805fd44b72756c81"
+  integrity sha1-9MCuSkzvnyBNd4HegF/US3J1bIE=
+  dependencies:
+    "@ethersproject/bignumber" "^5.3.0"
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+    "@ethersproject/networks" "^5.3.0"
+    "@ethersproject/properties" "^5.3.0"
+    "@ethersproject/transactions" "^5.3.0"
+    "@ethersproject/web" "^5.3.0"
 
 "@ethersproject/abstract-provider@^5.0.8":
   version "5.0.8"
@@ -904,6 +932,17 @@
     "@ethersproject/transactions" "^5.1.0"
     "@ethersproject/web" "^5.1.0"
 
+"@ethersproject/abstract-signer@5.3.0", "@ethersproject/abstract-signer@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/abstract-signer/download/@ethersproject/abstract-signer-5.3.0.tgz#05172b653e15b535ed5854ef5f6a72f4b441052d"
+  integrity sha1-BRcrZT4VtTXtWFTvX2py9LRBBS0=
+  dependencies:
+    "@ethersproject/abstract-provider" "^5.3.0"
+    "@ethersproject/bignumber" "^5.3.0"
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+    "@ethersproject/properties" "^5.3.0"
+
 "@ethersproject/abstract-signer@^5.0.10":
   version "5.0.11"
   resolved "https://registry.npmjs.org/@ethersproject/abstract-signer/-/abstract-signer-5.0.11.tgz#675da9ec168905c60ee79a6da95f7157ca956f46"
@@ -925,6 +964,17 @@
     "@ethersproject/bytes" "^5.1.0"
     "@ethersproject/logger" "^5.1.0"
     "@ethersproject/properties" "^5.1.0"
+
+"@ethersproject/address@5.3.0", "@ethersproject/address@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/address/download/@ethersproject/address-5.3.0.tgz#e53b69eacebf332e8175de814c5e6507d6932518"
+  integrity sha1-5Ttp6s6/My6Bdd6BTF5lB9aTJRg=
+  dependencies:
+    "@ethersproject/bignumber" "^5.3.0"
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/keccak256" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+    "@ethersproject/rlp" "^5.3.0"
 
 "@ethersproject/address@^5.0.4", "@ethersproject/address@^5.0.9":
   version "5.0.9"
@@ -948,6 +998,13 @@
     "@ethersproject/logger" "^5.1.0"
     "@ethersproject/rlp" "^5.1.0"
 
+"@ethersproject/base64@5.3.0", "@ethersproject/base64@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/base64/download/@ethersproject/base64-5.3.0.tgz#b831fb35418b42ad24d943c557259062b8640824"
+  integrity sha1-uDH7NUGLQq0k2UPFVyWQYrhkCCQ=
+  dependencies:
+    "@ethersproject/bytes" "^5.3.0"
+
 "@ethersproject/base64@^5.0.7":
   version "5.0.7"
   resolved "https://registry.npmjs.org/@ethersproject/base64/-/base64-5.0.7.tgz#d5da73699b4a33dc92bd8e5056ad1880b262057d"
@@ -962,6 +1019,14 @@
   dependencies:
     "@ethersproject/bytes" "^5.1.0"
 
+"@ethersproject/basex@5.3.0", "@ethersproject/basex@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/basex/download/@ethersproject/basex-5.3.0.tgz#02dea3ab8559ae625c6d548bc11773432255c916"
+  integrity sha1-At6jq4VZrmJcbVSLwRdzQyJVyRY=
+  dependencies:
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/properties" "^5.3.0"
+
 "@ethersproject/basex@^5.1.0":
   version "5.1.0"
   resolved "https://registry.npm.taobao.org/@ethersproject/basex/download/@ethersproject/basex-5.1.0.tgz#80da2e86f9da0cb5ccd446b337364d791f6a131c"
@@ -969,6 +1034,15 @@
   dependencies:
     "@ethersproject/bytes" "^5.1.0"
     "@ethersproject/properties" "^5.1.0"
+
+"@ethersproject/bignumber@5.3.0", "@ethersproject/bignumber@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/bignumber/download/@ethersproject/bignumber-5.3.0.tgz#74ab2ec9c3bda4e344920565720a6ee9c794e9db"
+  integrity sha1-dKsuycO9pONEkgVlcgpu6ceU6ds=
+  dependencies:
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+    bn.js "^4.11.9"
 
 "@ethersproject/bignumber@^5.0.13", "@ethersproject/bignumber@^5.0.7":
   version "5.0.13"
@@ -988,6 +1062,13 @@
     "@ethersproject/logger" "^5.1.0"
     bn.js "^4.4.0"
 
+"@ethersproject/bytes@5.3.0", "@ethersproject/bytes@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/bytes/download/@ethersproject/bytes-5.3.0.tgz#473e0da7f831d535b2002be05e6f4ca3729a1bc9"
+  integrity sha1-Rz4Np/gx1TWyACvgXm9Mo3KaG8k=
+  dependencies:
+    "@ethersproject/logger" "^5.3.0"
+
 "@ethersproject/bytes@^5.0.4", "@ethersproject/bytes@^5.0.9":
   version "5.0.9"
   resolved "https://registry.npmjs.org/@ethersproject/bytes/-/bytes-5.0.9.tgz#2748247402ad20df69f3a3e935dc7b58c0d75c08"
@@ -1002,6 +1083,13 @@
   dependencies:
     "@ethersproject/logger" "^5.1.0"
 
+"@ethersproject/constants@5.3.0", "@ethersproject/constants@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/constants/download/@ethersproject/constants-5.3.0.tgz#a5d6d86c0eec2c64c3024479609493b9afb3fc77"
+  integrity sha1-pdbYbA7sLGTDAkR5YJSTua+z/Hc=
+  dependencies:
+    "@ethersproject/bignumber" "^5.3.0"
+
 "@ethersproject/constants@^5.0.4", "@ethersproject/constants@^5.0.8":
   version "5.0.8"
   resolved "https://registry.npmjs.org/@ethersproject/constants/-/constants-5.0.8.tgz#50f2e23f48c0d1d0de3759ea79b68ec3e06435a1"
@@ -1015,6 +1103,22 @@
   integrity sha1-Tn2mNn6g6b6HWF2LCfP8zzhLFFI=
   dependencies:
     "@ethersproject/bignumber" "^5.1.0"
+
+"@ethersproject/contracts@5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/contracts/download/@ethersproject/contracts-5.3.0.tgz#ad699a3abaae30bfb6422cf31813a663b2d4099c"
+  integrity sha1-rWmaOrquML+2QizzGBOmY7LUCZw=
+  dependencies:
+    "@ethersproject/abi" "^5.3.0"
+    "@ethersproject/abstract-provider" "^5.3.0"
+    "@ethersproject/abstract-signer" "^5.3.0"
+    "@ethersproject/address" "^5.3.0"
+    "@ethersproject/bignumber" "^5.3.0"
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/constants" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+    "@ethersproject/properties" "^5.3.0"
+    "@ethersproject/transactions" "^5.3.0"
 
 "@ethersproject/contracts@^5.1.0":
   version "5.1.0"
@@ -1031,6 +1135,20 @@
     "@ethersproject/logger" "^5.1.0"
     "@ethersproject/properties" "^5.1.0"
     "@ethersproject/transactions" "^5.1.0"
+
+"@ethersproject/hash@5.3.0", "@ethersproject/hash@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/hash/download/@ethersproject/hash-5.3.0.tgz#f65e3bf3db3282df4da676db6cfa049535dd3643"
+  integrity sha1-9l4789sygt9NpnbbbPoElTXdNkM=
+  dependencies:
+    "@ethersproject/abstract-signer" "^5.3.0"
+    "@ethersproject/address" "^5.3.0"
+    "@ethersproject/bignumber" "^5.3.0"
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/keccak256" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+    "@ethersproject/properties" "^5.3.0"
+    "@ethersproject/strings" "^5.3.0"
 
 "@ethersproject/hash@^5.0.4":
   version "5.0.10"
@@ -1060,6 +1178,51 @@
     "@ethersproject/properties" "^5.1.0"
     "@ethersproject/strings" "^5.1.0"
 
+"@ethersproject/hdnode@5.3.0", "@ethersproject/hdnode@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/hdnode/download/@ethersproject/hdnode-5.3.0.tgz?cache=0&sync_timestamp=1622517905129&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40ethersproject%2Fhdnode%2Fdownload%2F%40ethersproject%2Fhdnode-5.3.0.tgz#26fed65ffd5c25463fddff13f5fb4e5617553c94"
+  integrity sha1-Jv7WX/1cJUY/3f8T9ftOVhdVPJQ=
+  dependencies:
+    "@ethersproject/abstract-signer" "^5.3.0"
+    "@ethersproject/basex" "^5.3.0"
+    "@ethersproject/bignumber" "^5.3.0"
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+    "@ethersproject/pbkdf2" "^5.3.0"
+    "@ethersproject/properties" "^5.3.0"
+    "@ethersproject/sha2" "^5.3.0"
+    "@ethersproject/signing-key" "^5.3.0"
+    "@ethersproject/strings" "^5.3.0"
+    "@ethersproject/transactions" "^5.3.0"
+    "@ethersproject/wordlists" "^5.3.0"
+
+"@ethersproject/json-wallets@5.3.0", "@ethersproject/json-wallets@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/json-wallets/download/@ethersproject/json-wallets-5.3.0.tgz?cache=0&sync_timestamp=1622517905731&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40ethersproject%2Fjson-wallets%2Fdownload%2F%40ethersproject%2Fjson-wallets-5.3.0.tgz#7b1a5ff500c12aa8597ae82c8939837b0449376e"
+  integrity sha1-expf9QDBKqhZeugsiTmDewRJN24=
+  dependencies:
+    "@ethersproject/abstract-signer" "^5.3.0"
+    "@ethersproject/address" "^5.3.0"
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/hdnode" "^5.3.0"
+    "@ethersproject/keccak256" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+    "@ethersproject/pbkdf2" "^5.3.0"
+    "@ethersproject/properties" "^5.3.0"
+    "@ethersproject/random" "^5.3.0"
+    "@ethersproject/strings" "^5.3.0"
+    "@ethersproject/transactions" "^5.3.0"
+    aes-js "3.0.0"
+    scrypt-js "3.0.1"
+
+"@ethersproject/keccak256@5.3.0", "@ethersproject/keccak256@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/keccak256/download/@ethersproject/keccak256-5.3.0.tgz#fb5cd36bdfd6fa02e2ea84964078a9fc6bd731be"
+  integrity sha1-+1zTa9/W+gLi6oSWQHip/GvXMb4=
+  dependencies:
+    "@ethersproject/bytes" "^5.3.0"
+    js-sha3 "0.5.7"
+
 "@ethersproject/keccak256@^5.0.3", "@ethersproject/keccak256@^5.0.7":
   version "5.0.7"
   resolved "https://registry.npmjs.org/@ethersproject/keccak256/-/keccak256-5.0.7.tgz#2eedb5e4c160fcdf0079660f8ae362d7855ea943"
@@ -1076,6 +1239,11 @@
     "@ethersproject/bytes" "^5.1.0"
     js-sha3 "0.5.7"
 
+"@ethersproject/logger@5.3.0", "@ethersproject/logger@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/logger/download/@ethersproject/logger-5.3.0.tgz#7a69fa1d4ca0d4b7138da1627eb152f763d84dd0"
+  integrity sha1-emn6HUyg1LcTjaFifrFS92PYTdA=
+
 "@ethersproject/logger@^5.0.5", "@ethersproject/logger@^5.0.8":
   version "5.0.8"
   resolved "https://registry.npmjs.org/@ethersproject/logger/-/logger-5.0.8.tgz#135c1903d35c878265f3cbf2b287042c4c20d5d4"
@@ -1085,6 +1253,13 @@
   version "5.1.0"
   resolved "https://registry.npm.taobao.org/@ethersproject/logger/download/@ethersproject/logger-5.1.0.tgz#4cdeeefac029373349d5818f39c31b82cc6d9bbf"
   integrity sha1-TN7u+sApNzNJ1YGPOcMbgsxtm78=
+
+"@ethersproject/networks@5.3.1", "@ethersproject/networks@^5.3.0":
+  version "5.3.1"
+  resolved "https://registry.nlark.com/@ethersproject/networks/download/@ethersproject/networks-5.3.1.tgz#78fe08324cee289ce239acf8c746121934b2ef61"
+  integrity sha1-eP4IMkzuKJziOaz4x0YSGTSy72E=
+  dependencies:
+    "@ethersproject/logger" "^5.3.0"
 
 "@ethersproject/networks@^5.0.7":
   version "5.0.7"
@@ -1100,6 +1275,21 @@
   dependencies:
     "@ethersproject/logger" "^5.1.0"
 
+"@ethersproject/pbkdf2@5.3.0", "@ethersproject/pbkdf2@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/pbkdf2/download/@ethersproject/pbkdf2-5.3.0.tgz#8adbb41489c3c9f319cc44bc7d3e6095fd468dc8"
+  integrity sha1-itu0FInDyfMZzES8fT5glf1Gjcg=
+  dependencies:
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/sha2" "^5.3.0"
+
+"@ethersproject/properties@5.3.0", "@ethersproject/properties@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/properties/download/@ethersproject/properties-5.3.0.tgz#feef4c4babeb7c10a6b3449575016f4ad2c092b2"
+  integrity sha1-/u9MS6vrfBCms0SVdQFvStLAkrI=
+  dependencies:
+    "@ethersproject/logger" "^5.3.0"
+
 "@ethersproject/properties@^5.0.3", "@ethersproject/properties@^5.0.7":
   version "5.0.7"
   resolved "https://registry.npmjs.org/@ethersproject/properties/-/properties-5.0.7.tgz#951d11ba592ff90bbe8ec34c5a03a5157e3b3360"
@@ -1113,6 +1303,31 @@
   integrity sha1-lIS9be8WWV/G5L3Cbynf9NP2rEI=
   dependencies:
     "@ethersproject/logger" "^5.1.0"
+
+"@ethersproject/providers@5.3.1":
+  version "5.3.1"
+  resolved "https://registry.nlark.com/@ethersproject/providers/download/@ethersproject/providers-5.3.1.tgz?cache=0&sync_timestamp=1623383128904&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40ethersproject%2Fproviders%2Fdownload%2F%40ethersproject%2Fproviders-5.3.1.tgz#a12c6370e8cbc0968c9744641b8ef90b0dd5ec2b"
+  integrity sha1-oSxjcOjLwJaMl0RkG475Cw3V7Cs=
+  dependencies:
+    "@ethersproject/abstract-provider" "^5.3.0"
+    "@ethersproject/abstract-signer" "^5.3.0"
+    "@ethersproject/address" "^5.3.0"
+    "@ethersproject/basex" "^5.3.0"
+    "@ethersproject/bignumber" "^5.3.0"
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/constants" "^5.3.0"
+    "@ethersproject/hash" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+    "@ethersproject/networks" "^5.3.0"
+    "@ethersproject/properties" "^5.3.0"
+    "@ethersproject/random" "^5.3.0"
+    "@ethersproject/rlp" "^5.3.0"
+    "@ethersproject/sha2" "^5.3.0"
+    "@ethersproject/strings" "^5.3.0"
+    "@ethersproject/transactions" "^5.3.0"
+    "@ethersproject/web" "^5.3.0"
+    bech32 "1.1.4"
+    ws "7.4.6"
 
 "@ethersproject/providers@^5.1.0":
   version "5.1.0"
@@ -1139,6 +1354,14 @@
     bech32 "1.1.4"
     ws "7.2.3"
 
+"@ethersproject/random@5.3.0", "@ethersproject/random@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/random/download/@ethersproject/random-5.3.0.tgz#7c46bf36e50cb0d0550bc8c666af8e1d4496dc1a"
+  integrity sha1-fEa/NuUMsNBVC8jGZq+OHUSW3Bo=
+  dependencies:
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+
 "@ethersproject/random@^5.1.0":
   version "5.1.0"
   resolved "https://registry.npm.taobao.org/@ethersproject/random/download/@ethersproject/random-5.1.0.tgz#0bdff2554df03ebc5f75689614f2d58ea0d9a71f"
@@ -1146,6 +1369,14 @@
   dependencies:
     "@ethersproject/bytes" "^5.1.0"
     "@ethersproject/logger" "^5.1.0"
+
+"@ethersproject/rlp@5.3.0", "@ethersproject/rlp@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/rlp/download/@ethersproject/rlp-5.3.0.tgz#7cb93a7b5dfa69163894153c9d4b0d936f333188"
+  integrity sha1-fLk6e136aRY4lBU8nUsNk28zMYg=
+  dependencies:
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
 
 "@ethersproject/rlp@^5.0.7":
   version "5.0.7"
@@ -1163,6 +1394,15 @@
     "@ethersproject/bytes" "^5.1.0"
     "@ethersproject/logger" "^5.1.0"
 
+"@ethersproject/sha2@5.3.0", "@ethersproject/sha2@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/sha2/download/@ethersproject/sha2-5.3.0.tgz#209f9a1649f7d2452dcd5e5b94af43b7f3f42366"
+  integrity sha1-IJ+aFkn30kUtzV5blK9Dt/P0I2Y=
+  dependencies:
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+    hash.js "1.1.7"
+
 "@ethersproject/sha2@^5.1.0":
   version "5.1.0"
   resolved "https://registry.npm.taobao.org/@ethersproject/sha2/download/@ethersproject/sha2-5.1.0.tgz#6ca42d1a26884b3e32ffa943fe6494af7211506c"
@@ -1171,6 +1411,18 @@
     "@ethersproject/bytes" "^5.1.0"
     "@ethersproject/logger" "^5.1.0"
     hash.js "1.1.3"
+
+"@ethersproject/signing-key@5.3.0", "@ethersproject/signing-key@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/signing-key/download/@ethersproject/signing-key-5.3.0.tgz?cache=0&sync_timestamp=1622517904077&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40ethersproject%2Fsigning-key%2Fdownload%2F%40ethersproject%2Fsigning-key-5.3.0.tgz#a96c88f8173e1abedfa35de32d3e5db7c48e5259"
+  integrity sha1-qWyI+Bc+Gr7fo13jLT5dt8SOUlk=
+  dependencies:
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+    "@ethersproject/properties" "^5.3.0"
+    bn.js "^4.11.9"
+    elliptic "6.5.4"
+    hash.js "1.1.7"
 
 "@ethersproject/signing-key@^5.0.8":
   version "5.0.8"
@@ -1193,6 +1445,17 @@
     bn.js "^4.4.0"
     elliptic "6.5.4"
 
+"@ethersproject/solidity@5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/solidity/download/@ethersproject/solidity-5.3.0.tgz?cache=0&sync_timestamp=1622517904262&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40ethersproject%2Fsolidity%2Fdownload%2F%40ethersproject%2Fsolidity-5.3.0.tgz#2a0b00b4aaaef99a080ddea13acab1fa35cd4a93"
+  integrity sha1-KgsAtKqu+ZoIDd6hOsqx+jXNSpM=
+  dependencies:
+    "@ethersproject/bignumber" "^5.3.0"
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/keccak256" "^5.3.0"
+    "@ethersproject/sha2" "^5.3.0"
+    "@ethersproject/strings" "^5.3.0"
+
 "@ethersproject/solidity@^5.1.0":
   version "5.1.0"
   resolved "https://registry.npm.taobao.org/@ethersproject/solidity/download/@ethersproject/solidity-5.1.0.tgz#095a9c75244edccb26c452c155736d363399b954"
@@ -1203,6 +1466,15 @@
     "@ethersproject/keccak256" "^5.1.0"
     "@ethersproject/sha2" "^5.1.0"
     "@ethersproject/strings" "^5.1.0"
+
+"@ethersproject/strings@5.3.0", "@ethersproject/strings@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/strings/download/@ethersproject/strings-5.3.0.tgz?cache=0&sync_timestamp=1622517904528&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40ethersproject%2Fstrings%2Fdownload%2F%40ethersproject%2Fstrings-5.3.0.tgz#a6b640aab56a18e0909f657da798eef890968ff0"
+  integrity sha1-prZAqrVqGOCQn2V9p5ju+JCWj/A=
+  dependencies:
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/constants" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
 
 "@ethersproject/strings@^5.0.4", "@ethersproject/strings@^5.0.8":
   version "5.0.8"
@@ -1221,6 +1493,21 @@
     "@ethersproject/bytes" "^5.1.0"
     "@ethersproject/constants" "^5.1.0"
     "@ethersproject/logger" "^5.1.0"
+
+"@ethersproject/transactions@5.3.0", "@ethersproject/transactions@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/transactions/download/@ethersproject/transactions-5.3.0.tgz#49b86f2bafa4d0bdf8e596578fc795ee47c50458"
+  integrity sha1-SbhvK6+k0L345ZZXj8eV7kfFBFg=
+  dependencies:
+    "@ethersproject/address" "^5.3.0"
+    "@ethersproject/bignumber" "^5.3.0"
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/constants" "^5.3.0"
+    "@ethersproject/keccak256" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+    "@ethersproject/properties" "^5.3.0"
+    "@ethersproject/rlp" "^5.3.0"
+    "@ethersproject/signing-key" "^5.3.0"
 
 "@ethersproject/transactions@^5.0.0-beta.135", "@ethersproject/transactions@^5.0.9":
   version "5.0.9"
@@ -1252,6 +1539,47 @@
     "@ethersproject/rlp" "^5.1.0"
     "@ethersproject/signing-key" "^5.1.0"
 
+"@ethersproject/units@5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/units/download/@ethersproject/units-5.3.0.tgz#c4d1493532ad3d4ddf6e2bc4f8c94a2db933a8f5"
+  integrity sha1-xNFJNTKtPU3fbivE+MlKLbkzqPU=
+  dependencies:
+    "@ethersproject/bignumber" "^5.3.0"
+    "@ethersproject/constants" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+
+"@ethersproject/wallet@5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/wallet/download/@ethersproject/wallet-5.3.0.tgz?cache=0&sync_timestamp=1622517905541&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40ethersproject%2Fwallet%2Fdownload%2F%40ethersproject%2Fwallet-5.3.0.tgz#91946b470bd279e39ade58866f21f92749d062af"
+  integrity sha1-kZRrRwvSeeOa3liGbyH5J0nQYq8=
+  dependencies:
+    "@ethersproject/abstract-provider" "^5.3.0"
+    "@ethersproject/abstract-signer" "^5.3.0"
+    "@ethersproject/address" "^5.3.0"
+    "@ethersproject/bignumber" "^5.3.0"
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/hash" "^5.3.0"
+    "@ethersproject/hdnode" "^5.3.0"
+    "@ethersproject/json-wallets" "^5.3.0"
+    "@ethersproject/keccak256" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+    "@ethersproject/properties" "^5.3.0"
+    "@ethersproject/random" "^5.3.0"
+    "@ethersproject/signing-key" "^5.3.0"
+    "@ethersproject/transactions" "^5.3.0"
+    "@ethersproject/wordlists" "^5.3.0"
+
+"@ethersproject/web@5.3.0", "@ethersproject/web@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/web/download/@ethersproject/web-5.3.0.tgz?cache=0&sync_timestamp=1622517904795&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40ethersproject%2Fweb%2Fdownload%2F%40ethersproject%2Fweb-5.3.0.tgz#7959c403f6476c61515008d8f92da51c553a8ee1"
+  integrity sha1-eVnEA/ZHbGFRUAjY+S2lHFU6juE=
+  dependencies:
+    "@ethersproject/base64" "^5.3.0"
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+    "@ethersproject/properties" "^5.3.0"
+    "@ethersproject/strings" "^5.3.0"
+
 "@ethersproject/web@^5.0.12":
   version "5.0.12"
   resolved "https://registry.npmjs.org/@ethersproject/web/-/web-5.0.12.tgz#f123397c107f863c31fce5f31a97c66ec155e755"
@@ -1273,6 +1601,17 @@
     "@ethersproject/logger" "^5.1.0"
     "@ethersproject/properties" "^5.1.0"
     "@ethersproject/strings" "^5.1.0"
+
+"@ethersproject/wordlists@5.3.0", "@ethersproject/wordlists@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.nlark.com/@ethersproject/wordlists/download/@ethersproject/wordlists-5.3.0.tgz?cache=0&sync_timestamp=1622517905353&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40ethersproject%2Fwordlists%2Fdownload%2F%40ethersproject%2Fwordlists-5.3.0.tgz#45a0205f5178c1de33d316cb2ab7ed5eac3c06c5"
+  integrity sha1-RaAgX1F4wd4z0xbLKrftXqw8BsU=
+  dependencies:
+    "@ethersproject/bytes" "^5.3.0"
+    "@ethersproject/hash" "^5.3.0"
+    "@ethersproject/logger" "^5.3.0"
+    "@ethersproject/properties" "^5.3.0"
+    "@ethersproject/strings" "^5.3.0"
 
 "@metamask/detect-provider@1.2.0":
   version "1.2.0"
@@ -1768,13 +2107,6 @@ aws4@^1.8.0:
   resolved "https://registry.npmjs.org/aws4/-/aws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
   integrity sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
 
-axios@^0.19.0:
-  version "0.19.2"
-  resolved "https://registry.npm.taobao.org/axios/download/axios-0.19.2.tgz?cache=0&sync_timestamp=1608609324963&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Faxios%2Fdownload%2Faxios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
-  integrity sha1-PqNsXYgY0NX4qKl6bTa4bNwAyyc=
-  dependencies:
-    follow-redirects "1.5.10"
-
 axios@^0.21.1:
   version "0.21.1"
   resolved "https://registry.npm.taobao.org/axios/download/axios-0.21.1.tgz?cache=0&sync_timestamp=1608609324963&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Faxios%2Fdownload%2Faxios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
@@ -2055,6 +2387,11 @@ bs58check@^2.1.2:
     bs58 "^4.0.0"
     create-hash "^1.1.0"
     safe-buffer "^5.1.2"
+
+buffer-equal-constant-time@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npm.taobao.org/buffer-equal-constant-time/download/buffer-equal-constant-time-1.0.1.tgz#f8e71132f7ffe6e01a5c9697a4c6f3e48d5cc819"
+  integrity sha1-+OcRMvf/5uAaXJaXpMbz5I1cyBk=
 
 buffer-from@^1.0.0:
   version "1.1.1"
@@ -2556,13 +2893,6 @@ debug@2.6.9, debug@^2.2.0, debug@^2.3.3:
   dependencies:
     ms "2.0.0"
 
-debug@=3.1.0:
-  version "3.1.0"
-  resolved "https://registry.npm.taobao.org/debug/download/debug-3.1.0.tgz?cache=0&sync_timestamp=1614330710870&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdebug%2Fdownload%2Fdebug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
-  integrity sha1-W7WgZyYotkFJVmuhaBnmFRjGcmE=
-  dependencies:
-    ms "2.0.0"
-
 debug@^4.1.0:
   version "4.3.1"
   resolved "https://registry.npmjs.org/debug/-/debug-4.3.1.tgz#f0d229c505e0c6d8c49ac553d1b13dc183f6b2ee"
@@ -2738,6 +3068,13 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
 
+ecdsa-sig-formatter@1.0.11:
+  version "1.0.11"
+  resolved "https://registry.npm.taobao.org/ecdsa-sig-formatter/download/ecdsa-sig-formatter-1.0.11.tgz#ae0f0fa2d85045ef14a817daa3ce9acd0489e5bf"
+  integrity sha1-rg8PothQRe8UqBfao86azQSJ5b8=
+  dependencies:
+    safe-buffer "^5.0.1"
+
 ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.npmjs.org/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
@@ -2766,7 +3103,7 @@ elliptic@6.5.3, elliptic@^6.4.0, elliptic@^6.5.2, elliptic@^6.5.3:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.0"
 
-elliptic@6.5.4, elliptic@^6.4.1:
+elliptic@6.5.4:
   version "6.5.4"
   resolved "https://registry.npm.taobao.org/elliptic/download/elliptic-6.5.4.tgz?cache=0&sync_timestamp=1612290637117&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felliptic%2Fdownload%2Felliptic-6.5.4.tgz#da37cebd31e79a1367e941b592ed1fbebd58abbb"
   integrity sha1-2jfOvTHnmhNn6UG1ku0fvr1Yq7s=
@@ -3031,20 +3368,41 @@ ethereumjs-util@^6.0.0:
     ethjs-util "0.1.6"
     rlp "^2.2.3"
 
-ethers@^4.0.7:
-  version "4.0.48"
-  resolved "https://registry.nlark.com/ethers/download/ethers-4.0.48.tgz#330c65b8133e112b0613156e57e92d9009d8fbbe"
-  integrity sha1-MwxluBM+ESsGExVuV+ktkAnY+74=
+ethers@^5.0.8, ethers@^5.3.1:
+  version "5.3.1"
+  resolved "https://registry.nlark.com/ethers/download/ethers-5.3.1.tgz#1f018f0aeb651576cd84fd987a45f0b99646d761"
+  integrity sha1-HwGPCutlFXbNhP2YekXwuZZG12E=
   dependencies:
-    aes-js "3.0.0"
-    bn.js "^4.4.0"
-    elliptic "6.5.3"
-    hash.js "1.1.3"
-    js-sha3 "0.5.7"
-    scrypt-js "2.0.4"
-    setimmediate "1.0.4"
-    uuid "2.0.1"
-    xmlhttprequest "1.8.0"
+    "@ethersproject/abi" "5.3.1"
+    "@ethersproject/abstract-provider" "5.3.0"
+    "@ethersproject/abstract-signer" "5.3.0"
+    "@ethersproject/address" "5.3.0"
+    "@ethersproject/base64" "5.3.0"
+    "@ethersproject/basex" "5.3.0"
+    "@ethersproject/bignumber" "5.3.0"
+    "@ethersproject/bytes" "5.3.0"
+    "@ethersproject/constants" "5.3.0"
+    "@ethersproject/contracts" "5.3.0"
+    "@ethersproject/hash" "5.3.0"
+    "@ethersproject/hdnode" "5.3.0"
+    "@ethersproject/json-wallets" "5.3.0"
+    "@ethersproject/keccak256" "5.3.0"
+    "@ethersproject/logger" "5.3.0"
+    "@ethersproject/networks" "5.3.1"
+    "@ethersproject/pbkdf2" "5.3.0"
+    "@ethersproject/properties" "5.3.0"
+    "@ethersproject/providers" "5.3.1"
+    "@ethersproject/random" "5.3.0"
+    "@ethersproject/rlp" "5.3.0"
+    "@ethersproject/sha2" "5.3.0"
+    "@ethersproject/signing-key" "5.3.0"
+    "@ethersproject/solidity" "5.3.0"
+    "@ethersproject/strings" "5.3.0"
+    "@ethersproject/transactions" "5.3.0"
+    "@ethersproject/units" "5.3.0"
+    "@ethersproject/wallet" "5.3.0"
+    "@ethersproject/web" "5.3.0"
+    "@ethersproject/wordlists" "5.3.0"
 
 ethjs-unit@0.1.6:
   version "0.1.6"
@@ -3297,13 +3655,6 @@ flush-write-stream@^1.0.0:
   dependencies:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
-
-follow-redirects@1.5.10:
-  version "1.5.10"
-  resolved "https://registry.nlark.com/follow-redirects/download/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
-  integrity sha1-e3qfmuov3/NnhqlP9kPtB/T/Xio=
-  dependencies:
-    debug "=3.1.0"
 
 follow-redirects@^1.10.0:
   version "1.14.1"
@@ -3690,7 +4041,7 @@ hash.js@1.1.3:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.0"
 
-hash.js@^1.0.0, hash.js@^1.0.3, hash.js@^1.1.7:
+hash.js@1.1.7, hash.js@^1.0.0, hash.js@^1.0.3, hash.js@^1.1.7:
   version "1.1.7"
   resolved "https://registry.npmjs.org/hash.js/-/hash.js-1.1.7.tgz#0babca538e8d4ee4a0f8988d68866537a003cf42"
   integrity sha512-taOaskGt4z4SOANNseOviYDvjEJinIkRgmp7LbKP2YTTmVxWBl87s/uzK9r+44BclBSp2X7K1hqeNfz9JbBeXA==
@@ -4207,6 +4558,22 @@ jsonfile@^4.0.0:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
+jsonwebtoken@^8.5.1:
+  version "8.5.1"
+  resolved "https://registry.npm.taobao.org/jsonwebtoken/download/jsonwebtoken-8.5.1.tgz#00e71e0b8df54c2121a1f26137df2280673bcc0d"
+  integrity sha1-AOceC431TCEhofJhN98igGc7zA0=
+  dependencies:
+    jws "^3.2.2"
+    lodash.includes "^4.3.0"
+    lodash.isboolean "^3.0.3"
+    lodash.isinteger "^4.0.4"
+    lodash.isnumber "^3.0.3"
+    lodash.isplainobject "^4.0.6"
+    lodash.isstring "^4.0.1"
+    lodash.once "^4.0.0"
+    ms "^2.1.1"
+    semver "^5.6.0"
+
 jsprim@^1.2.2:
   version "1.4.1"
   resolved "https://registry.npmjs.org/jsprim/-/jsprim-1.4.1.tgz#313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
@@ -4216,6 +4583,23 @@ jsprim@^1.2.2:
     extsprintf "1.3.0"
     json-schema "0.2.3"
     verror "1.10.0"
+
+jwa@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.npm.taobao.org/jwa/download/jwa-1.4.1.tgz#743c32985cb9e98655530d53641b66c8645b039a"
+  integrity sha1-dDwymFy56YZVUw1TZBtmyGRbA5o=
+  dependencies:
+    buffer-equal-constant-time "1.0.1"
+    ecdsa-sig-formatter "1.0.11"
+    safe-buffer "^5.0.1"
+
+jws@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.npm.taobao.org/jws/download/jws-3.2.2.tgz#001099f3639468c9414000e99995fa52fb478304"
+  integrity sha1-ABCZ82OUaMlBQADpmZX6UvtHgwQ=
+  dependencies:
+    jwa "^1.4.1"
+    safe-buffer "^5.0.1"
 
 keccak@^3.0.0:
   version "3.0.1"
@@ -4284,6 +4668,41 @@ locate-path@^5.0.0:
   integrity sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==
   dependencies:
     p-locate "^4.1.0"
+
+lodash.includes@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.npm.taobao.org/lodash.includes/download/lodash.includes-4.3.0.tgz#60bb98a87cb923c68ca1e51325483314849f553f"
+  integrity sha1-YLuYqHy5I8aMoeUTJUgzFISfVT8=
+
+lodash.isboolean@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.npm.taobao.org/lodash.isboolean/download/lodash.isboolean-3.0.3.tgz#6c2e171db2a257cd96802fd43b01b20d5f5870f6"
+  integrity sha1-bC4XHbKiV82WgC/UOwGyDV9YcPY=
+
+lodash.isinteger@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.npm.taobao.org/lodash.isinteger/download/lodash.isinteger-4.0.4.tgz#619c0af3d03f8b04c31f5882840b77b11cd68343"
+  integrity sha1-YZwK89A/iwTDH1iChAt3sRzWg0M=
+
+lodash.isnumber@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.npm.taobao.org/lodash.isnumber/download/lodash.isnumber-3.0.3.tgz#3ce76810c5928d03352301ac287317f11c0b1ffc"
+  integrity sha1-POdoEMWSjQM1IwGsKHMX8RwLH/w=
+
+lodash.isplainobject@^4.0.6:
+  version "4.0.6"
+  resolved "https://registry.npm.taobao.org/lodash.isplainobject/download/lodash.isplainobject-4.0.6.tgz#7c526a52d89b45c45cc690b88163be0497f550cb"
+  integrity sha1-fFJqUtibRcRcxpC4gWO+BJf1UMs=
+
+lodash.isstring@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.npm.taobao.org/lodash.isstring/download/lodash.isstring-4.0.1.tgz#d527dfb5456eca7cc9bb95d5daeaf88ba54a5451"
+  integrity sha1-1SfftUVuynzJu5XV2ur4i6VKVFE=
+
+lodash.once@^4.0.0:
+  version "4.1.1"
+  resolved "https://registry.npm.taobao.org/lodash.once/download/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
+  integrity sha1-DdOXEhPHxW34gJd9UEyI+0cal6w=
 
 lodash@^4.17.14, lodash@^4.17.19:
   version "4.17.20"
@@ -4546,6 +4965,11 @@ ms@2.1.2:
   version "2.1.2"
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
+
+ms@^2.1.1:
+  version "2.1.3"
+  resolved "https://registry.npm.taobao.org/ms/download/ms-2.1.3.tgz?cache=0&sync_timestamp=1607433899126&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fms%2Fdownload%2Fms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
+  integrity sha1-V0yBOM4dK1hh8LRFedut1gxmFbI=
 
 multibase@^0.7.0:
   version "0.7.0"
@@ -5402,12 +5826,7 @@ schema-utils@^2.6.5:
     ajv "^6.12.4"
     ajv-keywords "^3.5.2"
 
-scrypt-js@2.0.4:
-  version "2.0.4"
-  resolved "https://registry.npm.taobao.org/scrypt-js/download/scrypt-js-2.0.4.tgz#32f8c5149f0797672e551c07e230f834b6af5f16"
-  integrity sha1-MvjFFJ8Hl2cuVRwH4jD4NLavXxY=
-
-scrypt-js@^3.0.0, scrypt-js@^3.0.1:
+scrypt-js@3.0.1, scrypt-js@^3.0.0, scrypt-js@^3.0.1:
   version "3.0.1"
   resolved "https://registry.npmjs.org/scrypt-js/-/scrypt-js-3.0.1.tgz#d314a57c2aef69d1ad98a138a21fe9eafa9ee312"
   integrity sha512-cdwTTnqPu0Hyvf5in5asVdZocVDTNRmR7XEcJuIzMjJeSHybHl7vpB66AzwTaIg6CLSbtjcxc8fqcySfnTkccA==
@@ -5497,11 +5916,6 @@ set-value@^2.0.0, set-value@^2.0.1:
     is-extendable "^0.1.1"
     is-plain-object "^2.0.3"
     split-string "^3.0.1"
-
-setimmediate@1.0.4:
-  version "1.0.4"
-  resolved "https://registry.nlark.com/setimmediate/download/setimmediate-1.0.4.tgz#20e81de622d4a02588ce0c8da8973cbcf1d3138f"
-  integrity sha1-IOgd5iLUoCWIzgyNqJc8vPHTE48=
 
 setimmediate@^1.0.4, setimmediate@^1.0.5:
   version "1.0.5"
@@ -5926,19 +6340,20 @@ tough-cookie@~2.5.0:
     psl "^1.1.28"
     punycode "^2.1.1"
 
-tronweb@^2.10.1:
-  version "2.10.2"
-  resolved "https://registry.npm.taobao.org/tronweb/download/tronweb-2.10.2.tgz#ecdb92e01023c101df5f3981638c1242a997a510"
-  integrity sha1-7NuS4BAjwQHfXzmBY4wSQqmXpRA=
+tronweb@^3.2.6:
+  version "3.2.6"
+  resolved "https://registry.npm.taobao.org/tronweb/download/tronweb-3.2.6.tgz#4a9a5eed70561e4ec3cc6faee02b78831dcfaf64"
+  integrity sha1-Sppe7XBWHk7DzG+u4Ct4gx3Pr2Q=
   dependencies:
     "@babel/runtime" "^7.0.0"
-    axios "^0.19.0"
+    axios "^0.21.1"
     babel-runtime "^6.26.0"
     bignumber.js "^7.2.1"
-    elliptic "^6.4.1"
-    ethers "^4.0.7"
+    elliptic "^6.5.3"
+    ethers "^5.0.8"
     eventemitter3 "^3.1.0"
     injectpromise "^1.0.0"
+    jsonwebtoken "^8.5.1"
     lodash "^4.17.14"
     semver "^5.6.0"
     validator "^10.7.1"
@@ -6176,11 +6591,6 @@ utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
-
-uuid@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.nlark.com/uuid/download/uuid-2.0.1.tgz#c2a30dedb3e535d72ccf82e343941a50ba8533ac"
-  integrity sha1-wqMN7bPlNdcsz4LjQ5QaULqFM6w=
 
 uuid@3.3.2:
   version "3.3.2"
@@ -6620,6 +7030,11 @@ ws@7.2.3:
   resolved "https://registry.npmjs.org/ws/-/ws-7.2.3.tgz#a5411e1fb04d5ed0efee76d26d5c46d830c39b46"
   integrity sha512-HTDl9G9hbkNDk98naoR/cHDws7+EyYMOdL1BmjsZXRUjf7d+MficC4B7HLUPlSiho0vg+CWKrGIt/VJBd1xunQ==
 
+ws@7.4.6:
+  version "7.4.6"
+  resolved "https://registry.nlark.com/ws/download/ws-7.4.6.tgz#5654ca8ecdeee47c33a9a4bf6d28e2be2980377c"
+  integrity sha1-VlTKjs3u5HwzqaS/bSjivimAN3w=
+
 ws@^3.0.0:
   version "3.3.3"
   resolved "https://registry.npmjs.org/ws/-/ws-3.3.3.tgz#f1cf84fe2d5e901ebce94efaece785f187a228f2"
@@ -6672,11 +7087,6 @@ xhr@^2.0.4, xhr@^2.3.3:
     is-function "^1.0.1"
     parse-headers "^2.0.0"
     xtend "^4.0.0"
-
-xmlhttprequest@1.8.0:
-  version "1.8.0"
-  resolved "https://registry.npm.taobao.org/xmlhttprequest/download/xmlhttprequest-1.8.0.tgz#67fe075c5c24fef39f9d65f5f7b7fe75171968fc"
-  integrity sha1-Z/4HXFwk/vOfnWX197f+dRcZaPw=
 
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.2"
