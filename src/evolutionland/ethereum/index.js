@@ -2104,6 +2104,28 @@ class EthereumEvolutionLand {
         }, callback);
     }
 
+    /**
+     * Claim drill of rewards.
+     * @returns {Promise<PromiEvent<any>>}
+     */
+    furnaceDrillTakeBack(
+        { ids, grades, hashmessage, v, r, s },
+        callback = {}
+    ) {
+        return this.triggerContract(
+        {
+            methodName: "takeBack",
+            abiString: this.ABIs["itemTakeBack"].abi,
+            contractParams: [ids, grades, hashmessage, v, r, s],
+            sendParams: {
+            value: 0,
+            },
+            abiKey: "itemTakeBack",
+        },
+        callback
+        );
+    }
+
     async _sign({
         data,
         name
