@@ -50,7 +50,7 @@ export default {
         GENESISHOLDER: "4196c53cc5b77b6ef212c3db360dd3d4d33516787a",
         AUCTIONHOLDER: "",
 
-        GOLD_RUSH_RAFFLE: "41331610f5b595ea4265fbc4d20cd6ab67e851c6f1",
+        GOLD_RUSH_RAFFLE: "41F86C9AA48102D61943789A07E0C97EB8D923436B",
 
         ITERING_CALLBACK:
             "https://alpha.evolution.land/api/tron/raw_sign_broadcast"
