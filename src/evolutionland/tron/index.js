@@ -142,9 +142,7 @@ class TronEvolutionLand {
     } = {}) {
         try {
             beforeFetch && beforeFetch()
-
             let contractAddress = this.getContractAddress(abiKey);
-
             const extendPayload = { ...payload, _contractAddress: contractAddress };
             if (!this.option.sign) {
                 const {
@@ -193,6 +191,7 @@ class TronEvolutionLand {
         } catch (e) {
             console.error('triggerContract', e)
             let _abi = this.ABIs[abiKey];
+            let contractAddress = this.getContractAddress(abiKey);
             const extendPayload = { ...payload, _contractAddress: contractAddress };
             errorCallback && errorCallback(e, extendPayload)
         }
@@ -828,7 +827,7 @@ class TronEvolutionLand {
      * Get the contract address of evolution land by key.
      * @param {*} tokenKey ring | kton | gold ... 
      */
-    async getContractAddress(tokenKey) {
+    getContractAddress(tokenKey) {
         let token = (this.ABIs[tokenKey] && this.ABIs[tokenKey].address) || tokenKey;
         return token;
     }

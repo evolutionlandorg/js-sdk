@@ -1,6 +1,6 @@
 {
   "name": "@evolutionland/evolution-js",
-  "version": "1.5.0-beta.17",
+  "version": "1.5.0-beta.21",
   "description": "",
   "main": "./lib/index.js",
   "scripts": {
@@ -25,6 +25,7 @@
     "@ethersproject/contracts": "^5.1.0",
     "@ethersproject/providers": "^5.1.0",
     "@ethersproject/solidity": "^5.1.0",
+    "ethers": "^5.3.1",
     "@metamask/detect-provider": "1.2.0",
     "@uniswap/sdk": "3.0.3",
     "axios": "^0.21.1",
