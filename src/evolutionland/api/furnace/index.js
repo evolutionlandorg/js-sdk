@@ -1,4 +1,4 @@
-import Utils from '../../utils/index'
+import Utils from "../../utils/index";
 
 let FurnaceApi = {
   /**
@@ -27,6 +27,27 @@ let FurnaceApi = {
         sendParams: {
           value: 0,
         },
+      },
+      callback
+    );
+  },
+  /**
+   * Claim drill of rewards.
+   * @returns {Promise<PromiEvent<any>>}
+   */
+  furnaceDrillTakeBack(
+    { ids, grades, hashmessage, v, r, s },
+    callback = {}
+  ) {
+    return this.triggerContract(
+      {
+        methodName: "takeBack",
+        abiString: this.ABIs["itemTakeBack"].abi,
+        contractParams: [ids, grades, hashmessage, v, r, s],
+        sendParams: {
+          value: 0,
+        },
+        abiKey: "itemTakeBack",
       },
       callback
     );
