@@ -2,7 +2,7 @@ export default {
     CONTRACT: {
         TOKEN_DEX_BRIDGE: "", // cross land transfer(swapBridge)
         TOKEN_RING: "0xc8F2eC4c01AD7cDF27431983546da0c35E40237c",
-        TOKEN_WITHDRAW: "0xA16F665226cf67000B5543fA7656b841C8e58d58", // takeback
+        TOKEN_WITHDRAW: "0x5E8C535BD5b17936aCD39C34f867138fc935f8d8", // takeback
         TOKEN_WITHDRAW_KTON: "", // takeback
         TOKEN_AUCTION: "0x98C3033041577ddd2510050223d2c918e6a66719", // ClockAuction
         TOKEN_LAND: "0x8303fa5849d4E7B84A44083BD993733c31f63B3B", //objectOwnership
