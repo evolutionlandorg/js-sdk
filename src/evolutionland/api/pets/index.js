@@ -1,80 +1,110 @@
-import Utils from '../../utils/index'
+import Utils from "../../utils/index";
 
 let PetApi = {
   petGetPetContractData(petTypes) {
     const Pets = {
-      'CryptoKitties': {
-        token: this.ABIs['petCryptoKitties'],
-        type: 'erc721'
+      CryptoKitties: {
+        token: this.ABIs["petCryptoKitties"],
+        type: "erc721",
       },
-      'PolkaPets': {
-        token: this.ABIs['petPolkaPets'],
-        type: 'erc1155'
-      }
-    }
+      PolkaPets: {
+        token: this.ABIs["petPolkaPets"],
+        type: "erc1155",
+      },
+    };
 
     return Pets[petTypes];
   },
 
-  petIsApprovedOrOwnerToBridge(petsType, { tokenId, owner }) {
+  petIsApprovedOrOwnerToBridge(petsType, { tokenId, owner }, callback = {}) {
     const contractData = this.petGetPetContractData(petsType);
 
-    if(contractData.type === 'erc721') {
+    if (contractData.type === "erc721") {
       // spender, contractAddress, tokenId
-      return this.erc721IsApprovedOrOwner(this.ABIs['petBridge'].address, contractData.token.address, tokenId);
+      return this.erc721IsApprovedOrOwner(
+        this.ABIs["petBridge"].address,
+        contractData.token.address,
+        tokenId,
+        callback
+      );
     }
 
-    if(contractData.type === 'erc1155') {
+    if (contractData.type === "erc1155") {
       // owner, operator, contractAddress,
-      return this.erc1155IsApprovedForAll(owner, this.ABIs['petBridge'].address, contractData.token.address);
+      return this.erc1155IsApprovedForAll(
+        owner,
+        this.ABIs["petBridge"].address,
+        contractData.token.address,
+        callback
+      );
     }
   },
 
-  petSetApprovalForAllToBridge(petsType) {
+  petSetApprovalForAllToBridge(petsType, callback = {}) {
     const contractData = this.petGetPetContractData(petsType);
 
-    if(contractData.type === 'erc721') {
+    if (contractData.type === "erc721") {
       // operator, approved, contractAddress
-      return this.erc721SetApprovalForAll(this.ABIs['petBridge'].address, true, contractData.token.address);
+      return this.erc721SetApprovalForAll(
+        this.ABIs["petBridge"].address,
+        true,
+        contractData.token.address,
+        callback
+      );
     }
 
-    if(contractData.type === 'erc1155') {
+    if (contractData.type === "erc1155") {
       // operator, approved, contractAddress
-      return this.erc1155SetApprovalForAll(this.ABIs['petBridge'].address, true, contractData.token.address);
+      return this.erc1155SetApprovalForAll(
+        this.ABIs["petBridge"].address,
+        true,
+        contractData.token.address,
+        callback
+      );
     }
   },
 
-  petMirrorIsApprovedOrOwnerToBridge(mirrorTokenId) {
+  petMirrorIsApprovedOrOwnerToBridge(mirrorTokenId, callback = {}) {
     // spender, contractAddress, tokenId
-    return this.erc721IsApprovedOrOwner(this.ABIs['petBridge'].address, this.ABIs['objectOwnership'].address, Utils.pad0x(mirrorTokenId));
+    return this.erc721IsApprovedOrOwner(
+      this.ABIs["petBridge"].address,
+      this.ABIs["objectOwnership"].address,
+      Utils.pad0x(mirrorTokenId),
+      callback
+    );
   },
 
   petMirrorSetApprovalForAllToBridge(callback = {}) {
     // operator, approved, contractAddress
-    return this.erc721SetApprovalForAll(this.ABIs['petBridge'].address, true, this.ABIs['objectOwnership'].address, callback);
+    return this.erc721SetApprovalForAll(
+      this.ABIs["petBridge"].address,
+      true,
+      this.ABIs["objectOwnership"].address,
+      callback
+    );
   },
 
   petSwapOutFromBridge(petsType, mirrorTokenId, callback = {}) {
     const contractData = this.petGetPetContractData(petsType);
 
-    if(contractData.type === 'erc721') {
+    if (contractData.type === "erc721") {
       return this.triggerContract(
         {
-          methodName: "swapOut",
-          abiKey: this.ABIs['petBridge'].address,
-          abiString: this.ABIs['petBridge'].abi,
+          methodName: "swapOut721",
+          abiKey: this.ABIs["petBridge"].address,
+          abiString: this.ABIs["petBridge"].abi,
           contractParams: [Utils.pad0x(mirrorTokenId)],
         },
         callback
       );
     }
 
-    if(contractData.type === 'erc1155') {
+    if (contractData.type === "erc1155") {
       return this.triggerContract(
         {
           methodName: "swapOut1155",
-          abiKey: this.ABIs['petBridge'].address,
-          abiString: this.ABIs['petBridge'].abi,
+          abiKey: this.ABIs["petBridge"].address,
+          abiString: this.ABIs["petBridge"].abi,
           contractParams: [Utils.pad0x(mirrorTokenId)],
         },
         callback
@@ -82,41 +112,42 @@ let PetApi = {
     }
   },
 
-  petMirrorTokenApproveToBridge(petsType, {}) {
+  petSwapInToBridge(
+    petsType,
+    { from, id, value = 1, data = "0x" },
+    callback = {}
+  ) {
     const contractData = this.petGetPetContractData(petsType);
 
-    if(contractData.type === 'erc721') {
-      this.erc721IsApprovedOrOwner();
-
-    }
-
-    if(contractData.type === 'erc1155') {
-
-    }
-  },
-
-  petSwapInToBridge(petsType, {from, id, value = 1, data = '0x'}, callback = {}) {
-    const contractData = this.petGetPetContractData(petsType);
-  
-    if(contractData.type === 'erc721') {
+    if (contractData.type === "erc721") {
       return this.triggerContract(
         {
-          methodName: "safeTransferFrom",
-          abiKey: contractData.token.address,
-          abiString: contractData.token.abi,
-          contractParams: [from, this.ABIs['petBridge'].address, Utils.pad0x(id)],
+          methodName: "swapIn721",
+          abiKey: this.ABIs["petBridge"].address,
+          abiString: this.ABIs["petBridge"].abi,
+          contractParams: [
+            from,
+            this.ABIs["petBridge"].address,
+            Utils.pad0x(id),
+          ],
         },
         callback
       );
     }
 
-    if(contractData.type === 'erc1155') {
+    if (contractData.type === "erc1155") {
       return this.triggerContract(
         {
-          methodName: "safeTransferFrom",
-          abiKey: contractData.token.address,
-          abiString: contractData.token.abi,
-          contractParams: [from, this.ABIs['petBridge'].address, Utils.pad0x(Utils.padLeft(id, 64, '0')), value, data],
+          methodName: "swapIn1155",
+          abiKey: this.ABIs["petBridge"].address,
+          abiString: this.ABIs["petBridge"].abi,
+          contractParams: [
+            from,
+            this.ABIs["petBridge"].address,
+            Utils.pad0x(Utils.padLeft(id, 64, "0")),
+            value,
+            data,
+          ],
         },
         callback
       );
@@ -127,9 +158,12 @@ let PetApi = {
     return this.triggerContract(
       {
         methodName: "tiePetTokenToApostle",
-        abiKey: this.ABIs['petBase'].address,
-        abiString: this.ABIs['petBase'].abi,
-        contractParams: [Utils.pad0x(mirrorTokenId), Utils.pad0x(apostleTokenId)],
+        abiKey: this.ABIs["petBase"].address,
+        abiString: this.ABIs["petBase"].abi,
+        contractParams: [
+          Utils.pad0x(mirrorTokenId),
+          Utils.pad0x(apostleTokenId),
+        ],
       },
       callback
     );
@@ -139,14 +173,13 @@ let PetApi = {
     return this.triggerContract(
       {
         methodName: "untiePetToken",
-        abiKey: this.ABIs['petBase'].address,
-        abiString: this.ABIs['petBase'].abi,
+        abiKey: this.ABIs["petBase"].address,
+        abiString: this.ABIs["petBase"].abi,
         contractParams: [Utils.pad0x(petTokenId)],
       },
       callback
     );
-  }
-
-}
+  },
+};
 
 export default PetApi;
