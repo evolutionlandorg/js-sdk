@@ -126,8 +126,7 @@ let PetApi = {
           abiKey: this.ABIs["petBridge"].address,
           abiString: this.ABIs["petBridge"].abi,
           contractParams: [
-            from,
-            this.ABIs["petBridge"].address,
+            contractData.token.address,
             Utils.pad0x(id),
           ],
         },
@@ -142,11 +141,9 @@ let PetApi = {
           abiKey: this.ABIs["petBridge"].address,
           abiString: this.ABIs["petBridge"].abi,
           contractParams: [
-            from,
-            this.ABIs["petBridge"].address,
+            contractData.token.address,
             Utils.pad0x(Utils.padLeft(id, 64, "0")),
             value,
-            data,
           ],
         },
         callback
