@@ -31,6 +31,7 @@ import liquidityStakerABI from './abi/ethereum/abi-liquidityStaker'
 import liquidityStakerFactoryABI from './abi/ethereum/abi-liquidityStakerFactory'
 import erc1155ABI from './abi/ethereum/abi-ERC1155'
 import petBridgeABI from './abi/ethereum/abi-petBridge'
+import cryptoKitties from './abi/abi-cryptoKitties'
 
 function getABI(env){
     let _env = Env(env)
@@ -186,7 +187,7 @@ function getABI(env){
         },
         petCryptoKitties: {
             address: _env.CONTRACT.TOKEN_KITTY_CORE,
-            abi: erc721ABI
+            abi: cryptoKitties
         },
         petPolkaPets: {
             address: _env.CONTRACT.TOKEN_POLKAPETS,

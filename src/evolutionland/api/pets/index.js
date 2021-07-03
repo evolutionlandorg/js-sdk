@@ -206,7 +206,7 @@ let PetApi = {
     return this.triggerContract({
       methodName: 'approve',
       abiKey: this.ABIs['petCryptoKitties'].address,
-      abiString: this.ABIs['erc721'].abi,
+      abiString: this.ABIs['petCryptoKitties'].abi,
       contractParams: [
         this.ABIs['petBridge'].address,
         tokenId,

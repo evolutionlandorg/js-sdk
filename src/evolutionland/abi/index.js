@@ -37,6 +37,7 @@ import apostleSiringV3ABI from "./json/abi-apostleSiringV3";
 import tokenUseV2ABI from "./json/abi-tokenUseV2";
 import drillLuckyBoxV2ABI from "./json/abi-drillLuckyBoxV2";
 import erc721BridgeV2ABI from "./json/abi-ERC721BridgeV2";
+import cryptoKitties from "./json/abi-cryptoKitties";
 
 function getABI(env) {
   return {
@@ -206,7 +207,7 @@ function getABI(env) {
     },
     petCryptoKitties: {
       address: env.CONTRACT.TOKEN_KITTY_CORE,
-      abi: erc721ABI,
+      abi: cryptoKitties,
     },
     petPolkaPets: {
       address: env.CONTRACT.TOKEN_POLKAPETS,
