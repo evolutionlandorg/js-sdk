@@ -227,7 +227,7 @@ class EthereumEvolutionLand {
             })
 
         } catch (e) {
-            console.error('triggerContract', e)
+            console.error('callContract', e)
             errorCallback && errorCallback(e)
         }
     }
@@ -284,22 +284,6 @@ class EthereumEvolutionLand {
         const isApprovedForAll = await this.erc721IsApprovedForAll(owner, spender, contractAddress);
 
         return (owner.toLowerCase() === spender.toLowerCase() || approvedAddress.toLowerCase() === spender.toLowerCase() || isApprovedForAll);
-    }
-
-    /**
-     * 
-     * @param {*} owner 
-     * @param {*} operator 
-     * @param {*} contractAddress 
-     * @param {*} callback 
-     */    
-    erc721IsApprovedForAll(owner, operator, contractAddress, callback={}) {
-        return this.callContract({
-            methodName: 'isApprovedForAll',
-            abiKey: contractAddress,
-            abiString: this.ABIs['erc721'].abi,
-            contractParams: [owner, operator],
-        }, callback)
     }
 
     /**
