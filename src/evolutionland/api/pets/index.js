@@ -42,13 +42,11 @@ let PetApi = {
 
   /**
    * Check approve for all
-   * @param {string} petsType PolkaPets
    * @param {string} owner use wallet
-   * Note: not use for CryptoKitties
    */
-  petIsApprovalForAllToBridge(petsType, owner) {
+  polkapetsIsApprovalForAllToBridge(owner) {
     const operator = this.ABIs["petBridge"].address;
-    const contractData = this.petGetPetContractData(petsType);
+    const contractData = this.petGetPetContractData("PolkaPets");
 
     return this.callContract({
       methodName: 'isApprovedForAll',
@@ -58,7 +56,7 @@ let PetApi = {
     });
   },
 
-  petSetApprovalForAllToBridge(callback = {}) {
+  polkapetsSetApprovalForAllToBridge(callback = {}) {
     return this.triggerContract({
       methodName: 'setApprovalForAll',
       abiKey: this.ABIs["petPolkaPets"].address,
