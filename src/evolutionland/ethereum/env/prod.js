@@ -23,6 +23,7 @@ export default {
         TOKEN_TOKEN_USE: "0xa70abeaca1d6bba0f511758a0d66b7f59fd3f166", //token use
 
         TOKEN_KITTY_CORE: "0x06012c8cf97bead5deae237070f9587f8e7a266d", // KittyCore
+        TOKEN_POLKAPETS: "0x8cb813bf27dc744fc5fb6ba7515504de45d39e08", // PolkaPets
         TOKEN_PET_BASE: "0xb0c85c099094e73ffc1df23c8309a8b14c64420a", // PetBaseProxy
         TOKEN_GEGO: "0x27b4bc90fbe56f02ef50f2e2f79d7813aa8941a7", // Dego Token
 
