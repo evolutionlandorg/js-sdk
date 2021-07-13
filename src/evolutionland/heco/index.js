@@ -18,6 +18,7 @@ import ApostleApi from '../api/apostle'
 import FurnaceApi from '../api/furnace'
 import LandApi from '../api/land'
 import Erc20Api from '../api/erc20'
+import LiquidityStakerApi from '../api/liquidityStaker'
 
 const WETH = {
     "256": new Token(256, '0xD4C2F962B8b94cdD2e0B2e8E765d39f32980a1c1', 18, 'WHT', "Wrapped HT"),
@@ -1871,6 +1872,7 @@ class HecoEvolutionLand {
     }
 }
 
+Object.assign(HecoEvolutionLand.prototype, LiquidityStakerApi);
 Object.assign(HecoEvolutionLand.prototype, Erc20Api);
 Object.assign(HecoEvolutionLand.prototype, ApostleApi);
 Object.assign(HecoEvolutionLand.prototype, FurnaceApi);
