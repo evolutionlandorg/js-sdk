@@ -1354,6 +1354,7 @@ class HecoEvolutionLand {
                 return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_FIRE, 18, "FIRE", "FIRE");
             case 'soil':
                 return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_SOIL, 18, "SOIL", "SOIL");
+            case 'wth':
             case 'weth':
                 return WETH[parseInt(this.env.CONTRACT.NETWORK)];
             default:
@@ -1524,16 +1525,68 @@ class HecoEvolutionLand {
         }, callback)
     }
 
-    async addUniswapETHLiquidity(value, params, callback = {}) {
+    /**
+     * Adds liquidity to an ERC-20⇄ETH pool
+     * 
+     * msg.sender should have already given the router an allowance of at least amount on tokenA/tokenB.
+     * 
+     * Always adds assets at the ideal ratio, according to the price when the transaction is executed.
+     * 
+     * Token A or Token B must contains "WETH"
+     * 
+     * @param {*} param0 {token: tokenAType, amount: amountA}
+     * @param {*} param1 {token: tokenBType, amount: amountB}
+     * @param {*} to Recipient of the liquidity tokens.
+     * @param {*} slippage The amount the price moves in a trading pair between when a transaction is submitted and when it is executed.
+     * @param {*} callback 
+     */
+    async addUniswapETHLiquidity({token: tokenAType, amount: amountA}, {token: tokenBType, amount: amountB}, to, slippage = 100, callback = {}) {
         // const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 120 minutes from the current Unix time
         //  https://uniswap.org/docs/v2/smart-contracts/router02/#addliquidity
+
+        const { pair, parsedAmounts } = await this.getDerivedMintInfo({token: tokenAType, amount: amountA}, {token: tokenBType, amount: amountB});
+
+        if(!pair || !pair.token0.address || !pair.token1.address) {
+            return;
+        }
+
+        if(!to) {
+            to = await this.getCurrentAccount();    
+        }
+
+        const amountsMin = {
+            [pair.token0.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token0.address].raw, slippage)[0],
+            [pair.token1.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token1.address].raw, slippage)[0]
+        }
+
+        const erc20Token = pair.token0.address === WETH[pair.token0.chainId] ? pair.token1 : pair.token0;
+
+        const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 120 minutes from the current Unix time
+
+        // contract:
+        // function addLiquidityETH(
+        //     address token,
+        //     uint amountTokenDesired,
+        //     uint amountTokenMin,
+        //     uint amountETHMin,
+        //     address to,
+        //     uint deadline
+        //   ) external payable returns (uint amountToken, uint amountETH, uint liquidity);
+
         return this.triggerContract({
             methodName: 'addLiquidityETH',
             abiKey: 'uniswapExchange',
             abiString: this.ABIs['uniswapExchange'].abi,
-            contractParams: params,
+            contractParams: [
+                erc20Token.address,
+                parsedAmounts[erc20Token.address].raw.toString(),
+                amountsMin[erc20Token.address].toString(),
+                amountsMin[WETH[pair.token0.chainId].address].toString(),
+                to,
+                deadline
+            ],
             sendParams: {
-                value: value
+                value: parsedAmounts[WETH[pair.token0.chainId].address].raw.toString()
             }
         }, callback)
     }
@@ -1579,6 +1632,76 @@ class HecoEvolutionLand {
                 parsedAmounts[pair.liquidityToken.address].raw.toString(),
                 amountsMin[pair.token0.address].toString(),
                 amountsMin[pair.token1.address].toString(),
+                to,
+                deadline
+            ],
+            sendParams: {
+                value: 0
+            }
+        }, callback)
+    }
+
+    /**
+     * Removes liquidity from an ERC-20⇄ETH pool.
+     * 
+     * msg.sender should have already given the router an allowance of at least liquidity on the pool.
+     * 
+     * Token A or Token B must contains "WETH"
+     * 
+     * @param {*} tokenAType A pool token.
+     * @param {*} tokenBType A pool token.
+     * @param {*} liquidityValue The value of liquidity tokens to remove.
+     * @param {*} to Recipient of the underlying assets.
+     * @param {*} slippage The amount the price moves in a trading pair between when a transaction is submitted and when it is executed.
+     * @param {*} callback 
+     */
+    async removeUniswapETHLiquidity(tokenAType, tokenBType, liquidityValue, to, slippage = 100, callback = {}) {
+        if(!to) {
+            to = await this.getCurrentAccount();    
+        }
+
+        const { pair, parsedAmounts } = await this.getDerivedBurnInfo(tokenAType, tokenBType, liquidityValue, to);
+
+        if(!pair || !pair.token0.address || !pair.token1.address) {
+            return;
+        }
+
+        const amountsMin = {
+            [pair.token0.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token0.address].raw, slippage)[0],
+            [pair.token1.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token1.address].raw, slippage)[0]
+        }
+
+        const erc20Token = pair.token0.address === WETH[pair.token0.chainId] ? pair.token1 : pair.token0;
+
+        const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 20 minutes from the current Unix time
+
+        console.log([
+            erc20Token.address,
+            parsedAmounts[pair.liquidityToken.address].raw.toString(),
+            amountsMin[erc20Token.address].toString(),
+            amountsMin[WETH[pair.token0.chainId].address].toString(),
+            to,
+            deadline
+        ])
+
+        // https://uniswap.org/docs/v2/smart-contracts/router02/#removeliquidity
+        // function removeLiquidityETH(
+        //     address token,
+        //     uint liquidity,
+        //     uint amountTokenMin,
+        //     uint amountETHMin,
+        //     address to,
+        //     uint deadline
+        //   ) external returns (uint amountToken, uint amountETH);
+        return this.triggerContract({
+            methodName: 'removeLiquidityETH',
+            abiKey: 'uniswapExchange',
+            abiString: this.ABIs['uniswapExchange'].abi,
+            contractParams: [
+                erc20Token.address,
+                parsedAmounts[pair.liquidityToken.address].raw.toString(),
+                amountsMin[erc20Token.address].toString(),
+                amountsMin[WETH[pair.token0.chainId].address].toString(),
                 to,
                 deadline
             ],
