@@ -1354,7 +1354,7 @@ class HecoEvolutionLand {
                 return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_FIRE, 18, "FIRE", "FIRE");
             case 'soil':
                 return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_SOIL, 18, "SOIL", "SOIL");
-            case 'wth':
+            case 'wht':
             case 'weth':
                 return WETH[parseInt(this.env.CONTRACT.NETWORK)];
             default:
