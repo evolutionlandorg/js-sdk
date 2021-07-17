@@ -156,7 +156,7 @@ class TronEvolutionLand {
                 this._tronweb.transactionBuilder.triggerSmartContract(
                     _abi.address,
                     functionSelector,
-                    this._tronweb.toSun(50),
+                    this._tronweb.toSun(100),
                     sendParams.callValue || 0,
                     parameter,
                     this.getCurrentAccount('hex')
@@ -174,7 +174,7 @@ class TronEvolutionLand {
             }
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const res = _method.send({
-                feeLimit: this._tronweb.toSun(60),
+                feeLimit: this._tronweb.toSun(100),
                 callValue: 0,
                 shouldPollResponse: false,
                 ...sendParams
