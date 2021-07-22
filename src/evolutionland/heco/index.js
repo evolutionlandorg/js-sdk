@@ -18,12 +18,9 @@ import ApostleApi from '../api/apostle'
 import FurnaceApi from '../api/furnace'
 import LandApi from '../api/land'
 import Erc20Api from '../api/erc20'
+import WethApi from '../api/weth'
 import LiquidityStakerApi from '../api/liquidityStaker'
 
-const WETH = {
-    "256": new Token(256, '0xD4C2F962B8b94cdD2e0B2e8E765d39f32980a1c1', 18, 'WHT', "Wrapped HT"),
-    "128": new Token(128, '0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F', 18, 'WHT', "Wrapped HT")
-};
 
 const loop = function () { }
 
@@ -402,15 +399,15 @@ class HecoEvolutionLand {
         await this.setEtherjsProvider()
 
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-       
-        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING, this.etherjsProvider)
-        const route = new Route([pair], WETH[RING.chainId])
+        const WETH = this.wethGetToken();
+        const pair = await Fetcher.fetchPairData(WETH, RING, this.etherjsProvider)
+        const route = new Route([pair], WETH)
         const amountIn = value
         const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_OUTPUT)
         const slippageTolerance = new Percent('30', '10000') // 30 bips, or 0.30%
 
         const amountInMax = trade.maximumAmountIn(slippageTolerance).raw // needs to be converted to e.g. hex
-        const path = [WETH[RING.chainId].address, RING.address]
+        const path = [WETH.address, RING.address]
         const to = await this.getCurrentAccount() // should be a checksummed recipient address
         const deadline = Math.floor(Date.now() / 1000) + 60 * 20 // 20 minutes from the current Unix time
         const outputAmount = trade.outputAmount.raw // // needs to be converted to e.g. hex
@@ -440,14 +437,15 @@ class HecoEvolutionLand {
         await this.setEtherjsProvider()
 
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-        const pair = await Fetcher.fetchPairData(RING, WETH[RING.chainId], this.etherjsProvider)
+        const WETH = this.wethGetToken();
+        const pair = await Fetcher.fetchPairData(RING, WETH, this.etherjsProvider)
         const route = new Route([pair], RING)
         const amountIn = value
         const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_INPUT)
         const slippageTolerance = new Percent('30', '10000') // 30 bips, or 0.30%
 
         const amountOutMin = trade.minimumAmountOut(slippageTolerance).raw // needs to be converted to e.g. hex
-        const path = [RING.address, WETH[RING.chainId].address]
+        const path = [RING.address, WETH.address]
         const to = await this.getCurrentAccount() // should be a checksummed recipient address
         const deadline = Math.floor(Date.now() / 1000) + 60 * 20 // 20 minutes from the current Unix time
         const inputAmount = trade.inputAmount.raw // // needs to be converted to e.g. hex
@@ -621,8 +619,9 @@ class HecoEvolutionLand {
         await this.setEtherjsProvider()
 
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING, this.etherjsProvider)
-        return pair.tokenAmounts[0].token.equals(WETH[RING.chainId]) ? pair.tokenAmounts[0].raw.toString(10) : pair.tokenAmounts[1].raw.toString(10)
+        const WETH = this.wethGetToken();
+        const pair = await Fetcher.fetchPairData(WETH, RING, this.etherjsProvider)
+        return pair.tokenAmounts[0].token.equals(WETH) ? pair.tokenAmounts[0].raw.toString(10) : pair.tokenAmounts[1].raw.toString(10)
     }
 
     /**
@@ -632,7 +631,8 @@ class HecoEvolutionLand {
         await this.setEtherjsProvider()
 
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING, this.etherjsProvider)
+        const WETH = this.wethGetToken();
+        const pair = await Fetcher.fetchPairData(WETH, RING, this.etherjsProvider)
         return pair.tokenAmounts[0].token.equals(RING) ? pair.tokenAmounts[0].raw.toString(10) : pair.tokenAmounts[1].raw.toString(10)
     }
 
@@ -644,8 +644,9 @@ class HecoEvolutionLand {
         await this.setEtherjsProvider()
 
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING, this.etherjsProvider)
-        const route = new Route([pair], WETH[RING.chainId])
+        const WETH = this.wethGetToken();
+        const pair = await Fetcher.fetchPairData(WETH, RING, this.etherjsProvider)
+        const route = new Route([pair], WETH)
         const amountIn = tokens_bought
         const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_OUTPUT)
         const slippageTolerance = new Percent('30', '10000') 
@@ -662,7 +663,8 @@ class HecoEvolutionLand {
         await this.setEtherjsProvider()
 
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-        const pair = await Fetcher.fetchPairData(RING, WETH[RING.chainId], this.etherjsProvider)
+        const WETH = this.wethGetToken();
+        const pair = await Fetcher.fetchPairData(RING, WETH, this.etherjsProvider)
         const route = new Route([pair], RING)
         const amountIn = tokens_bought // 1 WETH
         const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_INPUT)
@@ -1356,7 +1358,7 @@ class HecoEvolutionLand {
                 return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_SOIL, 18, "SOIL", "SOIL");
             case 'wht':
             case 'weth':
-                return WETH[parseInt(this.env.CONTRACT.NETWORK)];
+                return this.wethGetToken();
             default:
                 break;
         }
@@ -1544,6 +1546,7 @@ class HecoEvolutionLand {
         // const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 120 minutes from the current Unix time
         //  https://uniswap.org/docs/v2/smart-contracts/router02/#addliquidity
 
+        const WETH = this.wethGetToken();
         const { pair, parsedAmounts } = await this.getDerivedMintInfo({token: tokenAType, amount: amountA}, {token: tokenBType, amount: amountB});
 
         if(!pair || !pair.token0.address || !pair.token1.address) {
@@ -1559,7 +1562,7 @@ class HecoEvolutionLand {
             [pair.token1.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token1.address].raw, slippage)[0]
         }
 
-        const erc20Token = pair.token0.address === WETH[pair.token0.chainId] ? pair.token1 : pair.token0;
+        const erc20Token = pair.token0.address === WETH ? pair.token1 : pair.token0;
 
         const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 120 minutes from the current Unix time
 
@@ -1581,12 +1584,12 @@ class HecoEvolutionLand {
                 erc20Token.address,
                 parsedAmounts[erc20Token.address].raw.toString(),
                 amountsMin[erc20Token.address].toString(),
-                amountsMin[WETH[pair.token0.chainId].address].toString(),
+                amountsMin[WETH.address].toString(),
                 to,
                 deadline
             ],
             sendParams: {
-                value: parsedAmounts[WETH[pair.token0.chainId].address].raw.toString()
+                value: parsedAmounts[WETH.address].raw.toString()
             }
         }, callback)
     }
@@ -1661,6 +1664,7 @@ class HecoEvolutionLand {
         }
 
         const { pair, parsedAmounts } = await this.getDerivedBurnInfo(tokenAType, tokenBType, liquidityValue, to);
+        const WETH = this.wethGetToken();
 
         if(!pair || !pair.token0.address || !pair.token1.address) {
             return;
@@ -1671,7 +1675,7 @@ class HecoEvolutionLand {
             [pair.token1.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token1.address].raw, slippage)[0]
         }
 
-        const erc20Token = pair.token0.address === WETH[pair.token0.chainId] ? pair.token1 : pair.token0;
+        const erc20Token = pair.token0.address === WETH ? pair.token1 : pair.token0;
 
         const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 20 minutes from the current Unix time
 
@@ -1679,7 +1683,7 @@ class HecoEvolutionLand {
             erc20Token.address,
             parsedAmounts[pair.liquidityToken.address].raw.toString(),
             amountsMin[erc20Token.address].toString(),
-            amountsMin[WETH[pair.token0.chainId].address].toString(),
+            amountsMin[WETH.address].toString(),
             to,
             deadline
         ])
@@ -1701,7 +1705,7 @@ class HecoEvolutionLand {
                 erc20Token.address,
                 parsedAmounts[pair.liquidityToken.address].raw.toString(),
                 amountsMin[erc20Token.address].toString(),
-                amountsMin[WETH[pair.token0.chainId].address].toString(),
+                amountsMin[WETH.address].toString(),
                 to,
                 deadline
             ],
@@ -1995,6 +1999,7 @@ class HecoEvolutionLand {
     }
 }
 
+Object.assign(HecoEvolutionLand.prototype, WethApi);
 Object.assign(HecoEvolutionLand.prototype, LiquidityStakerApi);
 Object.assign(HecoEvolutionLand.prototype, Erc20Api);
 Object.assign(HecoEvolutionLand.prototype, ApostleApi);
