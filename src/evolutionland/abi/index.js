@@ -217,6 +217,9 @@ function getABI(env) {
       address: env.CONTRACT.PET_BRIDGE,
       abi: erc721BridgeV2ABI,
     },
+    weth: {
+      address: env.CONTRACT.TOKEN_WETH,
+    }
   };
 }
 
