@@ -150,7 +150,6 @@ class TronEvolutionLand {
             let contractAddress = this.getContractAddress(abiKey);
             const extendPayload = { ...payload, _contractAddress: contractAddress };
             sendParams.callValue = sendParams.value;
-            debugger
             if (!this.option.sign) {
                 const {
                     functionSelector,
@@ -1359,6 +1358,61 @@ class TronEvolutionLand {
             contractParams: [
                 eventId, Utils.pad0x(landTokenId)
             ]
+        }, callback);
+    }
+
+    /**
+     * Returns the amount of RING owned by account
+     * @param {*} address 
+     */
+     getRingBalance(address, callback = {}) {
+        return this.callContract({
+            methodName: 'balanceOf',
+            abiKey: 'ring',
+            contractParams: [
+                address
+            ]
+        }, callback);
+    }
+
+    /**
+     * Returns the amount of KTON owned by account
+     * @param {*} address 
+     */
+    getKtonBalance(address, callback = {}) {
+        return this.callContract({
+            methodName: 'balanceOf',
+            abiKey: 'kton',
+            contractParams: [
+                address
+            ]
+        }, callback);
+    }
+
+    /**
+     * Returns the amount of tokens owned by account
+     * @param {*} account 
+     * @param {*} contractAddress 
+     */
+    getTokenBalance(account, contractAddress, callback = {}) {
+        return this.callContract({
+            methodName: 'balanceOf',
+            abiKey: contractAddress,
+            contractParams: [
+                account
+            ]
+        }, callback);
+    }
+
+    /**
+     * Get total supply of erc20 token
+     * @param {*} contractAddress Erc20 contract address
+     */
+    getTokenTotalSupply(contractAddress, callback = {}) {
+        return this.callContract({
+            methodName: 'totalSupply',
+            abiKey: contractAddress,
+            contractParams: []
         }, callback);
     }
     
