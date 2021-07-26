@@ -27,6 +27,10 @@ import luckyBoxABI from '../ethereum/env/abi/ethereum/abi-luckyBag'
 import justswapExchangeABI from '../tron/env/abi/tron/abi-justswapExchange'
 
 import Utils from '../utils/index'
+
+import FurnaceV1Api from '../api/furnace/indexV1'
+
+
 const loop = function () { }
 
 class TronEvolutionLand {
@@ -41,6 +45,7 @@ class TronEvolutionLand {
             address: null,
             ...option
         }
+        this.ERC20TRANSFERMETHOD = 'transferAndFallback'
         // this.clientFetch = new ClientFetch({baseUrl: this.env.ABI_DOMAIN, chainId: 60})
     }
 
@@ -65,7 +70,7 @@ class TronEvolutionLand {
 
     //     return _contract[methodName](...contractParams).send({
     //         feeLimit: this._tronweb.toSun(100),
-    //         callValue: 0,
+    //         value: 0,
     //         shouldPollResponse: false,
     //         ...sendParams
     //     })
@@ -144,6 +149,8 @@ class TronEvolutionLand {
             beforeFetch && beforeFetch()
             let contractAddress = this.getContractAddress(abiKey);
             const extendPayload = { ...payload, _contractAddress: contractAddress };
+            sendParams.callValue = sendParams.value;
+            debugger
             if (!this.option.sign) {
                 const {
                     functionSelector,
@@ -157,7 +164,7 @@ class TronEvolutionLand {
                     _abi.address,
                     functionSelector,
                     this._tronweb.toSun(100),
-                    sendParams.callValue || 0,
+                    sendParams.value || 0,
                     parameter,
                     this.getCurrentAccount('hex')
                 ).then(({ transaction }) => {
@@ -972,7 +979,7 @@ class TronEvolutionLand {
             abiString: luckyBoxABI,
             contractParams: [buyer, goldBoxAmount, silverBoxAmount],
             sendParams: {
-                callValue: cost
+                value: cost
             }
         }, callback)
     }
@@ -1157,7 +1164,7 @@ class TronEvolutionLand {
                 deadline
             ],
             sendParams: {
-                callValue: slippageAmountInMax.toFixed(0)
+                value: slippageAmountInMax.toFixed(0)
             }
         }, callback)
     }
@@ -1184,7 +1191,7 @@ class TronEvolutionLand {
                 deadline
             ],
             sendParams: {
-                callValue: 0
+                value: 0
             }
         }, callback)
     }
@@ -1356,5 +1363,7 @@ class TronEvolutionLand {
     }
     
 }
+
+Object.assign(TronEvolutionLand.prototype, FurnaceV1Api);
 
 export default TronEvolutionLand
