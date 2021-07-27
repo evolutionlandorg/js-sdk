@@ -1,4 +1,5 @@
 import Utils from "../../utils/index";
+import BigNumber from "bignumber.js";
 
 let FurnaceV1Api = {
   /**

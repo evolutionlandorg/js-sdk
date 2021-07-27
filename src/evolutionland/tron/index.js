@@ -106,7 +106,7 @@ class TronEvolutionLand {
             let _contract = await this._tronweb.contract().at(contractAddress)
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const res = await _method.call()
-            console.log('tron res:', res)
+
             return res;
 
         } catch (e) {
@@ -192,7 +192,7 @@ class TronEvolutionLand {
                 const extendPayload = { ...payload, _contractAddress: contractAddress };
                 errorCallback && errorCallback(e, extendPayload)
             })
-            console.log('tron res:', res)
+
             return res;
         } catch (e) {
             console.error('triggerContract', e)
