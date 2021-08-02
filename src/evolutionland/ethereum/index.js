@@ -50,6 +50,7 @@ class EthereumEvolutionLand {
             address: null,
             ...option
         }
+        this.ERC20TRANSFERMETHOD = 'transfer'
     }
 
 

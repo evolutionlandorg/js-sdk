@@ -54,9 +54,9 @@ export default {
 
         GOLD_RUSH_RAFFLE: "414de84fdcc7b32452f6fcecf2021458e41aceb0f0",
 
-        FURNACE_TREASURE: "412111e584fb1e7040ca6b25a4e457564cc51cc3f9", // DrillLuckyBox
-        FURNACE_TAKEBACK: "41fea2cb189d1e0ff042e841a34db61a43503ffd94",   // DrillTakeBack
-        FURNACE_ITEMBASE: "419ddd1b84732f2c5c3cbc38d4dbe9d678e85c462d",   // ItemBase_Proxy
+        FURNACE_TREASURE: "418abb949fcba9cab83a1014a1a8f952690bea3ba8", // DrillLuckyBox
+        FURNACE_TAKEBACK: "417bf295c01baf447989b8998a9ecef00a902f368d",   // DrillTakeBack
+        FURNACE_ITEMBASE: "4171caf9e4d9eafb4f17e54dedbfe8243e2c9630ba",   // ItemBase_Proxy
 
         LIQUIDITY_STAKER_FACTORY: "", // farm
 
