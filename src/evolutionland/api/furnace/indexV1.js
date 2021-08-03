@@ -70,10 +70,48 @@ let FurnaceV1Api = {
     // https://etherscan.io/tx/0x4e1fc1dcec64bb497405126e55ab743368f1cb1cede945936937e0cde1d254e7
     // prize ring - gas used - 254,776
     // https://etherscan.io/tx/0xd2b3f05b19e74627940edfe98daee31eeab84b67e88dcf0e77d595430b3b1afc
-    const silverBoxGasLimit =
-      this.env.NETWORK === "1" ? new BigNumber(260000) : new BigNumber(350000);
-    const goldBoxGasLimit =
-      this.env.NETWORK === "1" ? new BigNumber(300000) : new BigNumber(400000);
+    const chainGasLimit = {
+      // ethereum - mainnet
+      "1": {
+        silver: new BigNumber(260000),
+        gold: new BigNumber(300000)
+      },
+      // ethereum - ropsten
+      "3": {
+        silver: new BigNumber(350000),
+        gold: new BigNumber(400000)
+      },
+      // heco - mainnet
+      "256": {
+        silver: new BigNumber(350000),
+        gold: new BigNumber(400000)
+      },
+      // heco - testnet
+      "128": {
+        silver: new BigNumber(350000),
+        gold: new BigNumber(400000)
+      },
+      // tron - shasta 30trx
+      "tron-1": {
+        silver: new BigNumber(30000000),
+        gold: new BigNumber(30000000)
+      },
+      // tron - mainnet 30trx
+      "tron-11111": {
+        silver: new BigNumber(30000000),
+        gold: new BigNumber(30000000)
+      }
+    }
+
+    const silverBoxGasLimit = chainGasLimit[this.env.CONTRACT.NETWORK].silver;
+      // this.env.CONTRACT.NETWORK === "1" ? new BigNumber(260000) : new BigNumber(350000);
+    const goldBoxGasLimit = chainGasLimit[this.env.CONTRACT.NETWORK].gold;
+      // this.env.CONTRACT.NETWORK === "1" ? new BigNumber(300000) : new BigNumber(400000);
+   
+    console.log('openFurnaceTreasure', {
+      silverBoxGasLimit, goldBoxGasLimit
+    }, { boxIds, amounts, hashmessage, v, r, s })
+
 
     let gasLimit = new BigNumber(amounts[0]).lt("1000000000000000000000")
       ? silverBoxGasLimit
@@ -97,9 +135,9 @@ let FurnaceV1Api = {
         contractParams: [boxIds, amounts, hashmessage, v, r, s],
         sendParams: {
           value: 0,
-          gasLimit: gasLimit.toFixed(0),
         },
         abiKey: "itemTakeBack",
+        gasLimit: gasLimit.toFixed(0),
       },
       callback
     );

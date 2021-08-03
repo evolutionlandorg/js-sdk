@@ -23,7 +23,7 @@ export default {
         TOKEN_APOSTLE_SIRING_AUCTION:
             "419e7827155234ad4bd8102532de8c1dc74eb3aadc", //SiringClockAuction
         TOKEN_APOSTLE_BASE: "41238fe04997359169aa65fe5b4631db220dfe540e", //ApostleBase
-        TOKEN_LAND_RESOURCE: "410cce145a83f344e290613028ea3123eb473e69cb", //landResource
+        TOKEN_LAND_RESOURCE: "41b36f434a28fcbc921b92182ca79af872b476cdc1", //landResource
         TOKEN_TOKEN_USE: "4184793cf50f45330256265e7b14af096438057670", //token use
 
         // new
@@ -44,7 +44,7 @@ export default {
         SCAN_TRANSACTION: "https://shasta.tronscan.org/#/transaction",
         SCAN_ADDRESS: "https://shasta.tronscan.org/#/address",
 
-        NETWORK: "https://api.shasta.trongrid.io",
+        NETWORK: "tron-1",
         NETWORK_NODE: "1",
 
         GENESISHOLDER: "4196c53cc5b77b6ef212c3db360dd3d4d33516787a",
