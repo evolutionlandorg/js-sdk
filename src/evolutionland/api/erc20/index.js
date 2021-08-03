@@ -11,8 +11,6 @@ let Erc20Api = {
       this.ABIs["ring"].abi,
       token
     );
-    
-    console.log('js-sdk::erc20Allowance params:', from, spender);
 
     const allowanceAmount = await erc20Contract.methods
       .allowance(from, spender)

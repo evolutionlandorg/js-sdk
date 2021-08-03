@@ -27,6 +27,10 @@ import luckyBoxABI from '../ethereum/env/abi/ethereum/abi-luckyBag'
 import justswapExchangeABI from '../tron/env/abi/tron/abi-justswapExchange'
 
 import Utils from '../utils/index'
+
+import FurnaceV1Api from '../api/furnace/indexV1'
+
+
 const loop = function () { }
 
 class TronEvolutionLand {
@@ -41,6 +45,7 @@ class TronEvolutionLand {
             address: null,
             ...option
         }
+        this.ERC20TRANSFERMETHOD = 'transferAndFallback'
         // this.clientFetch = new ClientFetch({baseUrl: this.env.ABI_DOMAIN, chainId: 60})
     }
 
@@ -65,7 +70,7 @@ class TronEvolutionLand {
 
     //     return _contract[methodName](...contractParams).send({
     //         feeLimit: this._tronweb.toSun(100),
-    //         callValue: 0,
+    //         value: 0,
     //         shouldPollResponse: false,
     //         ...sendParams
     //     })
@@ -101,7 +106,7 @@ class TronEvolutionLand {
             let _contract = await this._tronweb.contract().at(contractAddress)
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const res = await _method.call()
-            console.log('tron res:', res)
+
             return res;
 
         } catch (e) {
@@ -130,7 +135,8 @@ class TronEvolutionLand {
         abiString,
         forceABI = false,
         contractParams = [],
-        sendParams = {}
+        sendParams = {},
+        gasLimit
     }, {
         beforeFetch = loop,
         transactionHashCallback = loop,
@@ -144,6 +150,7 @@ class TronEvolutionLand {
             beforeFetch && beforeFetch()
             let contractAddress = this.getContractAddress(abiKey);
             const extendPayload = { ...payload, _contractAddress: contractAddress };
+            sendParams.callValue = sendParams.value;
             if (!this.option.sign) {
                 const {
                     functionSelector,
@@ -156,8 +163,8 @@ class TronEvolutionLand {
                 this._tronweb.transactionBuilder.triggerSmartContract(
                     _abi.address,
                     functionSelector,
-                    this._tronweb.toSun(100),
-                    sendParams.callValue || 0,
+                    gasLimit || this._tronweb.toSun(100),
+                    sendParams.value || 0,
                     parameter,
                     this.getCurrentAccount('hex')
                 ).then(({ transaction }) => {
@@ -174,7 +181,7 @@ class TronEvolutionLand {
             }
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const res = _method.send({
-                feeLimit: this._tronweb.toSun(100),
+                feeLimit: gasLimit || this._tronweb.toSun(100),
                 callValue: 0,
                 shouldPollResponse: false,
                 ...sendParams
@@ -186,7 +193,7 @@ class TronEvolutionLand {
                 const extendPayload = { ...payload, _contractAddress: contractAddress };
                 errorCallback && errorCallback(e, extendPayload)
             })
-            console.log('tron res:', res)
+
             return res;
         } catch (e) {
             console.error('triggerContract', e)
@@ -972,7 +979,7 @@ class TronEvolutionLand {
             abiString: luckyBoxABI,
             contractParams: [buyer, goldBoxAmount, silverBoxAmount],
             sendParams: {
-                callValue: cost
+                value: cost
             }
         }, callback)
     }
@@ -1157,7 +1164,7 @@ class TronEvolutionLand {
                 deadline
             ],
             sendParams: {
-                callValue: slippageAmountInMax.toFixed(0)
+                value: slippageAmountInMax.toFixed(0)
             }
         }, callback)
     }
@@ -1184,7 +1191,7 @@ class TronEvolutionLand {
                 deadline
             ],
             sendParams: {
-                callValue: 0
+                value: 0
             }
         }, callback)
     }
@@ -1195,7 +1202,6 @@ class TronEvolutionLand {
      * @param {*} token 
      */
     isEvolutionLandToken(token) {
-        console.log('isEvolutionLandToken', token);
 
         const tokenList = ['ring', 'kton', 'gold', 'wood', 'water', 'hoo', 'fire', 'soil',
             this.ABIs['ring'].address.toLowerCase(),
@@ -1354,7 +1360,64 @@ class TronEvolutionLand {
             ]
         }, callback);
     }
+
+    /**
+     * Returns the amount of RING owned by account
+     * @param {*} address 
+     */
+     getRingBalance(address, callback = {}) {
+        return this.callContract({
+            methodName: 'balanceOf',
+            abiKey: 'ring',
+            contractParams: [
+                address
+            ]
+        }, callback);
+    }
+
+    /**
+     * Returns the amount of KTON owned by account
+     * @param {*} address 
+     */
+    getKtonBalance(address, callback = {}) {
+        return this.callContract({
+            methodName: 'balanceOf',
+            abiKey: 'kton',
+            contractParams: [
+                address
+            ]
+        }, callback);
+    }
+
+    /**
+     * Returns the amount of tokens owned by account
+     * @param {*} account 
+     * @param {*} contractAddress 
+     */
+    getTokenBalance(account, contractAddress, callback = {}) {
+        return this.callContract({
+            methodName: 'balanceOf',
+            abiKey: contractAddress,
+            contractParams: [
+                account
+            ]
+        }, callback);
+    }
+
+    /**
+     * Get total supply of erc20 token
+     * @param {*} contractAddress Erc20 contract address
+     */
+    getTokenTotalSupply(contractAddress, callback = {}) {
+        return this.callContract({
+            methodName: 'totalSupply',
+            abiKey: contractAddress,
+            contractParams: []
+        }, callback);
+    }
     
 }
+
+Object.assign(TronEvolutionLand.prototype, FurnaceV1Api);
 
 export default TronEvolutionLand

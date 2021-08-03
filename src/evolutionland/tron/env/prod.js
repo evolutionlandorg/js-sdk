@@ -32,8 +32,10 @@ export default {
         SCAN_URL: "https://tronscan.org/#/",
         SCAN_TRANSACTION: "https://tronscan.org/#/transaction",
         SCAN_ADDRESS: "https://tronscan.org/#/address",
-        NETWORK: "https://api.trongrid.io",
+
+        NETWORK: "tron-11111",
         NETWORK_NODE: "11111",
+
         GENESISHOLDER: "41fd9ac1a0b242ba7116399174dd7ce5ff462e6c0f",
         AUCTIONHOLDER: "",
         JUSTSWAP_EXCHANGE: "41394CFB02DA445B95CA61DB8A993AF63E2AAE907A",
