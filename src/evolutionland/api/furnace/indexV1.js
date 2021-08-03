@@ -104,15 +104,9 @@ let FurnaceV1Api = {
     }
 
     const silverBoxGasLimit = chainGasLimit[this.env.CONTRACT.NETWORK].silver;
-      // this.env.CONTRACT.NETWORK === "1" ? new BigNumber(260000) : new BigNumber(350000);
+
     const goldBoxGasLimit = chainGasLimit[this.env.CONTRACT.NETWORK].gold;
-      // this.env.CONTRACT.NETWORK === "1" ? new BigNumber(300000) : new BigNumber(400000);
    
-    console.log('openFurnaceTreasure', {
-      silverBoxGasLimit, goldBoxGasLimit
-    }, { boxIds, amounts, hashmessage, v, r, s })
-
-
     let gasLimit = new BigNumber(amounts[0]).lt("1000000000000000000000")
       ? silverBoxGasLimit
       : goldBoxGasLimit;
