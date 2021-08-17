@@ -54,5 +54,5 @@ export default {
         TOKEN_WETH: "0x3277B7BABbeadF5dC43D5350df25310f3c819965"  // weht
     },
     DOMAIN: "https://www.evolution.land.l2me.com",
-    ABI_DOMAIN: "https://devstatic.l2me.com/static"
+    ABI_DOMAIN: "https://www.evolution.land.l2me.com"
 };
