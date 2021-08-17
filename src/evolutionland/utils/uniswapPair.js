@@ -26,6 +26,7 @@ const FACTORY_ADDRESS = {
   '97': '0x6725F303b657a9451d8BA641348b6761A6CC7a17',
   '128': '0xb0b670fc1F7724119963018DB0BfA86aDb22d941',
   '256': '0xA19a691EB6dE729758BFCef165e117C830483eF0',
+  '80001': '0x6d7cdf98a49f968F6eB90eEb3D8189038760d439'
 }
 
 // https://github.com/Uniswap/uniswap-v2-core/issues/102
@@ -37,6 +38,7 @@ const INIT_CODE_HASH = {
   '97': '0xd0d4c4cd0848c93cb4fd1f498d7013ee6bfb25783ea21593d5834f5d250ece66',
   '128': '0x2ad889f82040abccb2649ea6a874796c1601fb67f91a747a80e08860c73ddf24',
   '256': '0x6fcc083b512761e9f65d41be84dbc66f5afb698ad320a8b0e1e6d2d0e4d10930',
+  '80001': '0x6fcc083b512761e9f65d41be84dbc66f5afb698ad320a8b0e1e6d2d0e4d10930'
 }
 
 export class Pair {
@@ -63,6 +65,8 @@ export class Pair {
     const tokenAmounts = tokenAmountA.token.sortsBefore(tokenAmountB.token) // does safety checks
       ? [tokenAmountA, tokenAmountB]
       : [tokenAmountB, tokenAmountA]
+
+      ;console.log(tokenAmounts[0].token.chainId)
     this.liquidityToken = new Token(
       tokenAmounts[0].token.chainId,
       Pair.getAddress(tokenAmounts[0].token, tokenAmounts[1].token),
