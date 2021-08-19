@@ -1102,7 +1102,7 @@ class TronEvolutionLand {
     async getJustswapTokenBalance() {
         const ring = await this._tronweb.contract().at(this.ABIs['ring'].address)
         const balance = await ring.methods.balanceOf(this.ABIs['justswapExchange'].address).call()
-        return new BigNumber(balance).toString(10)
+        return balance?._isBigNumber ? balance.toString() : new BigNumber(balance).toString(10)
     }
 
     getOutputPrice(outputAmount, inputReserve, outputReserve) {
