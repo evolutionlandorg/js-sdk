@@ -20,6 +20,7 @@ import LandApi from '../api/land'
 import Erc20Api from '../api/erc20'
 import WethApi from '../api/weth'
 import LiquidityStakerApi from '../api/liquidityStaker'
+import DrillApi from '../api/drill'
 
 const loop = function () { }
 
@@ -27,7 +28,7 @@ const loop = function () { }
  * @class
  * Evolution Land for Polygon
  */
-class HecoEvolutionLand {
+class PolygonEvolutionLand {
     /**
      * constructor function.
      * @param {object} web3js - web3js instance
@@ -1988,11 +1989,12 @@ class HecoEvolutionLand {
     }
 }
 
-Object.assign(HecoEvolutionLand.prototype, WethApi);
-Object.assign(HecoEvolutionLand.prototype, LiquidityStakerApi);
-Object.assign(HecoEvolutionLand.prototype, Erc20Api);
-Object.assign(HecoEvolutionLand.prototype, ApostleApi);
-Object.assign(HecoEvolutionLand.prototype, FurnaceApi);
-Object.assign(HecoEvolutionLand.prototype, LandApi);
+Object.assign(PolygonEvolutionLand.prototype, WethApi);
+Object.assign(PolygonEvolutionLand.prototype, LiquidityStakerApi);
+Object.assign(PolygonEvolutionLand.prototype, Erc20Api);
+Object.assign(PolygonEvolutionLand.prototype, ApostleApi);
+Object.assign(PolygonEvolutionLand.prototype, FurnaceApi);
+Object.assign(PolygonEvolutionLand.prototype, LandApi);
+Object.assign(PolygonEvolutionLand.prototype, DrillApi);
 
-export default HecoEvolutionLand
+export default PolygonEvolutionLand

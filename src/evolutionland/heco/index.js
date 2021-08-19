@@ -21,6 +21,7 @@ import Erc20Api from '../api/erc20'
 import WethApi from '../api/weth'
 import LiquidityStakerApi from '../api/liquidityStaker'
 import GoldrushApi from '../api/goldrush';
+import DrillApi from '../api/drill'
 
 
 const loop = function () { }
@@ -2008,5 +2009,6 @@ Object.assign(HecoEvolutionLand.prototype, ApostleApi);
 Object.assign(HecoEvolutionLand.prototype, FurnaceApi);
 Object.assign(HecoEvolutionLand.prototype, LandApi);
 Object.assign(HecoEvolutionLand.prototype, GoldrushApi);
+Object.assign(HecoEvolutionLand.prototype, DrillApi);
 
 export default HecoEvolutionLand
