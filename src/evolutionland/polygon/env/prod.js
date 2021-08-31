@@ -50,7 +50,7 @@ export default {
 
         ITERING_CALLBACK: "",
 
-        TOKEN_WETH: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270"    // wht
+        TOKEN_WETH: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270"    // wmatic
     },
     DOMAIN: "https://www.evolution.land",
     ABI_DOMAIN: "https://static.l2me.com/static"
