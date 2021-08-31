@@ -9,6 +9,11 @@ const chainMap = {
         alias: 'heco',
         symbol: 'ht'
     },
+    '137': {
+        coin: 'polygon',
+        alias: 'polygon',
+        symbol: 'matic'
+    },
     '195': {
         coin: 'tron',
         alias: 'tron',
