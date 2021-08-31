@@ -5,6 +5,7 @@ import tronEvolutionLand from './evolutionland/tron'
 import crabEvolutionLand from './evolutionland/crab'
 import hecoEvolutionLand from './evolutionland/heco'
 import bscEvolutionLand from './evolutionland/bsc'
+import polygonEvolutionLand from './evolutionland/polygon'
 import units from './evolutionland/utils/unitConversion'
 
 /**
@@ -51,6 +52,8 @@ class Evolution {
                 return this.crabEvoland = new crabEvolutionLand(this.web3js, env, option)
             case 'heco':
                 return this.hecoEvoland = new hecoEvolutionLand(this.web3js, env, option)
+            case 'polygon':
+                return this.polygonEvoland = new polygonEvolutionLand(this.web3js, env, option)
             case 'bsc':
                 return this.bscEvoland = new bscEvolutionLand(this.web3js, env, option)
             default:

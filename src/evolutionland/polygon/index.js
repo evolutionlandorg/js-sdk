@@ -17,19 +17,18 @@ import { Currency, ChainId, Token, TokenAmount, Pair, Percent, Route, TradeType,
 import ApostleApi from '../api/apostle'
 import FurnaceApi from '../api/furnace'
 import LandApi from '../api/land'
-
-const WETH = {
-    // TODO
-    "97": new Token(97, '0xae13d989dac2f0debff460ac112a837c89baa7cd', 18, 'WBNB', "Wrapped BNB")
-};
+import Erc20Api from '../api/erc20'
+import WethApi from '../api/weth'
+import LiquidityStakerApi from '../api/liquidityStaker'
+import DrillApi from '../api/drill'
 
 const loop = function () { }
 
 /**
  * @class
- * Evolution Land for Ethereum
+ * Evolution Land for Polygon
  */
-class BscEvolutionLand {
+class PolygonEvolutionLand {
     /**
      * constructor function.
      * @param {object} web3js - web3js instance
@@ -42,14 +41,14 @@ class BscEvolutionLand {
         this.ABIs = getABIConfig(network)
         this.ABIClientFetch = new ClientFetch({
             baseUrl: this.env.ABI_DOMAIN,
-            evoNetwork: 'bsc'
+            evoNetwork: 'polygon'
         })
 
         this.etherjsProvider = null;
 
         this.ClientFetch = new ClientFetch({
             baseUrl: this.env.DOMAIN,
-            evoNetwork: 'bsc'
+            evoNetwork: 'polygon'
         })
         this.option = {
             sign: true,
@@ -124,7 +123,6 @@ class BscEvolutionLand {
             let contractAddress = this.getContractAddress(abiKey);
             
             _contract = new this._web3js.eth.Contract(abiString, contractAddress);
-
             const extendPayload = { ...payload, _contractAddress: contractAddress };
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const from = await this.getCurrentAccount()
@@ -401,15 +399,15 @@ class BscEvolutionLand {
         await this.setEtherjsProvider()
 
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-       
-        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING, this.etherjsProvider)
-        const route = new Route([pair], WETH[RING.chainId])
+        const WETH = this.wethGetToken();
+        const pair = await Fetcher.fetchPairData(WETH, RING, this.etherjsProvider)
+        const route = new Route([pair], WETH)
         const amountIn = value
         const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_OUTPUT)
         const slippageTolerance = new Percent('30', '10000') // 30 bips, or 0.30%
 
         const amountInMax = trade.maximumAmountIn(slippageTolerance).raw // needs to be converted to e.g. hex
-        const path = [WETH[RING.chainId].address, RING.address]
+        const path = [WETH.address, RING.address]
         const to = await this.getCurrentAccount() // should be a checksummed recipient address
         const deadline = Math.floor(Date.now() / 1000) + 60 * 20 // 20 minutes from the current Unix time
         const outputAmount = trade.outputAmount.raw // // needs to be converted to e.g. hex
@@ -439,14 +437,15 @@ class BscEvolutionLand {
         await this.setEtherjsProvider()
 
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-        const pair = await Fetcher.fetchPairData(RING, WETH[RING.chainId], this.etherjsProvider)
+        const WETH = this.wethGetToken();
+        const pair = await Fetcher.fetchPairData(RING, WETH, this.etherjsProvider)
         const route = new Route([pair], RING)
         const amountIn = value
         const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_INPUT)
-        const slippageTolerance = new Percent('0', '10000') // 30 bips, or 0.30%
+        const slippageTolerance = new Percent('30', '10000') // 30 bips, or 0.30%
 
         const amountOutMin = trade.minimumAmountOut(slippageTolerance).raw // needs to be converted to e.g. hex
-        const path = [RING.address, WETH[RING.chainId].address]
+        const path = [RING.address, WETH.address]
         const to = await this.getCurrentAccount() // should be a checksummed recipient address
         const deadline = Math.floor(Date.now() / 1000) + 60 * 20 // 20 minutes from the current Unix time
         const inputAmount = trade.inputAmount.raw // // needs to be converted to e.g. hex
@@ -620,8 +619,9 @@ class BscEvolutionLand {
         await this.setEtherjsProvider()
 
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING, this.etherjsProvider)
-        return pair.tokenAmounts[0].token.equals(WETH[RING.chainId]) ? pair.tokenAmounts[0].raw.toString(10) : pair.tokenAmounts[1].raw.toString(10)
+        const WETH = this.wethGetToken();
+        const pair = await Fetcher.fetchPairData(WETH, RING, this.etherjsProvider)
+        return pair.tokenAmounts[0].token.equals(WETH) ? pair.tokenAmounts[0].raw.toString(10) : pair.tokenAmounts[1].raw.toString(10)
     }
 
     /**
@@ -631,7 +631,8 @@ class BscEvolutionLand {
         await this.setEtherjsProvider()
 
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING, this.etherjsProvider)
+        const WETH = this.wethGetToken();
+        const pair = await Fetcher.fetchPairData(WETH, RING, this.etherjsProvider)
         return pair.tokenAmounts[0].token.equals(RING) ? pair.tokenAmounts[0].raw.toString(10) : pair.tokenAmounts[1].raw.toString(10)
     }
 
@@ -643,11 +644,12 @@ class BscEvolutionLand {
         await this.setEtherjsProvider()
 
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-        const pair = await Fetcher.fetchPairData(WETH[RING.chainId], RING, this.etherjsProvider)
-        const route = new Route([pair], WETH[RING.chainId])
+        const WETH = this.wethGetToken();
+        const pair = await Fetcher.fetchPairData(WETH, RING, this.etherjsProvider)
+        const route = new Route([pair], WETH)
         const amountIn = tokens_bought
         const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_OUTPUT)
-        const slippageTolerance = new Percent('0', '10000') 
+        const slippageTolerance = new Percent('30', '10000') 
         const amountInMax = trade.maximumAmountIn(slippageTolerance).raw
 
         return [new BigNumber(amountInMax.toString(10)).times('1000000000000000000').div(tokens_bought).toFixed(0), amountInMax.toString(10)];
@@ -661,11 +663,12 @@ class BscEvolutionLand {
         await this.setEtherjsProvider()
 
         const RING = new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_RING, 18, "RING", "Darwinia Network Native Token")
-        const pair = await Fetcher.fetchPairData(RING, WETH[RING.chainId], this.etherjsProvider)
+        const WETH = this.wethGetToken();
+        const pair = await Fetcher.fetchPairData(RING, WETH, this.etherjsProvider)
         const route = new Route([pair], RING)
         const amountIn = tokens_bought // 1 WETH
         const trade = new Trade(route, new TokenAmount(RING, amountIn), TradeType.EXACT_INPUT)
-        const slippageTolerance = new Percent('0', '10000') // 50 bips, or 0.50%
+        const slippageTolerance = new Percent('30', '10000') // 50 bips, or 0.50%
         const amountOutMin = trade.minimumAmountOut(slippageTolerance).raw // needs to be converted to e.g. hex
         return [new BigNumber(amountOutMin.toString(10)).times('1000000000000000000').div(tokens_bought).toFixed(0), amountOutMin.toString(10)];
     }
@@ -1239,12 +1242,12 @@ class BscEvolutionLand {
         // prize ring - gas used - 254,776 
         // https://etherscan.io/tx/0xd2b3f05b19e74627940edfe98daee31eeab84b67e88dcf0e77d595430b3b1afc
 
-        let gasLimit = new BigNumber(amounts[0]).lt('1000000000000000000000') ? new BigNumber(260000) : new BigNumber(300000);
+        let gasLimit = new BigNumber(amounts[0]).lt('1000000000000000000000') ? new BigNumber(350000) : new BigNumber(350000);
 
         if(amounts.length > 1) {
             for (let index = 1; index < amounts.length; index++) {
                 const amount = amounts[index];
-                gasLimit = gasLimit.plus(new BigNumber(amount).lt('1000000000000000000000') ? new BigNumber(260000) : new BigNumber(260000));
+                gasLimit = gasLimit.plus(new BigNumber(amount).lt('1000000000000000000000') ? new BigNumber(350000) : new BigNumber(350000));
             }
         }
         
@@ -1353,6 +1356,9 @@ class BscEvolutionLand {
                 return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_FIRE, 18, "FIRE", "FIRE");
             case 'soil':
                 return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_ELEMENT_SOIL, 18, "SOIL", "SOIL");
+            case 'wht':
+            case 'weth':
+                return this.wethGetToken();
             default:
                 break;
         }
@@ -1394,7 +1400,6 @@ class BscEvolutionLand {
     async getDerivedMintInfo({token: tokenAType, amount: amountA}, {token: tokenBType, amount: amountB}) {
         const pair = await this.getDerivedPairInfo(tokenAType, tokenBType);
         const totalSupply = new TokenAmount(pair.liquidityToken, await this.getTokenTotalSupply(pair.liquidityToken.address));
-
         const independentToken = amountA ? 
         { token: this.getUniswapToken(tokenAType), amount: amountA} : 
         { token: this.getUniswapToken(tokenBType), amount: amountB};
@@ -1521,16 +1526,69 @@ class BscEvolutionLand {
         }, callback)
     }
 
-    async addUniswapETHLiquidity(value, params, callback = {}) {
+    /**
+     * Adds liquidity to an ERC-20⇄ETH pool
+     * 
+     * msg.sender should have already given the router an allowance of at least amount on tokenA/tokenB.
+     * 
+     * Always adds assets at the ideal ratio, according to the price when the transaction is executed.
+     * 
+     * Token A or Token B must contains "WETH"
+     * 
+     * @param {*} param0 {token: tokenAType, amount: amountA}
+     * @param {*} param1 {token: tokenBType, amount: amountB}
+     * @param {*} to Recipient of the liquidity tokens.
+     * @param {*} slippage The amount the price moves in a trading pair between when a transaction is submitted and when it is executed.
+     * @param {*} callback 
+     */
+    async addUniswapETHLiquidity({token: tokenAType, amount: amountA}, {token: tokenBType, amount: amountB}, to, slippage = 100, callback = {}) {
         // const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 120 minutes from the current Unix time
         //  https://uniswap.org/docs/v2/smart-contracts/router02/#addliquidity
+        const WETH = this.wethGetToken();
+
+        const { pair, parsedAmounts } = await this.getDerivedMintInfo({token: tokenAType, amount: amountA}, {token: tokenBType, amount: amountB});
+
+        if(!pair || !pair.token0.address || !pair.token1.address) {
+            return;
+        }
+
+        if(!to) {
+            to = await this.getCurrentAccount();    
+        }
+
+        const amountsMin = {
+            [pair.token0.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token0.address].raw, slippage)[0],
+            [pair.token1.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token1.address].raw, slippage)[0]
+        }
+
+        const erc20Token = pair.token0.address === WETH ? pair.token1 : pair.token0;
+
+        const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 120 minutes from the current Unix time
+
+        // contract:
+        // function addLiquidityETH(
+        //     address token,
+        //     uint amountTokenDesired,
+        //     uint amountTokenMin,
+        //     uint amountETHMin,
+        //     address to,
+        //     uint deadline
+        //   ) external payable returns (uint amountToken, uint amountETH, uint liquidity);
+
         return this.triggerContract({
             methodName: 'addLiquidityETH',
             abiKey: 'uniswapExchange',
             abiString: this.ABIs['uniswapExchange'].abi,
-            contractParams: params,
+            contractParams: [
+                erc20Token.address,
+                parsedAmounts[erc20Token.address].raw.toString(),
+                amountsMin[erc20Token.address].toString(),
+                amountsMin[WETH.address].toString(),
+                to,
+                deadline
+            ],
             sendParams: {
-                value: value
+                value: parsedAmounts[WETH.address].raw.toString()
             }
         }, callback)
     }
@@ -1576,6 +1634,68 @@ class BscEvolutionLand {
                 parsedAmounts[pair.liquidityToken.address].raw.toString(),
                 amountsMin[pair.token0.address].toString(),
                 amountsMin[pair.token1.address].toString(),
+                to,
+                deadline
+            ],
+            sendParams: {
+                value: 0
+            }
+        }, callback)
+    }
+
+    /**
+     * Removes liquidity from an ERC-20⇄ETH pool.
+     * 
+     * msg.sender should have already given the router an allowance of at least liquidity on the pool.
+     * 
+     * Token A or Token B must contains "WETH"
+     * 
+     * @param {*} tokenAType A pool token.
+     * @param {*} tokenBType A pool token.
+     * @param {*} liquidityValue The value of liquidity tokens to remove.
+     * @param {*} to Recipient of the underlying assets.
+     * @param {*} slippage The amount the price moves in a trading pair between when a transaction is submitted and when it is executed.
+     * @param {*} callback 
+     */
+    async removeUniswapETHLiquidity(tokenAType, tokenBType, liquidityValue, to, slippage = 100, callback = {}) {
+        if(!to) {
+            to = await this.getCurrentAccount();    
+        }
+
+        const { pair, parsedAmounts } = await this.getDerivedBurnInfo(tokenAType, tokenBType, liquidityValue, to);
+        const WETH = this.wethGetToken();
+
+        if(!pair || !pair.token0.address || !pair.token1.address) {
+            return;
+        }
+
+        const amountsMin = {
+            [pair.token0.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token0.address].raw, slippage)[0],
+            [pair.token1.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token1.address].raw, slippage)[0]
+        }
+
+        const erc20Token = pair.token0.address === WETH ? pair.token1 : pair.token0;
+
+        const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 20 minutes from the current Unix time
+
+        // https://uniswap.org/docs/v2/smart-contracts/router02/#removeliquidity
+        // function removeLiquidityETH(
+        //     address token,
+        //     uint liquidity,
+        //    s uint amountTokenMin,
+        //     uint amountETHMin,
+        //     address to,
+        //     uint deadline
+        //   ) external returns (uint amountToken, uint amountETH);
+        return this.triggerContract({
+            methodName: 'removeLiquidityETH',
+            abiKey: 'uniswapExchange',
+            abiString: this.ABIs['uniswapExchange'].abi,
+            contractParams: [
+                erc20Token.address,
+                parsedAmounts[pair.liquidityToken.address].raw.toString(),
+                amountsMin[erc20Token.address].toString(),
+                amountsMin[WETH.address].toString(),
                 to,
                 deadline
             ],
@@ -1869,8 +1989,12 @@ class BscEvolutionLand {
     }
 }
 
-Object.assign(BscEvolutionLand.prototype, ApostleApi);
-Object.assign(BscEvolutionLand.prototype, FurnaceApi);
-Object.assign(BscEvolutionLand.prototype, LandApi);
+Object.assign(PolygonEvolutionLand.prototype, WethApi);
+Object.assign(PolygonEvolutionLand.prototype, LiquidityStakerApi);
+Object.assign(PolygonEvolutionLand.prototype, Erc20Api);
+Object.assign(PolygonEvolutionLand.prototype, ApostleApi);
+Object.assign(PolygonEvolutionLand.prototype, FurnaceApi);
+Object.assign(PolygonEvolutionLand.prototype, LandApi);
+Object.assign(PolygonEvolutionLand.prototype, DrillApi);
 
-export default BscEvolutionLand
+export default PolygonEvolutionLand

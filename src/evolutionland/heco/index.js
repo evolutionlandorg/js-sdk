@@ -20,6 +20,8 @@ import LandApi from '../api/land'
 import Erc20Api from '../api/erc20'
 import WethApi from '../api/weth'
 import LiquidityStakerApi from '../api/liquidityStaker'
+import GoldrushApi from '../api/goldrush';
+import DrillApi from '../api/drill'
 
 
 const loop = function () { }
@@ -127,7 +129,6 @@ class HecoEvolutionLand {
             const extendPayload = { ...payload, _contractAddress: contractAddress };
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const from = await this.getCurrentAccount()
-            const gasRes = await this.ClientFetch.apiGasPrice({ wallet: this.option.address || from }, true)
             let estimateGas = null;
 
             try {
@@ -149,6 +150,8 @@ class HecoEvolutionLand {
                 Object.keys(sendParams).forEach((item) => {
                     hexSendParams[item] = Utils.toHex(sendParams[item])
                 })
+
+                const gasRes = await this.ClientFetch.apiGasPrice({ wallet: this.option.address || from }, true)
 
                 const tx = new EthereumTx({
                     to: contractAddress,
@@ -2005,5 +2008,7 @@ Object.assign(HecoEvolutionLand.prototype, Erc20Api);
 Object.assign(HecoEvolutionLand.prototype, ApostleApi);
 Object.assign(HecoEvolutionLand.prototype, FurnaceApi);
 Object.assign(HecoEvolutionLand.prototype, LandApi);
+Object.assign(HecoEvolutionLand.prototype, GoldrushApi);
+Object.assign(HecoEvolutionLand.prototype, DrillApi);
 
 export default HecoEvolutionLand

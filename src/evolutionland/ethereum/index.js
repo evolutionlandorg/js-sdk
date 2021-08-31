@@ -16,6 +16,7 @@ import LiquidityStakerApi from '../api/liquidityStaker'
 import Erc20Api from '../api/erc20'
 import Erc1155Api from '../api/erc1155'
 import PetsApi from '../api/pets'
+import DrillApi from '../api/drill'
 
 const loop = function () { }
 
@@ -117,7 +118,6 @@ class EthereumEvolutionLand {
             const extendPayload = { ...payload, _contractAddress: contractAddress };
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const from = await this.getCurrentAccount()
-            const gasRes = await this.ClientFetch.apiGasPrice({ wallet: this.option.address || from })
             let estimateGas = null;
 
             try {
@@ -139,6 +139,8 @@ class EthereumEvolutionLand {
                 Object.keys(sendParams).forEach((item) => {
                     hexSendParams[item] = Utils.toHex(sendParams[item])
                 })
+
+                const gasRes = await this.ClientFetch.apiGasPrice({ wallet: this.option.address || from })
 
                 const tx = new EthereumTx({
                     to: contractAddress,
@@ -2175,5 +2177,6 @@ Object.assign(EthereumEvolutionLand.prototype, LiquidityStakerApi);
 Object.assign(EthereumEvolutionLand.prototype, Erc20Api);
 Object.assign(EthereumEvolutionLand.prototype, Erc1155Api);
 Object.assign(EthereumEvolutionLand.prototype, PetsApi);
+Object.assign(EthereumEvolutionLand.prototype, DrillApi);
 
 export default EthereumEvolutionLand

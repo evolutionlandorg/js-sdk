@@ -47,6 +47,8 @@ export default {
         FURNACE_TAKEBACK: "0xAb43805C2335055dA0171D06C821cf8A39FFfbcf",   // DrillTakeBack
         FURNACE_ITEMBASE: "0x96AAcc7e2dFAebD7D1153A0B7C7e4D6a55f7025B",   // ItemBase_Proxy
 
+        GOLD_RUSH_RAFFLE: "0x229768860d74f6F3A6B7e1576DF86E99e4Fa2140",
+
         LIQUIDITY_STAKER_FACTORY: "0xcA713F138149245e915e67C525B19769dce5c1f9",
 
         ITERING_CALLBACK: "",
@@ -54,5 +56,5 @@ export default {
         TOKEN_WETH: "0xD4C2F962B8b94cdD2e0B2e8E765d39f32980a1c1"  // wht
     },
     DOMAIN: "https://www.evolution.land.l2me.com",
-    ABI_DOMAIN: "https://devstatic.l2me.com/static"
+    ABI_DOMAIN: "https://www.evolution.land.l2me.com"
 };

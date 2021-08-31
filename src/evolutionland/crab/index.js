@@ -112,7 +112,6 @@ class CrabEvolutionLand {
             const extendPayload = { ...payload, _contractAddress: contractAddress };
             const _method = _contract.methods[methodName].apply(this, contractParams)
             const from = await this.getCurrentAccount()
-            const gasRes = await this.ClientFetch.apiGasPrice({ wallet: this.option.address || from }, true)
             let estimateGas = null;
 
             try {
@@ -134,6 +133,8 @@ class CrabEvolutionLand {
                 Object.keys(sendParams).forEach((item) => {
                     hexSendParams[item] = Utils.toHex(sendParams[item])
                 })
+                
+                const gasRes = await this.ClientFetch.apiGasPrice({ wallet: this.option.address || from }, true)
 
                 const tx = new EthereumTx({
                     to: contractAddress,
