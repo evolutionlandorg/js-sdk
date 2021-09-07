@@ -22,7 +22,6 @@ import WethApi from '../api/weth'
 import LiquidityStakerApi from '../api/liquidityStaker'
 import GoldrushApi from '../api/goldrush';
 import DrillApi from '../api/drill'
-import { PropBatchClaimApi } from "../api/propBatchClaim";
 
 
 const loop = function () { }
@@ -2011,6 +2010,5 @@ Object.assign(HecoEvolutionLand.prototype, FurnaceApi);
 Object.assign(HecoEvolutionLand.prototype, LandApi);
 Object.assign(HecoEvolutionLand.prototype, GoldrushApi);
 Object.assign(HecoEvolutionLand.prototype, DrillApi);
-Object.assign(HecoEvolutionLand.prototype, PropBatchClaimApi);
 
 export default HecoEvolutionLand
