@@ -2086,7 +2086,7 @@ class EthereumEvolutionLand {
             abiKey: 'goldRushRaffle',
             abiString: this.ABIs['goldRushRaffle'].abi,
             contractParams: [
-                eventId, landTokenId
+                eventId, Utils.pad0x(landTokenId)
             ]
         }, callback);
     }
