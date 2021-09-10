@@ -11,6 +11,7 @@ import landABI from "./json/abi-land";
 import lotteryABI from "./json/abi-lottery";
 import rolesUpdaterABI from "./json/abi-rolesUpdater";
 import landResourceABI from "./json/abi-landResource";
+import landResourceV2ABI from "./json/abi-landResourceV2";
 import apostleAuctionABI from "./json/abi-apostleAuction";
 import apostleTakeBackABI from "./json/abi-takeBack";
 import apostleSiringABI from "./json/abi-apostleSiring";
@@ -124,6 +125,9 @@ function getABI(env) {
     apostleLandResource: {
       address: env.CONTRACT.TOKEN_LAND_RESOURCE,
       abi: landResourceABI,
+    },
+    apostleLandResourceV2: {
+      abi: landResourceV2ABI,
     },
     apostleTokenUse: {
       address: env.CONTRACT.TOKEN_TOKEN_USE,
