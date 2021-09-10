@@ -46,6 +46,8 @@ export default {
         FURNACE_TAKEBACK: "0xd7b08EE01Ad1b6DB5a0d2f106CefB2E6b11c0082",   // DrillTakeBack
         FURNACE_ITEMBASE: "0xc5f01D664B192FC7Fc0f2e166cf182FdaD315C0f",   // ItemBase_Proxy
 
+        GOLD_RUSH_RAFFLE: "0x6f75Dcd61579d9363799d282D6DD1f202295Ae84",
+
         LIQUIDITY_STAKER_FACTORY: "0x3158616c547afa169fb0057B67980630FD09F6dD",
 
         ITERING_CALLBACK: "https://www.evolution.land/api/eth/raw_sign_broadcast",
