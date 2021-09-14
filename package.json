@@ -1,0 +1,31 @@
+{
+  "name": "@evolutionland/evolution-js",
+  "version": "2.0.0",
+  "description": "evolution evolution-js evolutionland evolution-js-sdk evolution-land metaverse",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evolutionlandorg/js-sdk.git"
+  },
+  "keywords": [
+    "evolution",
+    "evolution-js",
+    "evolutionland",
+    "evolution-js-sdk",
+    "evolution-land",
+    "atlantis",
+    "byzantine",
+    "columbus",
+    "dawning",
+    "eden"
+  ],
+  "author": "evolutionlandorg",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/evolutionlandorg/js-sdk/issues"
+  },
+  "homepage": "https://github.com/evolutionlandorg/js-sdk#readme"
+}
