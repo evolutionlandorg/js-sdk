@@ -4,7 +4,8 @@
   "description": "evolution evolution-js evolutionland evolution-js-sdk evolution-land metaverse",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "format": "prettier --write ./**/*.{js,jsx,ts,tsx,json}"
   },
   "repository": {
     "type": "git",
@@ -27,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/evolutionlandorg/js-sdk/issues"
   },
-  "homepage": "https://github.com/evolutionlandorg/js-sdk#readme"
+  "homepage": "https://github.com/evolutionlandorg/js-sdk#readme",
+  "devDependencies": {
+    "prettier": "2.4.0"
+  }
 }
