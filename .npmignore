@@ -17,3 +17,4 @@ src
 tsconfig.json
 yarn.lock
 .test.ts
+rollup.config.js
