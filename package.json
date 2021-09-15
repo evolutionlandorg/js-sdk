@@ -54,7 +54,8 @@
     }
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix",
+    "**/*.test.ts": "jest",
+    "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
     "*.{js,jsx,ts,tsx,json}": "prettier --write"
   }
 }
