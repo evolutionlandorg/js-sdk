@@ -1,5 +1,3 @@
-import { Env } from "./index";
-
 import bancorABI from "./json/abi-bancor";
 import actionABI from "./json/abi-auction";
 import ringABI from "./json/abi-ring";
@@ -39,6 +37,7 @@ import tokenUseV2ABI from "./json/abi-tokenUseV2";
 import drillLuckyBoxV2ABI from "./json/abi-drillLuckyBoxV2";
 import erc721BridgeV2ABI from "./json/abi-ERC721BridgeV2";
 import cryptoKitties from "./json/abi-cryptoKitties";
+import pveTeamABI from "./json/abi-pveTeam.json";
 
 function getABI(env) {
   return {
@@ -223,7 +222,11 @@ function getABI(env) {
     },
     weth: {
       address: env.CONTRACT.TOKEN_WETH,
-    }
+    },
+    pveTeam: {
+      abi: pveTeamABI,
+      address: env.CONTRACT.PVETEAM_PROXY,
+    },
   };
 }
 
