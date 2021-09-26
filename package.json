@@ -4,11 +4,11 @@
   "description": "evolution evolution-js evolutionland evolution-js-sdk evolution-land metaverse",
   "main": "./lib/index.js",
   "scripts": {
-    "build": "rm -rf dist lib && rollup -c",
-    "lint": "eslint src/**/*.{js,jsx,ts,tsx} --fix",
+    "build": "rm -rf dist lib && tsc",
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
     "test": "jest",
-    "format": "prettier --write ./**/*.{js,jsx,ts,tsx,json}",
-    "prepare": "husky install"
+    "format": "prettier --write '**/*.{js,jsx,ts,tsx,json}'",
+    "prepare": "husky install && ts-patch install -s"
   },
   "repository": {
     "type": "git",
@@ -36,6 +36,7 @@
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
     "@rollup/plugin-commonjs": "^20.0.0",
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@types/jest": "^27.0.1",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
@@ -48,11 +49,14 @@
     "lint-staged": ">=10",
     "prettier": "2.4.0",
     "rollup": "^2.56.3",
+    "rollup-plugin-polyfill-node": "^0.7.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
     "ts-jest": "^27.0.5",
+    "ts-patch": "^1.4.4",
     "tslib": "^2.3.1",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.3",
+    "typescript-transform-paths": "^3.3.1"
   },
   "config": {
     "commitizen": {
@@ -65,7 +69,6 @@
     "*.{js,jsx,ts,tsx,json}": "prettier --write"
   },
   "dependencies": {
-    "@types/lodash-es": "^4.17.5",
-    "lodash-es": "^4.17.21"
+    "ethers": "^5.4.6"
   }
 }
