@@ -52,7 +52,9 @@ export default {
 
         ITERING_CALLBACK: "https://www.evolution.land/api/eth/raw_sign_broadcast",
 
-        TOKEN_WETH: "0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F"    // wht
+        TOKEN_WETH: "0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F",    // wht
+
+        PVETEAM_PROXY: "0x66B3f77Ba05e795A8Fd5ab60799d598312148e67",  // PVE Team
     },
     DOMAIN: "https://www.evolution.land",
     ABI_DOMAIN: "https://static.l2me.com/static"

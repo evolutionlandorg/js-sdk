@@ -21,7 +21,8 @@ import Erc20Api from '../api/erc20'
 import WethApi from '../api/weth'
 import LiquidityStakerApi from '../api/liquidityStaker'
 import GoldrushApi from '../api/goldrush';
-import DrillApi from '../api/drill'
+import DrillApi from '../api/drill';
+import { PveApi } from "../api/pve";
 
 
 const loop = function () { }
@@ -1565,7 +1566,7 @@ class HecoEvolutionLand {
             [pair.token1.address]: UniswapUtils.calculateSlippageAmount(parsedAmounts[pair.token1.address].raw, slippage)[0]
         }
 
-        const erc20Token = pair.token0.address === WETH ? pair.token1 : pair.token0;
+        const erc20Token = pair.token0.address.toLowerCase() === WETH.address?.toLowerCase() ? pair.token1 : pair.token0;
 
         const deadline = Math.floor(Date.now() / 1000) + 60 * 120 // 120 minutes from the current Unix time
 
@@ -2010,5 +2011,6 @@ Object.assign(HecoEvolutionLand.prototype, FurnaceApi);
 Object.assign(HecoEvolutionLand.prototype, LandApi);
 Object.assign(HecoEvolutionLand.prototype, GoldrushApi);
 Object.assign(HecoEvolutionLand.prototype, DrillApi);
+Object.assign(HecoEvolutionLand.prototype, PveApi);
 
 export default HecoEvolutionLand

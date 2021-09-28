@@ -53,7 +53,9 @@ export default {
 
         ITERING_CALLBACK: "",
 
-        TOKEN_WETH: "0xD4C2F962B8b94cdD2e0B2e8E765d39f32980a1c1"  // wht
+        TOKEN_WETH: "0xD4C2F962B8b94cdD2e0B2e8E765d39f32980a1c1",  // wht
+
+        PVETEAM_PROXY: "0x02d95D51B59bDDF0d93AD0acCCB7c7044D3E6561",  // PVE Team
     },
     DOMAIN: "https://www.evolution.land.l2me.com",
     ABI_DOMAIN: "https://www.evolution.land.l2me.com"
