@@ -74,6 +74,7 @@ export const getContractsAddressAndABI = (env: EnvType): ContractsType => {
       abi: actionABI,
     },
     landClockAuctionV3: {
+      address: env.CONTRACT_ADDRESS.TOKEN_AUCTION,
       abi: clockAuctionV3ABI,
     },
     land: {
