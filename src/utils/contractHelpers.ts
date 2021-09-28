@@ -1,6 +1,22 @@
 import { ethers } from "ethers";
-import { getEnv } from "@evo/env/index";
+import { getEnv, getEnvByProvider } from "@evo/env/index";
 import { getContractsAddressAndABI } from "@evo/abi/index";
+
+export const getContractAddress = async (
+  provider: ethers.providers.Provider,
+  abiCfgKeyOrAddress: string
+): Promise<string | undefined> => {
+  if (ethers.utils.isAddress(abiCfgKeyOrAddress)) {
+    return abiCfgKeyOrAddress;
+  }
+
+  const env = await getEnvByProvider(provider);
+  if (!env) {
+    return;
+  }
+
+  return getContractsAddressAndABI(env)[abiCfgKeyOrAddress].address;
+};
 
 export type ErrorCallbackType = (err: { error: unknown }) => void;
 export type ResponseCallbackType = (response?: { transactionHash: string }) => void;
