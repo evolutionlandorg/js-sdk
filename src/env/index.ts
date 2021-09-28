@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import type { EnvType } from "@evo/env/types";
 
 import { HecoEnv } from "@evo/env/heco";
@@ -34,4 +35,14 @@ export const getEnv = (chainId: number): EnvType | undefined => {
     default:
       return;
   }
+};
+
+/**
+ * Get Env By Provider
+ * @param provider Ethers provider
+ * @returns Env config or undefined
+ */
+export const getEnvByProvider = async (provider: ethers.providers.Provider) => {
+  const network = await provider.getNetwork();
+  return getEnv(network.chainId);
 };
