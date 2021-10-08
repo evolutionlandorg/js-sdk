@@ -32,7 +32,7 @@ export default {
         TOKEN_ELEMENT_FIRE: "0xe97C7F83ec91E29569f1a08De95ad3Bb0e8B6B3A",
         TOKEN_ELEMENT_SOIL: "0x81989cD57271565DBFfe9807E917Afc098B30c9A",
 
-        PROVIDER: `https://http-mainnet-node.huobichain.com`,
+        PROVIDER: `https://http-mainnet.hecochain.com`,
 
         SCAN_URL: "https://hecoinfo.com/",
 
