@@ -1246,12 +1246,12 @@ class HecoEvolutionLand {
         // prize ring - gas used - 254,776 
         // https://etherscan.io/tx/0xd2b3f05b19e74627940edfe98daee31eeab84b67e88dcf0e77d595430b3b1afc
 
-        let gasLimit = new BigNumber(amounts[0]).lt('1000000000000000000000') ? new BigNumber(260000) : new BigNumber(300000);
+        let gasLimit = new BigNumber(amounts[0]).lt('1000000000000000000000') ? new BigNumber(320000) : new BigNumber(320000);
 
         if(amounts.length > 1) {
             for (let index = 1; index < amounts.length; index++) {
                 const amount = amounts[index];
-                gasLimit = gasLimit.plus(new BigNumber(amount).lt('1000000000000000000000') ? new BigNumber(260000) : new BigNumber(260000));
+                gasLimit = gasLimit.plus(new BigNumber(amount).lt('1000000000000000000000') ? new BigNumber(320000) : new BigNumber(320000));
             }
         }
         
