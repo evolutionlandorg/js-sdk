@@ -1363,6 +1363,8 @@ class HecoEvolutionLand {
             case 'wht':
             case 'weth':
                 return this.wethGetToken();
+            case 'dusd':
+                return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_DUSD, 18, "DUSD", "Demeter USD");
             default:
                 break;
         }

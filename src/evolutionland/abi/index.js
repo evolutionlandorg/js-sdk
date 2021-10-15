@@ -227,6 +227,11 @@ function getABI(env) {
       abi: pveTeamABI,
       address: env.CONTRACT.PVETEAM_PROXY,
     },
+    // only heco
+    dusd: {
+      address: env.CONTRACT.TOKEN_DUSD,
+      abi: ringABI,
+    },
   };
 }
 
