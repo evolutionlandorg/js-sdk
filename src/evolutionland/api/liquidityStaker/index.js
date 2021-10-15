@@ -1,6 +1,10 @@
 let LiquidityStakerApi = {
 
   liqidityStakerGetStakerAddress(stakingToken, callback = {}) {
+    if ((stakingToken || "").toLowerCase() === "0x8d9C7F55dB6f9BCc49559dF9608503E017303279".toLowerCase()) {
+      return "0x76b953B76007634BB4953b518bA428266b32f1Ce";
+    }
+
     return this.callContract(
       {
         methodName: "stakingRewardsInfoByStakingToken",
