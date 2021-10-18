@@ -1300,6 +1300,15 @@ class HecoEvolutionLand {
     }
 
     /**
+     * Get native token balance
+     * @param {*} address
+     * @returns
+     */
+    getNativeBalance(address) {
+        return this._tronweb.trx.getBalance(address);
+    }
+
+    /**
      * Returns the amount of tokens owned by account
      * @param {*} account 
      * @param {*} contractAddress 
