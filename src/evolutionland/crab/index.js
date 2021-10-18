@@ -1283,7 +1283,7 @@ class CrabEvolutionLand {
      * @returns
      */
     getNativeBalance(address) {
-        return this._tronweb.trx.getBalance(address);
+        return this._web3js.eth.getBalance(address);
     }
 
     /**
