@@ -1405,6 +1405,30 @@ class TronEvolutionLand {
     }
 
     /**
+     * Returns the amount of tokens owned by account
+     * @param {*} account
+     * @param {*} symbol
+     * @returns
+     */
+    getTokenBalanceBySymbol(account, symbol) {
+        // specify token
+        switch ((symbol || '').toLowerCase()) {
+            // case 'ht':
+            // case 'matic':
+            case 'weth':
+                return this._tronweb.trx.getBalance(account);
+        }
+
+        return this.callContract({
+            methodName: 'balanceOf',
+            abiKey: (symbol || '').toLowerCase(),
+            contractParams: [
+                account
+            ]
+        }, callback);
+    }
+
+    /**
      * Get total supply of erc20 token
      * @param {*} contractAddress Erc20 contract address
      */
