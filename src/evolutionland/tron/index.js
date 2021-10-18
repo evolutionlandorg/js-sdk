@@ -1401,9 +1401,10 @@ class TronEvolutionLand {
     /**
      * Returns the amount of tokens owned by account
      * @param {*} account 
-     * @param {*} contractAddress 
+     * @param {*} contractAddressOrType 
      */
-    getTokenBalance(account, contractAddress, callback = {}) {
+    getTokenBalance(account, contractAddressOrType, callback = {}) {
+        const contractAddress = this.getContractAddress(contractAddressOrType);
         return this.callContract({
             methodName: 'balanceOf',
             abiKey: contractAddress,

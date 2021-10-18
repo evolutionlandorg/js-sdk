@@ -1469,9 +1469,10 @@ class EthereumEvolutionLand {
     /**
      * Returns the amount of tokens owned by account
      * @param {*} account 
-     * @param {*} contractAddress 
+     * @param {*} contractAddressOrType 
      */
-    getTokenBalance(account, contractAddress) {
+    getTokenBalance(account, contractAddressOrType) {
+        const contractAddress = this.getContractAddress(contractAddressOrType);
         const _contract = new this._web3js.eth.Contract(this.ABIs['ring'].abi, contractAddress)
         return _contract.methods.balanceOf(account).call()
     }
