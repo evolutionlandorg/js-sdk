@@ -55,6 +55,8 @@ export default {
         TOKEN_WETH: "0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F",    // wht
 
         PVETEAM_PROXY: "0x66B3f77Ba05e795A8Fd5ab60799d598312148e67",  // PVE Team
+
+        TOKEN_DUSD: "0x9F5c80dc840f9cc60670a20c1e5d0fbD3E13B015",  // dusd, https://github.com/evolutionlandorg/evo-static/issues/604
     },
     DOMAIN: "https://www.evolution.land",
     ABI_DOMAIN: "https://static.l2me.com/static"
