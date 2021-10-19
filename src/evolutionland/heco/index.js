@@ -1300,11 +1300,21 @@ class HecoEvolutionLand {
     }
 
     /**
+     * Get native token balance
+     * @param {*} address
+     * @returns
+     */
+    getNativeBalance(address) {
+        return this._web3js.eth.getBalance(address);
+    }
+
+    /**
      * Returns the amount of tokens owned by account
      * @param {*} account 
-     * @param {*} contractAddress 
+     * @param {*} contractAddressOrType 
      */
-    getTokenBalance(account, contractAddress) {
+    getTokenBalance(account, contractAddressOrType) {
+        const contractAddress = this.getContractAddress(contractAddressOrType);
         const _contract = new this._web3js.eth.Contract(this.ABIs['ring'].abi, contractAddress)
         return _contract.methods.balanceOf(account).call()
     }
@@ -1363,6 +1373,8 @@ class HecoEvolutionLand {
             case 'wht':
             case 'weth':
                 return this.wethGetToken();
+            case 'dusd':
+                return new Token(parseInt(this.env.CONTRACT.NETWORK), this.env.CONTRACT.TOKEN_DUSD, 18, "DUSD", "Demeter USD");
             default:
                 break;
         }

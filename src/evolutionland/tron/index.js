@@ -1390,11 +1390,21 @@ class TronEvolutionLand {
     }
 
     /**
+     * Get native token balance
+     * @param {*} address
+     * @returns
+     */
+    getNativeBalance(address) {
+        return this._tronweb.trx.getBalance(address);
+    }
+
+    /**
      * Returns the amount of tokens owned by account
      * @param {*} account 
-     * @param {*} contractAddress 
+     * @param {*} contractAddressOrType 
      */
-    getTokenBalance(account, contractAddress, callback = {}) {
+    getTokenBalance(account, contractAddressOrType, callback = {}) {
+        const contractAddress = this.getContractAddress(contractAddressOrType);
         return this.callContract({
             methodName: 'balanceOf',
             abiKey: contractAddress,
