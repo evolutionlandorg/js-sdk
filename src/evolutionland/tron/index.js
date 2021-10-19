@@ -1405,13 +1405,17 @@ class TronEvolutionLand {
      */
     getTokenBalance(account, contractAddressOrType, callback = {}) {
         const contractAddress = this.getContractAddress(contractAddressOrType);
-        return this.callContract({
-            methodName: 'balanceOf',
-            abiKey: contractAddress,
-            contractParams: [
-                account
-            ]
-        }, callback);
+        if (this._tronweb.isAddress(contractAddress)) {
+            return this.callContract({
+                methodName: 'balanceOf',
+                abiKey: contractAddress,
+                contractParams: [
+                    account
+                ]
+            }, callback);
+        } else {
+            return 0;
+        }
     }
 
     /**

@@ -1311,8 +1311,12 @@ class PolygonEvolutionLand {
      */
     getTokenBalance(account, contractAddressOrType) {
         const contractAddress = this.getContractAddress(contractAddressOrType);
-        const _contract = new this._web3js.eth.Contract(this.ABIs['ring'].abi, contractAddress)
-        return _contract.methods.balanceOf(account).call()
+        if (this._web3js.utils.isAddress(contractAddress)) {
+            const _contract = new this._web3js.eth.Contract(this.ABIs['ring'].abi, contractAddress)
+            return _contract.methods.balanceOf(account).call()
+        } else {
+            return 0;
+        }
     }
 
     /**
