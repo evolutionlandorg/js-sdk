@@ -171,4 +171,25 @@ export const PveApi = {
       ],
     });
   },
+
+  /**
+   * takeback(...) is invoked by the user who want to clain drill
+   * @param {*} param0 _hashmessage = hash("${address(this)}{_user}${networkid}${ids[]}${rewards[]}"), _v, _r, _s are from supervisor's signature on _hashmessage
+   * @param {*} callback 
+   * @returns 
+   */
+  pveMaterialTakeback({ ids, rewards, hashmessage, v, r, s }, callback = {}) {
+    return this.triggerContract(
+      {
+        methodName: "takeback",
+        abiKey: "materialTakeBack",
+        abiString: this.ABIs["materialTakeBack"].abi,
+        contractParams: [ids, rewards, hashmessage, v, r, s],
+        sendParams: {
+          value: 0,
+        },
+      },
+      callback
+    );
+  }
 };

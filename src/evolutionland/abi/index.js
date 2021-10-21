@@ -38,6 +38,7 @@ import drillLuckyBoxV2ABI from "./json/abi-drillLuckyBoxV2";
 import erc721BridgeV2ABI from "./json/abi-ERC721BridgeV2";
 import cryptoKitties from "./json/abi-cryptoKitties";
 import pveTeamABI from "./json/abi-pveTeam.json";
+import pveMaterialTakebackABI from './json/abi-materialTakeBack.json';
 
 function getABI(env) {
   return {
@@ -223,9 +224,14 @@ function getABI(env) {
     weth: {
       address: env.CONTRACT.TOKEN_WETH,
     },
+    // pve
     pveTeam: {
       abi: pveTeamABI,
       address: env.CONTRACT.PVETEAM_PROXY,
+    },
+    materialTakeBack: {
+      abi: pveMaterialTakebackABI,
+      address: env.CONTRACT.PVETEAM_MATERIAL_TAKEBACK,
     },
     // only heco
     dusd: {
