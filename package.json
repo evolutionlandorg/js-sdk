@@ -1,6 +1,6 @@
 {
   "name": "@evolutionland/evolution-js",
-  "version": "1.8.1",
+  "version": "1.9.0-alpha.0",
   "description": "",
   "main": "./lib/index.js",
   "scripts": {
