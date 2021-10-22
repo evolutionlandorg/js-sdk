@@ -182,12 +182,30 @@ export const PveApi = {
     return this.triggerContract(
       {
         methodName: "takeback",
-        abiKey: "materialTakeBack",
-        abiString: this.ABIs["materialTakeBack"].abi,
+        abiKey: "pveMaterialTakeBack",
+        abiString: this.ABIs["pveMaterialTakeBack"].abi,
         contractParams: [nonce, ids, rewards, hashmessage, v, r, s],
         sendParams: {
           value: 0,
         },
+      },
+      callback
+    );
+  },
+  
+  /**
+   * Encode material id to tokenId
+   * @param {*} id 
+   * @param {*} callback 
+   * @returns 
+   */
+  pveMaterialIdEncode(id, callback = {}) {
+    return this.callContract(
+      {
+        methodName: "encode",
+        abiKey: "pveMaterial",
+        abiString: this.ABIs["pveMaterial"].abi,
+        contractParams: [id],
       },
       callback
     );

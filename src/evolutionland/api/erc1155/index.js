@@ -32,6 +32,30 @@ let Erc1155Api = {
       callback
     );
   },
+
+  async erc1155BalanceOf(owner, tokenId, contractAddress, callback = {}) {
+    return this.callContract(
+      {
+        methodName: "balanceOf",
+        abiKey: contractAddress,
+        abiString: this.ABIs["erc1155"].abi,
+        contractParams: [owner, tokenId],
+      },
+      callback
+    );
+  },
+
+  async erc1155BalanceOfBatch(owners, tokenIds, contractAddress, callback = {}) {
+    return this.callContract(
+      {
+        methodName: "balanceOfBatch",
+        abiKey: contractAddress,
+        abiString: this.ABIs["erc1155"].abi,
+        contractParams: [owners, tokenIds],
+      },
+      callback
+    );
+  },
 };
 
 export default Erc1155Api;

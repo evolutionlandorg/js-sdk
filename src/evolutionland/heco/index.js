@@ -18,6 +18,7 @@ import ApostleApi from '../api/apostle'
 import FurnaceApi from '../api/furnace'
 import LandApi from '../api/land'
 import Erc20Api from '../api/erc20'
+import Erc1155Api from '../api/erc1155'
 import WethApi from '../api/weth'
 import LiquidityStakerApi from '../api/liquidityStaker'
 import GoldrushApi from '../api/goldrush';
@@ -2022,6 +2023,7 @@ class HecoEvolutionLand {
 Object.assign(HecoEvolutionLand.prototype, WethApi);
 Object.assign(HecoEvolutionLand.prototype, LiquidityStakerApi);
 Object.assign(HecoEvolutionLand.prototype, Erc20Api);
+Object.assign(HecoEvolutionLand.prototype, Erc1155Api);
 Object.assign(HecoEvolutionLand.prototype, ApostleApi);
 Object.assign(HecoEvolutionLand.prototype, FurnaceApi);
 Object.assign(HecoEvolutionLand.prototype, LandApi);
