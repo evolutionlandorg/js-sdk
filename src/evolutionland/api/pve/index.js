@@ -178,13 +178,13 @@ export const PveApi = {
    * @param {*} callback 
    * @returns 
    */
-  pveMaterialTakeback({ ids, rewards, hashmessage, v, r, s }, callback = {}) {
+  pveMaterialTakeback({ nonce, ids, rewards, hashmessage, v, r, s }, callback = {}) {
     return this.triggerContract(
       {
         methodName: "takeback",
         abiKey: "materialTakeBack",
         abiString: this.ABIs["materialTakeBack"].abi,
-        contractParams: [ids, rewards, hashmessage, v, r, s],
+        contractParams: [nonce, ids, rewards, hashmessage, v, r, s],
         sendParams: {
           value: 0,
         },
