@@ -21,6 +21,7 @@ import Erc20Api from '../api/erc20'
 import WethApi from '../api/weth'
 import LiquidityStakerApi from '../api/liquidityStaker'
 import DrillApi from '../api/drill'
+import CommonApi from '../api/common'
 
 const loop = function () { }
 
@@ -2010,5 +2011,6 @@ Object.assign(PolygonEvolutionLand.prototype, ApostleApi);
 Object.assign(PolygonEvolutionLand.prototype, FurnaceApi);
 Object.assign(PolygonEvolutionLand.prototype, LandApi);
 Object.assign(PolygonEvolutionLand.prototype, DrillApi);
+Object.assign(PolygonEvolutionLand.prototype, CommonApi);
 
 export default PolygonEvolutionLand

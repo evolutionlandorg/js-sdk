@@ -227,5 +227,5 @@ export const PveApi = {
       },
       callback
     );
-  }
+  },
 };

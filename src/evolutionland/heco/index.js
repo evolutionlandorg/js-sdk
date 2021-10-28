@@ -24,7 +24,7 @@ import LiquidityStakerApi from '../api/liquidityStaker'
 import GoldrushApi from '../api/goldrush';
 import DrillApi from '../api/drill';
 import { PveApi } from "../api/pve";
-
+import CommonApi from '../api/common';
 
 const loop = function () { }
 
@@ -2030,5 +2030,6 @@ Object.assign(HecoEvolutionLand.prototype, LandApi);
 Object.assign(HecoEvolutionLand.prototype, GoldrushApi);
 Object.assign(HecoEvolutionLand.prototype, DrillApi);
 Object.assign(HecoEvolutionLand.prototype, PveApi);
+Object.assign(HecoEvolutionLand.prototype, CommonApi);
 
 export default HecoEvolutionLand
