@@ -209,5 +209,23 @@ export const PveApi = {
       },
       callback
     );
+  },
+
+  /**
+   * Get team lock time
+   * @param {*} address account address
+   * @param {*} callback 
+   * @returns 
+   */
+  pveGetTeamLockTime(address, callback = {}) {
+    return this.callContract(
+      {
+        methodName: "teamLock",
+        abiKey: "pveTeam",
+        abiString: this.ABIs["pveTeam"].abi,
+        contractParams: [address],
+      },
+      callback
+    );
   }
 };
