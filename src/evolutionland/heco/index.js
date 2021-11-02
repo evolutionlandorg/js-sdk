@@ -18,12 +18,13 @@ import ApostleApi from '../api/apostle'
 import FurnaceApi from '../api/furnace'
 import LandApi from '../api/land'
 import Erc20Api from '../api/erc20'
+import Erc1155Api from '../api/erc1155'
 import WethApi from '../api/weth'
 import LiquidityStakerApi from '../api/liquidityStaker'
 import GoldrushApi from '../api/goldrush';
 import DrillApi from '../api/drill';
 import { PveApi } from "../api/pve";
-
+import CommonApi from '../api/common';
 
 const loop = function () { }
 
@@ -2022,11 +2023,13 @@ class HecoEvolutionLand {
 Object.assign(HecoEvolutionLand.prototype, WethApi);
 Object.assign(HecoEvolutionLand.prototype, LiquidityStakerApi);
 Object.assign(HecoEvolutionLand.prototype, Erc20Api);
+Object.assign(HecoEvolutionLand.prototype, Erc1155Api);
 Object.assign(HecoEvolutionLand.prototype, ApostleApi);
 Object.assign(HecoEvolutionLand.prototype, FurnaceApi);
 Object.assign(HecoEvolutionLand.prototype, LandApi);
 Object.assign(HecoEvolutionLand.prototype, GoldrushApi);
 Object.assign(HecoEvolutionLand.prototype, DrillApi);
 Object.assign(HecoEvolutionLand.prototype, PveApi);
+Object.assign(HecoEvolutionLand.prototype, CommonApi);
 
 export default HecoEvolutionLand

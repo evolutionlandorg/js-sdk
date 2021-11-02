@@ -17,6 +17,7 @@ import Erc20Api from '../api/erc20'
 import Erc1155Api from '../api/erc1155'
 import PetsApi from '../api/pets'
 import DrillApi from '../api/drill'
+import CommonApi from '../api/common';
 
 const loop = function () { }
 
@@ -2192,5 +2193,7 @@ Object.assign(EthereumEvolutionLand.prototype, Erc20Api);
 Object.assign(EthereumEvolutionLand.prototype, Erc1155Api);
 Object.assign(EthereumEvolutionLand.prototype, PetsApi);
 Object.assign(EthereumEvolutionLand.prototype, DrillApi);
+Object.assign(EthereumEvolutionLand.prototype, CommonApi);
+
 
 export default EthereumEvolutionLand

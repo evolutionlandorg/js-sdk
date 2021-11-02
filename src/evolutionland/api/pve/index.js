@@ -171,4 +171,61 @@ export const PveApi = {
       ],
     });
   },
+
+  /**
+   * takeback(...) is invoked by the user who want to clain drill
+   * @param {*} param0 _hashmessage = hash("${address(this)}{_user}${networkid}${ids[]}${rewards[]}"), _v, _r, _s are from supervisor's signature on _hashmessage
+   * @param {*} callback 
+   * @returns 
+   */
+  pveMaterialTakeback({ nonce, ids, rewards, hashmessage, v, r, s }, callback = {}) {
+    return this.triggerContract(
+      {
+        methodName: "takeback",
+        abiKey: "pveMaterialTakeBack",
+        abiString: this.ABIs["pveMaterialTakeBack"].abi,
+        contractParams: [nonce, ids, rewards, hashmessage, v, r, s],
+        sendParams: {
+          value: 0,
+        },
+      },
+      callback
+    );
+  },
+  
+  /**
+   * Encode material id to tokenId
+   * @param {*} id 
+   * @param {*} callback 
+   * @returns 
+   */
+  pveMaterialIdEncode(id, callback = {}) {
+    return this.callContract(
+      {
+        methodName: "encode",
+        abiKey: "pveMaterial",
+        abiString: this.ABIs["pveMaterial"].abi,
+        contractParams: [id],
+      },
+      callback
+    );
+  },
+
+  /**
+   * Get team lock time
+   * @param {*} address account address
+   * @param {*} callback 
+   * @returns 
+   */
+  pveGetTeamLockTime(address, callback = {}) {
+    return this.callContract(
+      {
+        methodName: "teamLock",
+        abiKey: "pveTeam",
+        abiString: this.ABIs["pveTeam"].abi,
+        contractParams: [address],
+      },
+      callback
+    );
+  },
 };
