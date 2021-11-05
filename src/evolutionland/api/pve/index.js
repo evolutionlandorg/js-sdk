@@ -212,6 +212,31 @@ export const PveApi = {
   },
 
   /**
+   * {IERC1155-safeBatchTransferFrom}.
+   * @param {*} account from
+   * @param {*} to recipient
+   * @param {*} ids tokenId array
+   * @param {*} amounts amounts array
+   * @param {*} data 
+   * @param {*} callback 
+   * @returns 
+   */
+  async pveMaterialTransfer(account, to, ids, amounts, data="0x", callback = {}) {
+    const from = account || await this.getCurrentAccount();
+    
+    console.log('pveMaterialTransfer',[from, to, ids, amounts, data] )
+    return this.triggerContract(
+      {
+        methodName: "safeBatchTransferFrom",
+        abiKey: "pveMaterial",
+        abiString: this.ABIs["pveMaterial"].abi,
+        contractParams: [from, to, ids, amounts, data|"0x"],
+      },
+      callback
+    );
+  },
+
+  /**
    * Get team lock time
    * @param {*} address account address
    * @param {*} callback 
