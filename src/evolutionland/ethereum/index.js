@@ -1945,8 +1945,6 @@ class EthereumEvolutionLand {
      * @param {*} token 
      */
     isEvolutionLandToken(token) {
-        console.log('isEvolutionLandToken', token);
-
         const tokenList = ['ring', 'kton', 'gold', 'wood', 'water', 'hoo', 'fire', 'soil',
             this.ABIs['ring'].address.toLowerCase(),
             this.ABIs['kton'].address.toLowerCase(),

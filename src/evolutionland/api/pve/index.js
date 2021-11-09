@@ -224,7 +224,6 @@ export const PveApi = {
   async pveMaterialTransfer(account, to, ids, amounts, data="0x", callback = {}) {
     const from = account || await this.getCurrentAccount();
     
-    console.log('pveMaterialTransfer',[from, to, ids, amounts, data] )
     return this.triggerContract(
       {
         methodName: "safeBatchTransferFrom",
