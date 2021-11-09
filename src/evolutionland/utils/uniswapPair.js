@@ -66,9 +66,8 @@ export class Pair {
   constructor(tokenAmountA, tokenAmountB) {
     const tokenAmounts = tokenAmountA.token.sortsBefore(tokenAmountB.token) // does safety checks
       ? [tokenAmountA, tokenAmountB]
-      : [tokenAmountB, tokenAmountA]
-
-      ;console.log(tokenAmounts[0].token.chainId)
+      : [tokenAmountB, tokenAmountA];
+      
     this.liquidityToken = new Token(
       tokenAmounts[0].token.chainId,
       Pair.getAddress(tokenAmounts[0].token, tokenAmounts[1].token),
