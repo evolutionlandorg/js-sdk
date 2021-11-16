@@ -158,7 +158,44 @@ let LiquidityStakerApi = {
       },
       callback
     );
-  }
+  },
+
+  // Polygon MyTrade - https://polygon.mytrade.org/pool
+  liquidityStakerMytradeGetLpOfPid(lpAddress, callback = {}) {
+    return this.callContract(
+      {
+        methodName: "LpOfPid",
+        abiKey: 'myTradePool',
+        abiString: this.ABIs["myTradePool"].abi,
+        contractParams: [lpAddress],
+      },
+      callback
+    );
+  },
+
+  liquidityStakerMytradeGetPoolInfo(pid, callback = {}) {
+    return this.callContract(
+      {
+        methodName: "poolInfo",
+        abiKey: 'myTradePool',
+        abiString: this.ABIs["myTradePool"].abi,
+        contractParams: [pid],
+      },
+      callback
+    );
+  },
+
+  liquidityStakerMytradeGetPendingReward(pid, address, callback = {}) {
+    return this.callContract(
+      {
+        methodName: "pending",
+        abiKey: 'myTradePool',
+        abiString: this.ABIs["myTradePool"].abi,
+        contractParams: [pid, address],
+      },
+      callback
+    );
+  },
 }
 
 export default LiquidityStakerApi;

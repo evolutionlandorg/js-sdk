@@ -59,6 +59,7 @@ export default {
         PVETEAM_MATERIAL_TAKEBACK: "0xA33a1308Ac1c7a7683C01a8036a1D722C441cD62",
 
         TOKEN_DUSD: "0x9F5c80dc840f9cc60670a20c1e5d0fbD3E13B015",  // dusd, https://github.com/evolutionlandorg/evo-static/issues/604
+        MYTRADE_POOL: ""
     },
     DOMAIN: "https://www.evolution.land",
     ABI_DOMAIN: "https://static.l2me.com/static"

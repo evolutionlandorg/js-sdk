@@ -40,6 +40,8 @@ import cryptoKitties from "./json/abi-cryptoKitties";
 import pveTeamABI from "./json/abi-pveTeam.json";
 import pveMaterialTakebackABI from './json/abi-materialTakeBack.json';
 import pveMaterialABI from './json/abi-material.json'
+import liquidityStakerMyTradePoolABI from './json/abi-myTradePool.json'
+
 
 function getABI(env) {
   return {
@@ -246,6 +248,11 @@ function getABI(env) {
     dusd: {
       address: env.CONTRACT.TOKEN_DUSD,
       abi: ringABI,
+    },
+    // only polygon mytrade
+    myTradePool: {
+      address: env.CONTRACT.MYTRADE_POOL,
+      abi: liquidityStakerMyTradePoolABI,
     },
   };
 }

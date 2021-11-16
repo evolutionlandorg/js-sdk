@@ -51,7 +51,8 @@ export default {
 
         ITERING_CALLBACK: "",
 
-        TOKEN_WETH: "0x3277B7BABbeadF5dC43D5350df25310f3c819965"  // weht
+        TOKEN_WETH: "0x3277B7BABbeadF5dC43D5350df25310f3c819965",  // weht
+        MYTRADE_POOL: "" // my trade lp pool, https://polygon.mytrade.org/pool, No dev environment
     },
     DOMAIN: "https://www.evolution.land.l2me.com",
     ABI_DOMAIN: "https://www.evolution.land.l2me.com"
