@@ -252,4 +252,92 @@ export const PveApi = {
       callback
     );
   },
+  /**
+   * Use material synthesis equipment
+   * @param {*} objId Illustrated ID of the target equipment
+   * @param {*} rarity Rarity of the target equipment
+   * @param {*} tokenContractAddress token address of the target equipment
+   * @param {*} callback 
+   * @returns 
+   */
+  pveCraftNew(objId, rarity, tokenContractAddress, callback = {}) {
+    return this.triggerContract(
+      {
+        methodName: "craft",
+        abiKey: "pveCraft",
+        abiString: this.ABIs["pveCraft"].abi,
+        contractParams: [objId, rarity, tokenContractAddress],
+      },
+      callback
+    );
+  },
+
+  pveCraftNewBatch(objIdList, rarityList, tokenContractAddressList, callback = {}) {
+    return this.triggerContract(
+      {
+        methodName: "craft_batch",
+        abiKey: "pveCraft",
+        abiString: this.ABIs["pveCraft"].abi,
+        contractParams: [objIdList, rarityList, tokenContractAddressList],
+      },
+      callback
+    );
+  },
+
+  /**
+   * Enchant equipment
+   * @param {*} objId Equipment Token Id
+   * @param {*} tokenContractAddress Token address of the material
+   * @param {*} callback 
+   * @returns 
+   */
+  pveCraftEnchant(tokenId, tokenContractAddress, callback = {}) {
+    return this.triggerContract(
+      {
+        methodName: "enchant",
+        abiKey: "pveCraft",
+        abiString: this.ABIs["pveCraft"].abi,
+        contractParams: [Utils.pad0x(tokenId), tokenContractAddress],
+      },
+      callback
+    );
+  },
+
+  /**
+   * Disnchant equipment
+   * @param {*} tokenId Equipment Token Id
+   * @param {*} callback 
+   * @returns 
+   */
+  pveCraftDisenchant(tokenId, callback = {}) {
+    console.log(21)
+    return this.triggerContract(
+      {
+        methodName: "disenchant",
+        abiKey: "pveCraft",
+        abiString: this.ABIs["pveCraft"].abi,
+        contractParams: [Utils.pad0x(tokenId)],
+      },
+      callback
+    );
+  },
+
+  /**
+   * Get equipment illustrated info
+   * @param {*} objId Illustrated Id
+   * @param {*} rarity Illustrated rarity
+   * @param {*} callback {id, materials, mcosts, ecost, srate, name}
+   * @returns 
+   */
+  pveCraftGetObjInfo(objId, rarity, callback = {}) {
+    return this.callContract(
+      {
+        methodName: "get_obj",
+        abiKey: "pveCraft",
+        abiString: this.ABIs["pveCraft"].abi,
+        contractParams: [objId, rarity],
+      },
+      callback
+    );
+  },
 };
