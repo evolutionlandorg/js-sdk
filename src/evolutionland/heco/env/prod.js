@@ -57,12 +57,12 @@ export default {
         PVETEAM_PROXY: "0x66B3f77Ba05e795A8Fd5ab60799d598312148e67",  // PVE Team
         PVETEAM_MATERIAL: "0x24Fa741f4A8f2D5B460De2bDc5AE0041C87F3331",
         PVETEAM_MATERIAL_TAKEBACK: "0xA33a1308Ac1c7a7683C01a8036a1D722C441cD62",
-        PVETEAM_CRAFTBASE: "",
+        PVETEAM_CRAFTBASE: "0x150e06306583e0FD7EA3f2049bD72192380D13C9",
 
         TOKEN_DUSD: "0x9F5c80dc840f9cc60670a20c1e5d0fbD3E13B015",  // dusd, https://github.com/evolutionlandorg/evo-static/issues/604
         MYTRADE_POOL: "",
 
-        SETTINGSREGISTRY: ""
+        SETTINGSREGISTRY: "0x2401224012bAE7C2f217392665CA7abC16dCDE1e"
     },
     DOMAIN: "https://www.evolution.land",
     ABI_DOMAIN: "https://static.l2me.com/static"
