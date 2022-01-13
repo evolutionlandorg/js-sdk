@@ -18,6 +18,7 @@ import ApostleApi from '../api/apostle'
 import FurnaceApi from '../api/furnace'
 import LandApi from '../api/land'
 import Erc20Api from '../api/erc20'
+import Erc1155Api from '../api/erc1155'
 import WethApi from '../api/weth'
 import LiquidityStakerApi from '../api/liquidityStaker'
 import DrillApi from '../api/drill'
@@ -2008,6 +2009,7 @@ class PolygonEvolutionLand {
 Object.assign(PolygonEvolutionLand.prototype, WethApi);
 Object.assign(PolygonEvolutionLand.prototype, LiquidityStakerApi);
 Object.assign(PolygonEvolutionLand.prototype, Erc20Api);
+Object.assign(PolygonEvolutionLand.prototype, Erc1155Api);
 Object.assign(PolygonEvolutionLand.prototype, ApostleApi);
 Object.assign(PolygonEvolutionLand.prototype, FurnaceApi);
 Object.assign(PolygonEvolutionLand.prototype, LandApi);
