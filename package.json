@@ -1,6 +1,6 @@
 {
   "name": "@evolutionland/evolution-js",
-  "version": "1.9.3",
+  "version": "1.10.0",
   "description": "",
   "main": "./lib/index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "analyze": "ANALYZE=true webpack --mode production",
     "generate-docs": "jsdoc --configure .jsdoc.json --verbose",
     "publish-docs": "gh-pages -d docs/@evolutionland/evolution-js/1.3.0-beta.3",
-    "cp-evolution-app": "cp -rf ./lib/* ../evo-game-v2/EvolutionaryPlanet/node_modules/@evolutionland/evolution-js/lib"
+    "cp-evolution-app": "cp -rf ./lib/* ../evo-static-v2/EvolutionaryPlanet/node_modules/@evolutionland/evolution-js/lib"
   },
   "author": "",
   "license": "ISC",

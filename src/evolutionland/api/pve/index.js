@@ -1,4 +1,30 @@
+import BigNumber from 'bignumber.js';
 import Utils from '../../utils/index';
+
+const chainGasLimit = {
+  // ethereum - mainnet
+  "1": {
+    craft: new BigNumber(210000),
+  },
+  // ethereum - ropsten
+  "3": {
+    craft: new BigNumber(210000),
+  },
+  // heco - mainnet
+  "256": {
+    craft: new BigNumber(210000),
+  },
+  // heco - testnet
+  "128": {
+    craft: new BigNumber(210000),
+  },
+  "tron-1": {
+    craft: null,
+  },
+  "tron-11111": {
+    craft: null,
+  }
+}
 
 export const PveApi = {
   /**
@@ -248,6 +274,102 @@ export const PveApi = {
         abiKey: "pveTeam",
         abiString: this.ABIs["pveTeam"].abi,
         contractParams: [address],
+      },
+      callback
+    );
+  },
+  /**
+   * Use material synthesis equipment
+   * @param {*} objId Illustrated ID of the target equipment
+   * @param {*} rarity Rarity of the target equipment
+   * @param {*} tokenContractAddress token address of the target equipment
+   * @param {*} callback 
+   * @returns 
+   */
+  pveCraftNew(objId, rarity, tokenContractAddress, callback = {}) {
+    const gasLimit = chainGasLimit[this.env.CONTRACT.NETWORK].craft;
+    return this.triggerContract(
+      {
+        methodName: "craft",
+        abiKey: "pveCraft",
+        abiString: this.ABIs["pveCraft"].abi,
+        contractParams: [objId, rarity, tokenContractAddress],
+        sendParams: {
+          gasLimit: gasLimit.plus(new BigNumber(350000)).toFixed(0),
+        }
+      },
+      callback
+    );
+  },
+
+  pveCraftNewBatch(objIdList, rarityList, tokenContractAddressList, callback = {}) {
+    const gasLimit = chainGasLimit[this.env.CONTRACT.NETWORK].craft;
+    return this.triggerContract(
+      {
+        methodName: "craft_batch",
+        abiKey: "pveCraft",
+        abiString: this.ABIs["pveCraft"].abi,
+        contractParams: [objIdList, rarityList, tokenContractAddressList],
+        sendParams: {
+          gasLimit: gasLimit.times(objIdList.length).plus(new BigNumber(350000)).toFixed(0),
+        }
+      },
+      callback
+    );
+  },
+
+  /**
+   * Enchant equipment
+   * @param {*} objId Equipment Token Id
+   * @param {*} tokenContractAddress Token address of the material
+   * @param {*} callback 
+   * @returns 
+   */
+  pveCraftEnchant(tokenId, tokenContractAddress, callback = {}) {
+    return this.triggerContract(
+      {
+        methodName: "enchant",
+        abiKey: "pveCraft",
+        abiString: this.ABIs["pveCraft"].abi,
+        contractParams: [Utils.pad0x(tokenId), tokenContractAddress],
+      },
+      callback
+    );
+  },
+
+  /**
+   * Disnchant equipment
+   * @param {*} tokenId Equipment Token Id
+   * @param {*} callback 
+   * @returns 
+   */
+  pveCraftDisenchant(tokenId, callback = {}) {
+    console.log(21)
+    return this.triggerContract(
+      {
+        methodName: "disenchant",
+        abiKey: "pveCraft",
+        abiString: this.ABIs["pveCraft"].abi,
+        contractParams: [Utils.pad0x(tokenId)],
+      },
+      callback
+    );
+  },
+
+  /**
+   * Get equipment illustrated info
+   * @param {*} objId Illustrated Id
+   * @param {*} rarity Illustrated rarity
+   * @param {*} callback {id, materials, mcosts, ecost, srate, name}
+   * @returns 
+   */
+  pveCraftGetObjInfo(objId, rarity, callback = {}) {
+    return this.callContract(
+      {
+        methodName: "get_obj",
+        abiKey: "pveCraft",
+        abiString: this.ABIs["pveCraft"].abi,
+        contractParams: [objId, rarity],
       },
       callback
     );

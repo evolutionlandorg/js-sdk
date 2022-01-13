@@ -179,6 +179,85 @@ let ApostleApi = {
       callback
     );
   },
+
+  apostleGetChangeClassFee(
+    callback = {}
+  ) {
+    return this.callContract(
+      {
+        methodName: "uintOf",
+        abiKey: "settingRegistry",
+        abiString: this.ABIs["settingRegistry"].abi,
+        contractParams: [
+         '0x55494e545f4348414e4745434c4153535f464545000000000000000000000000' // UINT_CHANGECLASS_FEE
+        ],
+      },
+      callback
+    );
+  },
+
+  apostleChangeClass(
+    apostleTokenId,
+    apostleClass, 
+    maxFee,
+    callback = {}
+  ) {
+    return this.triggerContract(
+      {
+        methodName: "changeClass",
+        abiKey: "apostleBase",
+        abiString: this.ABIs["apostleBaseV3"].abi,
+        contractParams: [
+          Utils.pad0x(apostleTokenId),
+          apostleClass, 
+          maxFee,
+        ],
+      },
+      callback
+    );
+  },
+
+  apostleEquip(
+    apostleTokenId,
+    slot,
+    equipTokenContractAddress,
+    equipTokenId,
+    callback = {}
+  ) {
+    return this.triggerContract(
+      {
+        methodName: "equip",
+        abiKey: "apostleBase",
+        abiString: this.ABIs["apostleBaseV3"].abi,
+        contractParams: [
+          Utils.pad0x(apostleTokenId),
+          slot,
+          equipTokenContractAddress,
+          Utils.pad0x(equipTokenId),
+        ],
+      },
+      callback
+    );
+  },
+
+  apostleDivest(
+    apostleTokenId,
+    slot,
+    callback = {}
+  ) {
+    return this.triggerContract(
+      {
+        methodName: "divest",
+        abiKey: "apostleBase",
+        abiString: this.ABIs["apostleBaseV3"].abi,
+        contractParams: [
+          Utils.pad0x(apostleTokenId),
+          slot,
+        ],
+      },
+      callback
+    );
+  },
 };
 
 export default ApostleApi;

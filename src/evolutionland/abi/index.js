@@ -32,6 +32,7 @@ import erc1155ABI from "./json/abi-ERC1155";
 import clockAuctionV3ABI from "./json/abi-clockAuctionV3";
 import apostleAuctionV3ABI from "./json/abi-apostleAuctionV3";
 import apostleBaseV3ABI from "./json/abi-apostleBaseV3";
+import apostleBaseV5ABI from "./json/abi-apostleBaseV5";
 import apostleSiringV3ABI from "./json/abi-apostleSiringV3";
 import tokenUseV2ABI from "./json/abi-tokenUseV2";
 import drillLuckyBoxV2ABI from "./json/abi-drillLuckyBoxV2";
@@ -40,7 +41,9 @@ import cryptoKitties from "./json/abi-cryptoKitties";
 import pveTeamABI from "./json/abi-pveTeam.json";
 import pveMaterialTakebackABI from './json/abi-materialTakeBack.json';
 import pveMaterialABI from './json/abi-material.json'
+import pveCraftABI from './json/abi-pveCraft.json'
 import liquidityStakerMyTradePoolABI from './json/abi-myTradePool.json'
+import settingRegistryABI from './json/abi-settingRegistry.json'
 
 
 function getABI(env) {
@@ -109,7 +112,7 @@ function getABI(env) {
       abi: apostleBaseABI,
     },
     apostleBaseV3: {
-      abi: apostleBaseV3ABI,
+      abi: apostleBaseV5ABI,
     },
     apostleAuction: {
       address: env.CONTRACT.TOKEN_APOSTLE_CLOCK_AUCTION,
@@ -240,6 +243,10 @@ function getABI(env) {
       abi: pveMaterialABI,
       address: env.CONTRACT.PVETEAM_MATERIAL,
     },
+    pveCraft: {
+      abi: pveCraftABI,
+      address: env.CONTRACT.PVETEAM_CRAFTBASE,
+    },
     erc1155: {
       abi: erc1155ABI,
       address: '',
@@ -254,6 +261,10 @@ function getABI(env) {
       address: env.CONTRACT.MYTRADE_POOL,
       abi: liquidityStakerMyTradePoolABI,
     },
+    settingRegistry: {
+      address: env.CONTRACT.SETTINGSREGISTRY,
+      abi: settingRegistryABI,
+    }
   };
 }
 
