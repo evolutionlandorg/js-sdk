@@ -38,6 +38,8 @@ export default {
         PVETEAM_MATERIAL_TAKEBACK: "0x8098D7E7bb049Ac1853D6DcCbc2538e646080834",
         PVETEAM_CRAFTBASE: "0x366694a6Af1C3aBe3AFedC24771BF3DdB0f9292E",
 
+        SETTINGSREGISTRY: "0x25D12af5F912058425Fe4Ab7BA2A28469C493680",
+
         PROVIDER: `https://matic-mumbai.chainstacklabs.com`,
 
         SCAN_URL: "https://mumbai.polygonscan.com",
