@@ -23,6 +23,14 @@ const chainGasLimit = {
   },
   "tron-11111": {
     craft: null,
+  },
+  // polygon - mumbai
+  "80001": {
+    craft: new BigNumber(210000),
+  },
+  // polygon - mainnet
+  "137": {
+    craft: new BigNumber(210000),
   }
 }
 

@@ -33,6 +33,11 @@ export default {
         TOKEN_ELEMENT_FIRE: "0xe9e0e23fB22865b20599Ad4f2552D7F0824212d8",
         TOKEN_ELEMENT_SOIL: "0x3Af4364015Bbb02d0061E819C4a8989550356EAF",
 
+        PVETEAM_PROXY: "0x09f89988390AB272a3E102d028c7904eB7643004",  // PVE Team
+        PVETEAM_MATERIAL: "0xF0A8be32CcD16c77046Ff5eB76ae49F21Dd95617",
+        PVETEAM_MATERIAL_TAKEBACK: "0x8098D7E7bb049Ac1853D6DcCbc2538e646080834",
+        PVETEAM_CRAFTBASE: "0x366694a6Af1C3aBe3AFedC24771BF3DdB0f9292E",
+
         PROVIDER: `https://matic-mumbai.chainstacklabs.com`,
 
         SCAN_URL: "https://mumbai.polygonscan.com",
@@ -53,6 +58,8 @@ export default {
 
         TOKEN_WETH: "0x3277B7BABbeadF5dC43D5350df25310f3c819965",  // weht
         MYTRADE_POOL: "", // my trade lp pool, https://polygon.mytrade.org/pool, No dev environment
+
+        SETTINGSREGISTRY: "0x25D12af5F912058425Fe4Ab7BA2A28469C493680",
     },
     DOMAIN: "https://www.evolution.land.l2me.com",
     ABI_DOMAIN: "https://www.evolution.land.l2me.com"
