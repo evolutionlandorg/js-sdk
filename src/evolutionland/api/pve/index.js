@@ -31,6 +31,10 @@ const chainGasLimit = {
   // polygon - mainnet
   "137": {
     craft: new BigNumber(210000),
+  },
+  // crab - mainnet
+  "44": {
+    craft: new BigNumber(210000),
   }
 }
 
