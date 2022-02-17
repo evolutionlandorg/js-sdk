@@ -34,7 +34,7 @@ const chainGasLimit = {
   },
   // crab - mainnet
   "44": {
-    craft: new BigNumber(210000),
+    craft: new BigNumber(300000),
   }
 }
 
