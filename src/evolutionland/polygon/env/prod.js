@@ -57,6 +57,8 @@ export default {
 
         TOKEN_WETH: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",    // wmatic
         MYTRADE_POOL: "0xBd5FDEd6767f07C7183eB71410E20395eCE9F082", // my trade lp pool, https://polygon.mytrade.org/pool, No dev environment
+
+        SETTINGSREGISTRY: "0x4d8765f1692e525E6f5572Ad141391dCF50D4A91",
     },
     DOMAIN: "https://www.evolution.land",
     ABI_DOMAIN: "https://static.l2me.com/static"
