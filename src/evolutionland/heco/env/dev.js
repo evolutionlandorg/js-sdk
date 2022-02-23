@@ -65,6 +65,6 @@ export default {
         
         SETTINGSREGISTRY: "0x7F8c4051f0F0C7324726FF61bb8EAA87902e6c2C"
     },
-    DOMAIN: "https://www.evolution.land.l2me.com",
-    ABI_DOMAIN: "https://www.evolution.land.l2me.com"
+    DOMAIN: "https://backend-staging.evolution.land",
+    ABI_DOMAIN: "https://backend-staging.evolution.land"
 };

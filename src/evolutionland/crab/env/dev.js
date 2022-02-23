@@ -68,6 +68,6 @@ export default {
         SETTINGSREGISTRY: "0xbc378EE890A675B5a26Cf0bd05f1aEDb32424c3c",
         TOKEN_RING_DECIMALS: 9
     },
-    DOMAIN: "https://www.evolution.land.l2me.com",
-    ABI_DOMAIN: "https://www.evolution.land.l2me.com"
+    DOMAIN: "https://backend-staging.evolution.land",
+    ABI_DOMAIN: "https://backend-staging.evolution.land"
 };

@@ -50,7 +50,7 @@ export default {
 
         LIQUIDITY_STAKER_FACTORY: "0x3158616c547afa169fb0057B67980630FD09F6dD",
 
-        ITERING_CALLBACK: "https://www.evolution.land/api/eth/raw_sign_broadcast",
+        ITERING_CALLBACK: "https://backend.evolution.land/api/eth/raw_sign_broadcast",
 
         TOKEN_WETH: "0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F",    // wht
 
@@ -64,6 +64,6 @@ export default {
 
         SETTINGSREGISTRY: "0x2401224012bAE7C2f217392665CA7abC16dCDE1e"
     },
-    DOMAIN: "https://www.evolution.land",
+    DOMAIN: "https://backend.evolution.land",
     ABI_DOMAIN: "https://static.l2me.com/static"
 };
