@@ -45,8 +45,8 @@ export default {
         FURNACE_TREASURE: "0xc7D7E731d6bf9182701096adCd5bba3bb0CF76fc",
         FURNACE_TAKEBACK: "0x8d7af9d2310016712b8f269df266f957cb12a27b",
 
-        ITERING_CALLBACK: "https://www.evolution.land/api/eth/raw_sign_broadcast"
+        ITERING_CALLBACK: "https://backend.evolution.land/api/eth/raw_sign_broadcast"
     },
-    DOMAIN: "https://www.evolution.land",
+    DOMAIN: "https://backend.evolution.land",
     ABI_DOMAIN: "https://static.l2me.com/static"
 };

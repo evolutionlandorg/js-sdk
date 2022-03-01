@@ -43,14 +43,14 @@ export default {
 
         GENESISHOLDER: "0x36f061bc3314793c5637fb79421294c061ead108",
         AUCTIONHOLDER: "0xba332453b171aac634b3bed88bfef28770acf7e3",
-        UNISWAP_EXCHANGE: "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+        UNISWAP_EXCHANGE: "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D", // UniswapV2Router02
 
         FURNACE_TREASURE: "0xc7D7E731d6bf9182701096adCd5bba3bb0CF76fc",
         FURNACE_TAKEBACK: "0x8d7af9d2310016712b8f269df266f957cb12a27b",
         FURNACE_ITEMBASE: "0xfd9C2B86f71C1484Bc51F97Bd9E323cB2Cd475C9",
         GOLD_RUSH_RAFFLE: "0x56746a8099a7e6D962802A23e01FeDdc1282cDAe",
-        ITERING_CALLBACK: "https://www.evolution.land/api/eth/raw_sign_broadcast"
+        ITERING_CALLBACK: "https://backend.evolution.land/api/eth/raw_sign_broadcast"
     },
-    DOMAIN: "https://www.evolution.land",
+    DOMAIN: "https://backend.evolution.land",
     ABI_DOMAIN: "https://static.l2me.com/static"
 };

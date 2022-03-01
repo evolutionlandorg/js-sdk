@@ -40,7 +40,7 @@ export default {
         AUCTIONHOLDER: "",
         JUSTSWAP_EXCHANGE: "41394CFB02DA445B95CA61DB8A993AF63E2AAE907A",
         GOLD_RUSH_RAFFLE: "41088303DC5304E273A5A838B4BB9B9645D737EE0E",
-        ITERING_CALLBACK: "https://www.evolution.land/api/tron/raw_sign_broadcast"
+        ITERING_CALLBACK: "https://backend.evolution.land/api/tron/raw_sign_broadcast"
     },
     DOMAIN: "https://evolution.land"
 };

@@ -55,6 +55,6 @@ export default {
 
         ITERING_CALLBACK: "https://alpha.evolution.land/api/eth/raw_sign_broadcast"
     },
-    DOMAIN: "https://www.evolution.land.l2me.com",
-    ABI_DOMAIN: "https://www.evolution.land.l2me.com"
+    DOMAIN: "https://backend-staging.evolution.land",
+    ABI_DOMAIN: "https://backend-staging.evolution.land"
 };

@@ -100,7 +100,12 @@ let FurnaceV1Api = {
       "tron-11111": {
         silver: new BigNumber(30000000),
         gold: new BigNumber(30000000)
-      }
+      },
+      // crab - mainnet
+      "44": {
+        silver: new BigNumber(350000),
+        gold: new BigNumber(400000)
+      },
     }
 
     const silverBoxGasLimit = chainGasLimit[this.env.CONTRACT.NETWORK].silver;
