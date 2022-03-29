@@ -21,6 +21,7 @@ import Erc20Api from '../api/erc20'
 import Erc1155Api from '../api/erc1155'
 import WethApi from '../api/weth'
 import LiquidityStakerApi from '../api/liquidityStaker'
+import GoldrushApi from '../api/goldrush';
 import DrillApi from '../api/drill'
 import CommonApi from '../api/common'
 import { PveApi } from "../api/pve";
@@ -2013,6 +2014,7 @@ Object.assign(PolygonEvolutionLand.prototype, Erc1155Api);
 Object.assign(PolygonEvolutionLand.prototype, ApostleApi);
 Object.assign(PolygonEvolutionLand.prototype, FurnaceApi);
 Object.assign(PolygonEvolutionLand.prototype, LandApi);
+Object.assign(PolygonEvolutionLand.prototype, GoldrushApi);
 Object.assign(PolygonEvolutionLand.prototype, DrillApi);
 Object.assign(PolygonEvolutionLand.prototype, PveApi);
 Object.assign(PolygonEvolutionLand.prototype, CommonApi);
